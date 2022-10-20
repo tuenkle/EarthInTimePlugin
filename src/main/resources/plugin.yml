@@ -1,0 +1,5 @@
+name: EarthInTime
+version: 1.0
+main: com.tuenkle.earthintime.EarthInTime
+api-version: 1.19
+depend: [dynmap]
