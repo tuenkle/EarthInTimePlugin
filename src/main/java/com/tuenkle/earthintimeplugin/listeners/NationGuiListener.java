@@ -121,30 +121,49 @@ public class NationGuiListener implements Listener {
                     return;
                 }
                 if (clickedItem.equals(NationButtons.getSpawnButton())) {
+                    player.closeInventory();
                     player.teleport(nation.getSpawn());
+                    player.sendMessage("나라 스폰으로 이동되었습니다.");
                     return;
                 }
                 if (clickedItem.equals(NationButtons.getDepositButton())) {
+                    player.closeInventory();
                     player.sendMessage(ChatColor.YELLOW + "/나라 입금 <시간>");
                     return;
                 }
                 if (clickedItem.equals(NationButtons.getBorderVisualizationButton())) {
+                    player.closeInventory();
+                    if (nation.isParticleOn()) {
+                        player.sendMessage("이미 실행중입니다.");
+                        return;
+                    }
+                    double particleY = player.getLocation().getY() + 2;
+                    if (particleY > 315) {
+                        player.sendMessage("플레이어의 위치가 너무 높습니다.");
+                        return;
+                    }
                     new ParticlesScheduler(player, nation).runTaskTimer(EarthInTimePlugin.getMainInstance(), 0, 20);
+                    player.sendMessage("나라 청크의 경계를 표시합니다.(지속시간 20초)");
                     return;
                 }
                 if (clickedItem.equals(NationButtons.getDisbandButton())) {
+                    player.closeInventory();
                     player.sendMessage(ChatColor.YELLOW + "/나라 삭제");
                     return;
                 }
                 if (clickedItem.equals(NationButtons.getWithdrawButton())) {
+                    player.closeInventory();
                     player.sendMessage(ChatColor.YELLOW + "/나라 출금 <시간>");
                     return;
                 }
                 if (clickedItem.equals(NationButtons.getSetSpawnButton())) {
+                    player.closeInventory();
                     nation.setSpawn(player.getLocation());
+                    player.sendMessage("플레이어의 위치를 나라 스폰으로 설정하였습니다.");
                     return;
                 }
                 if (clickedItem.equals(NationButtons.getExpandButton())) {
+                    player.closeInventory();
                     long requiredMoney = getNationExpandMoney(nation);
                     if (nation.getMoney() < requiredMoney) {
                         player.sendMessage("나라 잔고가 부족합니다. 필요 잔고: " + GeneralUtils.secondToUniversalTime(requiredMoney));
@@ -168,6 +187,7 @@ public class NationGuiListener implements Listener {
                     return;
                 }
                 if (clickedItem.equals(NationButtons.getShrinkButton())) {
+                    player.closeInventory();
                     int[] chunk = {player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ()};
                     if (!isIntChunkInNation(chunk, nation)){
                         player.sendMessage("본인 나라 안에 있지 않습니다.");
@@ -179,20 +199,6 @@ public class NationGuiListener implements Listener {
                     player.sendMessage("나라 축소 완료.");
                     return;
                 }
-//                if (clickedItem.getItemMeta().hasLore()) {
-//                    String title = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
-//                    switch (title) {
-//                        case "국고" -> {
-//                            if (clickedItem.getType().equals(Material.GOLD_INGOT)) {
-//                                player.openInventory(NationGui.getNationInfo(nation, Database.users.get(player.getUniqueId())));
-//                                return;
-//                            }
-//                        }
-//                        default -> {
-//                            return;
-//                        }
-//                    }
-//                }
                 //TODO 버튼 늘어남에 따라 추가
             }
             case "나라 정보(본국)-시민" -> {

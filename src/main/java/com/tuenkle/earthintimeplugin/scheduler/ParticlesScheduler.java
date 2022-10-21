@@ -20,12 +20,14 @@ public class ParticlesScheduler extends BukkitRunnable {
         this.player = player;
         this.particleY = player.getLocation().getY() + 2;
         this.nation = nation;
+        nation.setParticleOn(true);
     }
     @Override
     public void run() {
         ArrayList<int[]> sortedVertices = chunksToSortedVertices(nation.getChunks());
         if (count >= 10) {
             this.cancel();
+            nation.setParticleOn(false);
         }
         count++;
         for (int i = 0; i < sortedVertices.size(); i++){

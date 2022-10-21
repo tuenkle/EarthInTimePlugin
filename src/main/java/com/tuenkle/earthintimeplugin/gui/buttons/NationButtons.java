@@ -422,17 +422,6 @@ public class NationButtons {
         button.setItemMeta(buttonMeta);
         return button;
     }
-    public static ItemStack getWarButton(Nation nation, LocalDateTime registeredTime) {
-        ItemStack button = new ItemStack(Material.PLAYER_HEAD);
-        ItemMeta buttonMeta = button.getItemMeta();
-        buttonMeta.setDisplayName(ChatColor.GREEN + nation.getName());
-        ArrayList<String> lores = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        lores.add(ChatColor.GRAY + "동맹일: " + registeredTime.format(formatter));
-        buttonMeta.setLore(lores);
-        button.setItemMeta(buttonMeta);
-        return button;
-    }
     public static ItemStack getNationMyInfoButton() {
         return getNationMyInfoButton;
     }
