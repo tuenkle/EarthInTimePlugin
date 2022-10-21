@@ -160,6 +160,10 @@ public class NationGuiListener implements Listener {
                     player.closeInventory();
                     User user = Database.users.get(player.getUniqueId());
                     Nation nation = user.getNation();
+                    if (!isChunkInNation(player.getLocation().getChunk(), nation)){
+                        player.sendMessage("본인 나라 안에 있지 않습니다.");
+                        return;
+                    }
                     nation.setSpawn(player.getLocation());
                     player.sendMessage("플레이어의 위치를 나라 스폰으로 설정하였습니다.");
                     return;
