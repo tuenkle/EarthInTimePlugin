@@ -301,6 +301,28 @@ public class NationGuiListener implements Listener {
                     player.openInventory(NationGui.getNationInfo(nation, user));
                     return;
                 }
+                //TODO-동맹인 나라 누르면 그 나라 info로 바로 가게
+            }
+            case "나라 전쟁 정보" -> {
+                event.setCancelled(true);
+                final ItemStack clickedItem = event.getCurrentItem();
+
+                if (clickedItem == null || clickedItem.equals(GeneralButtons.getDummyButton())) {
+                    return;
+                }
+                final Player player = (Player) event.getWhoClicked();
+
+                if (clickedItem.equals(GeneralButtons.getCloseButton())) {
+                    player.closeInventory();
+                    return;
+                }
+                if (clickedItem.equals(GeneralButtons.getBackButton())) {
+                    Nation nation = Database.nations.get(ChatColor.stripColor(event.getInventory().getItem(4).getItemMeta().getDisplayName()));
+                    User user = Database.users.get(player.getUniqueId());
+                    player.openInventory(NationGui.getNationInfo(nation, user));
+                    return;
+                }
+                //TODO-전쟁 누르면 그 전쟁 info로 바로 가게
             }
         }
     }
