@@ -2,10 +2,15 @@ package com.tuenkle.earthintimeplugin.utils;
 
 import com.tuenkle.earthintimeplugin.database.Database;
 import com.tuenkle.earthintimeplugin.database.Nation;
+import com.tuenkle.earthintimeplugin.database.User;
+import com.tuenkle.earthintimeplugin.database.War;
+import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
+import com.tuenkle.earthintimeplugin.gui.NationGui;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.tuenkle.earthintimeplugin.database.Database.nations;
@@ -76,6 +81,25 @@ public class NationUtils {
             }
         }
         return false;
+    }
+    public static void disbandNation(Nation nation) {
+        for (War war : Database.wars) {
+            if (war.getDefendNation() == nation) {
+                war.terminateWar();
+            }
+            war.getDefendNations().remove(nation);
+        }
+        for (Map.Entry<String, Nation> nationEntry : Database.nations.entrySet()) {
+            Nation oneNation = nationEntry.getValue();
+            oneNation.removeNationInAllyInvites(nation);
+            oneNation.removeNationInAllies(nation);
+        }
+        for (Map.Entry<User, LocalDateTime> resident : nation.getResidents().entrySet()) {
+            resident.getKey().setNation(null);
+        }
+        Database.nations.remove(nation.getName());
+        NationDynmap.eraseNation(nation);
+        NationGui.makeNationsList();
     }
 
     public static long getNationExpandMoney(Nation nation) {

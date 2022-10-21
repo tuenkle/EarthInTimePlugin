@@ -43,6 +43,14 @@ public class Database {
         }
         return false;
     }
+    public static boolean isAttacking(Nation nation) {
+        for (War war : Database.wars) {
+            if (war.getAttackNations().contains(nation)) {
+                return true;
+            }
+        }
+        return false;
+    }
     public static War getWar(Nation nation1, Nation nation2) {
         for (War war : wars) {
             if (war.getAttackNation() == nation1 && war.getDefendNation() == nation2) {
@@ -50,6 +58,15 @@ public class Database {
             }
         }
         return null;
+    }
+    public static ArrayList<War> getWarRelated(Nation nation) {
+        ArrayList<War> relatedWars = new ArrayList<>();
+        for (War war: wars) {
+            if (war.getAttackNations().contains(nation) || war.getDefendNations().contains(nation)) {
+                relatedWars.add(war);
+            }
+        }
+        return relatedWars;
     }
     public static String getRelation(Nation nation1, Nation nation2) {
         if (isWarTogether(nation1, nation2)) {

@@ -12,9 +12,6 @@ import java.util.UUID;
 public class Nation {
     private User king;
     private HashMap<User, LocalDateTime> residents = new HashMap<>();
-
-
-
     private HashMap<User, LocalDateTime> invites = new HashMap<>();
 
     private LocalDateTime createdAt;
@@ -136,6 +133,9 @@ public class Nation {
     public void removeChunk(int[] targetChunk) {
         chunks.removeIf(chunk -> chunk[0] == targetChunk[0] && chunk[1] == targetChunk[1]);
     }
+
+
+
 
     public Nation(String name, User king, int[] chunk, Location spawn) {
         this.name = name;

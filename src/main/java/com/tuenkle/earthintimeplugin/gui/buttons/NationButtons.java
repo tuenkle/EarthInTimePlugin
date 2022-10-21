@@ -2,6 +2,7 @@ package com.tuenkle.earthintimeplugin.gui.buttons;
 import com.tuenkle.earthintimeplugin.database.Database;
 import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
+import com.tuenkle.earthintimeplugin.database.War;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,17 +11,99 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 public class NationButtons {
     private static ItemStack getNationMyInfoButton;
     private static ItemStack nationListButton;
-    private static ItemStack chunksButton;
+
+    public static ItemStack getDisbandButton() {
+        return disbandButton;
+    }
+
+    public static ItemStack getInviteButton() {
+        return inviteButton;
+    }
+
+    public static ItemStack getSetSpawnButton() {
+        return setSpawnButton;
+    }
+
+    public static ItemStack getAlliesButton() {
+        return alliesButton;
+    }
+
+    public static ItemStack getResidentsButton() {
+        return residentsButton;
+    }
+
+    public static ItemStack getWarsButton() {
+        return warsButton;
+    }
+
+    public static ItemStack getExpandButton() {
+        return expandButton;
+    }
+
+    public static ItemStack getShrinkButton() {
+        return shrinkButton;
+    }
+
+    public static ItemStack getWithdrawButton() {
+        return withdrawButton;
+    }
+
+    public static ItemStack getLeaveButton() {
+        return leaveButton;
+    }
+
+    public static ItemStack getSpawnButton() {
+        return spawnButton;
+    }
+
+    public static ItemStack getBorderVisualizationButton() {
+        return borderVisualizationButton;
+    }
+
+    public static ItemStack getDepositButton() {
+        return depositButton;
+    }
+
+
+
+    private static ItemStack disbandButton;
+    private static ItemStack inviteButton;
+    private static ItemStack setSpawnButton;
+    private static ItemStack alliesButton;
+    private static ItemStack residentsButton;
+    private static ItemStack warsButton;
+    private static ItemStack expandButton;
+    private static ItemStack shrinkButton;
+    private static ItemStack withdrawButton;
+    private static ItemStack leaveButton;
+    private static ItemStack spawnButton;
+    private static ItemStack borderVisualizationButton;
+    private static ItemStack depositButton;
+
+
     //    private static ItemStack attackButton;
 //    private static ItemStack allyButton;
     public static void makeAll() {
         makeNationListButton();
         makeNationInfoButton();
-        makeChunksButton();
+        makeAlliesButton();
+        makeDisbandButton();
+        makeDepositButton();
+        makeExpandButton();
+        makeBorderVisualizationButton();
+        makeLeaveButton();
+        makeResidentsButton();
+        makeSetSpawnButton();
+        makeShrinkButton();
+        makeSpawnButton();
+        makeWarsButton();
+        makeWithdrawButton();
+        makeInviteButton();
 //        makeAttackButton();
 //        makeAllyButton();
     }
@@ -64,77 +147,67 @@ public class NationButtons {
         button.setItemMeta(buttonMeta);
         nationListButton = button;
     }
-    public static void makeChunksButton() {
-        ItemStack button = new ItemStack(Material.GRASS_BLOCK);
-        ItemMeta buttonMeta = button.getItemMeta();
-        buttonMeta.setDisplayName(ChatColor.GREEN + "나라 청크 확인");
-        ArrayList<String> lores = new ArrayList<>();
-        lores.add(ChatColor.GRAY + "나라 청크를 확인합니다!");
-        buttonMeta.setLore(lores);
-        button.setItemMeta(buttonMeta);
-        chunksButton = button;
-    }
-    public static ItemStack getDisbandButton() {
-        ItemStack button = new ItemStack(Material.GREEN_WOOL);
+    public static void makeDisbandButton() {
+        ItemStack button = new ItemStack(Material.MAGENTA_DYE);
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(ChatColor.GREEN + "나라 해산");
         ArrayList<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "나라를 해산하려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        disbandButton = button;
     }
-    public static ItemStack getInviteButton() {
-        ItemStack button = new ItemStack(Material.GREEN_WOOL);
+    public static void makeInviteButton() {
+        ItemStack button = new ItemStack(Material.LIGHT_BLUE_DYE);
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(ChatColor.GREEN + "초대 관리");
         ArrayList<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "초대 목록을 관리하려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        inviteButton = button;
     }
-    public static ItemStack getSetSpawnButton() {
-        ItemStack button = new ItemStack(Material.GREEN_WOOL);
+    public static void makeSetSpawnButton() {
+        ItemStack button = new ItemStack(Material.LIME_DYE);
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(ChatColor.GREEN + "나라 스폰 설정");
         ArrayList<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "현재 위치를 나라 스폰으로 설정하려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        setSpawnButton =  button;
     }
-    public static ItemStack getExpandButton() {
-        ItemStack button = new ItemStack(Material.GREEN_WOOL);
+    public static void makeExpandButton() {
+        ItemStack button = new ItemStack(Material.PINK_DYE);
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(ChatColor.GREEN + "나라 확장");
         ArrayList<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "현재 청크로 나라를 확장하려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        expandButton = button;
     }
-    public static ItemStack getShrinkButton() {
-        ItemStack button = new ItemStack(Material.GREEN_WOOL);
+    public static void makeShrinkButton() {
+        ItemStack button = new ItemStack(Material.GRAY_DYE);
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(ChatColor.GREEN + "나라 축소");
         ArrayList<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "현재 청크를 나라에서 제거하려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        shrinkButton = button;
     }
-    public static ItemStack getWithdrawButton() {
-        ItemStack button = new ItemStack(Material.GREEN_WOOL);
+    public static void makeWithdrawButton() {
+        ItemStack button = new ItemStack(Material.PURPLE_DYE);
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(ChatColor.GREEN + "나라 잔고 출금");
         ArrayList<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "나라 잔고에서 시간을 출금하려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        withdrawButton = button;
     }
-    public static ItemStack getLeaveButton() {
+    public static void makeLeaveButton() {
         ItemStack button = new ItemStack(Material.GREEN_WOOL);
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(ChatColor.GREEN + "나라 떠나기");
@@ -142,58 +215,58 @@ public class NationButtons {
         lores.add(ChatColor.GRAY + "나라를 떠나려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        leaveButton = button;
     }
-    public static ItemStack getSpawnButton() {
-        ItemStack button = new ItemStack(Material.GREEN_WOOL);
+    public static void makeSpawnButton() {
+        ItemStack button = new ItemStack(Material.ENDER_PEARL);
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(ChatColor.GREEN + "나라 스폰");
         ArrayList<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "나라 스폰으로 가려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        spawnButton = button;
     }
 
-    public static ItemStack getDepositButton() {
-        ItemStack button = new ItemStack(Material.GREEN_WOOL);
+    public static void makeDepositButton() {
+        ItemStack button = new ItemStack(Material.IRON_INGOT);
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(ChatColor.GREEN + "나라 잔고 입금");
         ArrayList<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "나라 잔고로 시간을 입금하려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        depositButton = button;
     }
-    public static ItemStack getBorderVisualizationButton() {
-        ItemStack button = new ItemStack(Material.GREEN_WOOL);
+    public static void makeBorderVisualizationButton() {
+        ItemStack button = new ItemStack(Material.COMPASS);
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(ChatColor.GREEN + "나라 경계 확인");
         ArrayList<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "나라 경계를 시각화하려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        borderVisualizationButton = button;
     }
-    public static ItemStack getAlliesButton() {
-        ItemStack button = new ItemStack(Material.GREEN_WOOL);
+    public static void makeAlliesButton() {
+        ItemStack button = new ItemStack(Material.LIME_BANNER);
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(ChatColor.GREEN + "동맹 정보");
         ArrayList<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "나라의 동맹 정보를 보려면 클릭하세요");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        alliesButton = button;
     }
-    public static ItemStack getWarsButton() {
-        ItemStack button = new ItemStack(Material.GREEN_WOOL);
+    public static void makeWarsButton() {
+        ItemStack button = new ItemStack(Material.RED_BANNER);
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(ChatColor.GREEN + "전쟁 정보");
         ArrayList<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "나라의 전쟁 정보를 보려면 클릭하세요");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        warsButton = button;
     }
     public static ItemStack getNationNameButton(String nationName) {
         ItemStack button = new ItemStack(Material.GREEN_WOOL);
@@ -202,6 +275,13 @@ public class NationButtons {
         ArrayList<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "더 자세한 정보를 보려면 클릭하세요!");
         buttonMeta.setLore(lores);
+        button.setItemMeta(buttonMeta);
+        return button;
+    }
+    public static ItemStack getNationNameOnlyButton(String nationName) {
+        ItemStack button = new ItemStack(Material.GREEN_WOOL);
+        ItemMeta buttonMeta = button.getItemMeta();
+        buttonMeta.setDisplayName(ChatColor.GREEN + nationName);
         button.setItemMeta(buttonMeta);
         return button;
     }
@@ -273,23 +353,83 @@ public class NationButtons {
         button.setItemMeta(buttonMeta);
         return button;
     }
-    public static ItemStack getResidentsButton(Nation nation) {
-        String kingName = nation.getKing().getName();
-        ItemStack button = new ItemStack(Material.BOOK);
+    public static void makeResidentsButton() {
+        ItemStack button = new ItemStack(Material.PLAYER_HEAD);
         ItemMeta buttonMeta = button.getItemMeta();
-        buttonMeta.setDisplayName(ChatColor.GREEN + "왕: " + kingName);
+        buttonMeta.setDisplayName(ChatColor.GREEN + "구성원 목록");
         ArrayList<String> lores = new ArrayList<>();
-        for (Map.Entry<User, LocalDateTime> resident : nation.getResidents().entrySet()) {
-            lores.add(ChatColor.GRAY + "시민: " + resident.getKey().getName() + "가입 날짜: " + resident.getValue());
-        }
+        lores.add(ChatColor.GRAY + "나라 구성원 목록을 보려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
-        return button;
+        residentsButton = button;
     }
     public static ItemStack getMoneyButton(Nation nation) {
         ItemStack button = new ItemStack(Material.GOLD_INGOT);
         ItemMeta buttonMeta = button.getItemMeta();
-        buttonMeta.setDisplayName(ChatColor.GREEN + "국고: " + GeneralUtils.secondToUniversalTime(nation.getMoney()));
+        buttonMeta.setDisplayName(ChatColor.GREEN + "국고");
+        ArrayList<String> lores = new ArrayList<>();
+        lores.add(GeneralUtils.secondToUniversalTime(nation.getMoney()));
+        buttonMeta.setLore(lores);
+        button.setItemMeta(buttonMeta);
+        return button;
+    }
+    public static ItemStack getUserButton(User user, LocalDateTime registeredTime, boolean isKing) {
+        ItemStack button = new ItemStack(Material.PLAYER_HEAD);
+        ItemMeta buttonMeta = button.getItemMeta();
+        buttonMeta.setDisplayName(ChatColor.GREEN + user.getName());
+        ArrayList<String> lores = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        if (isKing) {
+            lores.add(ChatColor.RED + "왕");
+        } else {
+            lores.add(ChatColor.RED + "시민");
+        }
+        lores.add(ChatColor.GRAY + "가입일: " + registeredTime.format(formatter));
+        buttonMeta.setLore(lores);
+        button.setItemMeta(buttonMeta);
+        return button;
+    }
+    public static ItemStack getWarInfoButton(War war) {
+        ItemStack button = new ItemStack(Material.PLAYER_HEAD);
+        ItemMeta buttonMeta = button.getItemMeta();
+        buttonMeta.setDisplayName(ChatColor.GREEN + war.getAttackNation().getName() + "->" + war.getDefendNation().getName());
+        ArrayList<String> lores = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        lores.add(ChatColor.GRAY + "전쟁시작시간: " + war.getDefendStartTime().format(formatter));
+        buttonMeta.setLore(lores);
+        button.setItemMeta(buttonMeta);
+        return button;
+    }
+    public static ItemStack getInvitedUserButton(User user, LocalDateTime registeredTime) {
+        ItemStack button = new ItemStack(Material.PLAYER_HEAD);
+        ItemMeta buttonMeta = button.getItemMeta();
+        buttonMeta.setDisplayName(ChatColor.GREEN + user.getName());
+        ArrayList<String> lores = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        lores.add(ChatColor.GRAY + "초대 시간: " + registeredTime.format(formatter));
+        buttonMeta.setLore(lores);
+        button.setItemMeta(buttonMeta);
+        return button;
+    }
+    public static ItemStack getAllyInfoButton(Nation nation, LocalDateTime registeredTime) {
+        ItemStack button = new ItemStack(Material.PLAYER_HEAD);
+        ItemMeta buttonMeta = button.getItemMeta();
+        buttonMeta.setDisplayName(ChatColor.GREEN + nation.getName());
+        ArrayList<String> lores = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        lores.add(ChatColor.GRAY + "동맹일: " + registeredTime.format(formatter));
+        buttonMeta.setLore(lores);
+        button.setItemMeta(buttonMeta);
+        return button;
+    }
+    public static ItemStack getWarButton(Nation nation, LocalDateTime registeredTime) {
+        ItemStack button = new ItemStack(Material.PLAYER_HEAD);
+        ItemMeta buttonMeta = button.getItemMeta();
+        buttonMeta.setDisplayName(ChatColor.GREEN + nation.getName());
+        ArrayList<String> lores = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        lores.add(ChatColor.GRAY + "동맹일: " + registeredTime.format(formatter));
+        buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
         return button;
     }
@@ -298,8 +438,5 @@ public class NationButtons {
     }
     public static ItemStack getNationListButton() {
         return nationListButton;
-    }
-    public static ItemStack getChunksButton() {
-        return chunksButton;
     }
 }

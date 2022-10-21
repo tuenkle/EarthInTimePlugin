@@ -21,6 +21,14 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Objects;
 public class EarthInTimePlugin extends JavaPlugin {
+    private static EarthInTimePlugin mainInstance;
+
+    public EarthInTimePlugin() {
+        mainInstance = this;
+    }
+    public static EarthInTimePlugin getMainInstance() {
+        return mainInstance;
+    }
     @Override
     public void onEnable() {
         GeneralButtons.makeAll();
