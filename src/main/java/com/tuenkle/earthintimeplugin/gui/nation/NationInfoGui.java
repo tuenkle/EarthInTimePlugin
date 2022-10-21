@@ -29,13 +29,15 @@ public class NationInfoGui implements InventoryHolder {
     public static final int SHRINK_SLOT = 41;
     public static final int INVITE_SLOT = 42;
     public static final int ATTACK_SLOT = 29;
-    public static final int ALLY_SLOT = 42;
+    public static final int ALLY_SLOT = 30;
     public static final int CLOSE_SLOT = 49;
     public static final int BACK_SLOT = 48;
     private final Nation nation;
     private final User user;
     private String cameFrom;
-
+    public Nation getNation() {
+        return nation;
+    }
     public String getCameFrom() {
         return cameFrom;
     }

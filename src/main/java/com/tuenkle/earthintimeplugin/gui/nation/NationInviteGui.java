@@ -13,6 +13,9 @@ import java.util.Map;
 
 public class NationInviteGui implements InventoryHolder {
     private final Nation nation;
+    public Nation getNation() {
+        return nation;
+    }
     public static final int CLOSE_SLOT = 49;
     public static final int BACK_SLOT = 48;
     public NationInviteGui(Nation nation) {

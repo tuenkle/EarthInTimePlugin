@@ -17,6 +17,9 @@ public class NationWarsGui implements InventoryHolder {
     public static final int BACK_SLOT = 48;
 
     private final Nation nation;
+    public Nation getNation() {
+        return nation;
+    }
     public NationWarsGui(Nation nation) {
         this.nation = nation;
     }
