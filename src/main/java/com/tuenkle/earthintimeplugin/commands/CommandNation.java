@@ -6,6 +6,7 @@ import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.database.War;
 import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
 import com.tuenkle.earthintimeplugin.gui.NationGui;
+import com.tuenkle.earthintimeplugin.gui.nation.NationMainGui;
 import com.tuenkle.earthintimeplugin.scheduler.ParticlesScheduler;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import com.tuenkle.earthintimeplugin.utils.NationUtils;
@@ -40,7 +41,7 @@ public class CommandNation implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
             if (args.length == 0) {
-                player.openInventory(NationGui.getStart());
+                player.openInventory(new NationMainGui().getInventory());
                 return true;
             }
             switch (args[0]) {
