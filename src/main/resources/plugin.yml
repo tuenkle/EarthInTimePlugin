@@ -1,5 +1,29 @@
 name: EarthInTime
 version: 1.0
-main: com.tuenkle.earthintime.EarthInTime
+main: com.tuenkle.earthintimeplugin.EarthInTimePlugin
 api-version: 1.19
 depend: [dynmap]
+commands:
+  kit:
+    description: Your description
+    usage: /<command>
+  db:
+    description: DB Experimental Command
+  money:
+    description: Money Command
+  clock:
+    description: Clock Command
+    usage: /clock give empty, /clock give 600
+  나라:
+    aliases: [국가]
+    description: Nation Command
+    usage: /nation set nationName
+  gui:
+    description: GUI Experimental Command
+    usage: /gui war
+  particles:
+    description: Particles Experimental Command
+    usage: /particles x, y, z
+  dynmapnation:
+    description: Dynmap Nation Command
+    usage: /dynmap
