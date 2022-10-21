@@ -275,15 +275,33 @@ public class NationGuiListener implements Listener {
                     player.closeInventory();
                     return;
                 }
-
-                Nation nation = Database.nations.get(ChatColor.stripColor(event.getInventory().getItem(4).getItemMeta().getDisplayName()));
-                User user = Database.users.get(player.getUniqueId());
                 if (clickedItem.equals(GeneralButtons.getBackButton())) {
+                    Nation nation = Database.nations.get(ChatColor.stripColor(event.getInventory().getItem(4).getItemMeta().getDisplayName()));
+                    User user = Database.users.get(player.getUniqueId());
                     player.openInventory(NationGui.getNationInfo(nation, user));
                     return;
                 }
             }
+            case "나라 동맹 정보" -> {
+                event.setCancelled(true);
+                final ItemStack clickedItem = event.getCurrentItem();
 
+                if (clickedItem == null || clickedItem.equals(GeneralButtons.getDummyButton())) {
+                    return;
+                }
+                final Player player = (Player) event.getWhoClicked();
+
+                if (clickedItem.equals(GeneralButtons.getCloseButton())) {
+                    player.closeInventory();
+                    return;
+                }
+                if (clickedItem.equals(GeneralButtons.getBackButton())) {
+                    Nation nation = Database.nations.get(ChatColor.stripColor(event.getInventory().getItem(4).getItemMeta().getDisplayName()));
+                    User user = Database.users.get(player.getUniqueId());
+                    player.openInventory(NationGui.getNationInfo(nation, user));
+                    return;
+                }
+            }
         }
     }
 }
