@@ -5,8 +5,6 @@ import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.database.War;
 import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
-import com.tuenkle.earthintimeplugin.gui.NationGui;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 
@@ -99,7 +97,6 @@ public class NationUtils {
         }
         Database.nations.remove(nation.getName());
         NationDynmap.eraseNation(nation);
-        NationGui.makeNationsList();
     }
 
     public static long getNationExpandMoney(Nation nation) {

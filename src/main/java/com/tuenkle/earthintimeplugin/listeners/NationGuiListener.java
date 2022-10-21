@@ -5,14 +5,12 @@ import com.tuenkle.earthintimeplugin.database.Database;
 import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
-import com.tuenkle.earthintimeplugin.gui.NationGui;
 import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
 import com.tuenkle.earthintimeplugin.gui.buttons.NationButtons;
 import com.tuenkle.earthintimeplugin.gui.nation.*;
 import com.tuenkle.earthintimeplugin.scheduler.ParticlesScheduler;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import com.tuenkle.earthintimeplugin.utils.NationUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -25,7 +23,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -103,7 +100,7 @@ public class NationGuiListener implements Listener {
                         player.openInventory(new NationMainGui().getInventory());
                         return;
                     }
-                    if (((NationInfoGui) inventory.getHolder()).getCameFrom().equals("list")){
+                    if (((NationInfoGui) inventory.getHolder()).getCameFrom().equals("list")) {
                         player.openInventory(new NationListGui(user).getInventory());
                         return;
                     }
@@ -188,7 +185,7 @@ public class NationGuiListener implements Listener {
                     User user = Database.users.get(player.getUniqueId());
                     Nation nation = user.getNation();
                     int[] chunk = {player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ()};
-                    if (!isIntChunkInNation(chunk, nation)){
+                    if (!isIntChunkInNation(chunk, nation)) {
                         player.sendMessage("본인 나라 안에 있지 않습니다.");
                         return;
                     }
@@ -223,6 +220,88 @@ public class NationGuiListener implements Listener {
                         return;
                     }
                     return;
+                }
+                return;
+            }
+            if (inventory.getHolder() instanceof NationResidentsGui) {
+                event.setCancelled(true);
+                if (clickedItem.equals(GeneralButtons.getCloseButton())) {
+                    player.closeInventory();
+                    return;
+                }
+                if (clickedItem.equals(GeneralButtons.getBackButton())) {
+                    Nation nation = Database.nations.get(ChatColor.stripColor(event.getInventory().getItem(4).getItemMeta().getDisplayName()));
+                    User user = Database.users.get(player.getUniqueId());
+                    player.openInventory(new NationInfoGui(nation, user, "main").getInventory());
+                    return;
+                }
+                return;
+            }
+            if (inventory.getHolder() instanceof NationAlliesGui) {
+                event.setCancelled(true);
+                if (clickedItem.equals(GeneralButtons.getCloseButton())) {
+                    player.closeInventory();
+                    return;
+                }
+                if (clickedItem.equals(GeneralButtons.getBackButton())) {
+                    Nation nation = Database.nations.get(ChatColor.stripColor(event.getInventory().getItem(4).getItemMeta().getDisplayName()));
+                    User user = Database.users.get(player.getUniqueId());
+                    player.openInventory(new NationInfoGui(nation, user, "main").getInventory());
+                    return;
+                }
+                //TODO-동맹인 나라 누르면 그 나라 info로 바로 가게
+                return;
+            }
+            if (inventory.getHolder() instanceof NationWarsGui) {
+                event.setCancelled(true);
+                if (clickedItem.equals(GeneralButtons.getCloseButton())) {
+                    player.closeInventory();
+                    return;
+                }
+                if (clickedItem.equals(GeneralButtons.getBackButton())) {
+                    Nation nation = Database.nations.get(ChatColor.stripColor(event.getInventory().getItem(4).getItemMeta().getDisplayName()));
+                    User user = Database.users.get(player.getUniqueId());
+                    player.openInventory(new NationInfoGui(nation, user, "main").getInventory());
+                    return;
+                }
+                //TODO-전쟁 누르면 그 전쟁 info로 바로 가게
+                return;
+            }
+            if (inventory.getHolder() instanceof NationInviteGui) {
+                event.setCancelled(true);
+                if (clickedItem.equals(GeneralButtons.getCloseButton())) {
+                    player.closeInventory();
+                    return;
+                }
+                if (clickedItem.equals(GeneralButtons.getBackButton())) {
+                    Nation nation = Database.nations.get(ChatColor.stripColor(event.getInventory().getItem(4).getItemMeta().getDisplayName()));
+                    User user = Database.users.get(player.getUniqueId());
+                    player.openInventory(new NationInfoGui(nation, user, "main").getInventory());
+                    return;
+                }
+                if (clickedItem.equals(NationButtons.getInviteRequestButton())) {
+                    player.closeInventory();
+                    player.sendMessage(ChatColor.YELLOW + "/나라 초대 <유저이름>");
+                    return;
+                }
+                ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+                if (clickedItemMeta != null) {
+                    if (clickedItemMeta.hasLore()) {
+                        List<String> lores = clickedItemMeta.getLore();
+                        if (lores == null || lores.size() != 3) {
+                            return;
+                        }
+                        UUID userUuid = UUID.fromString(ChatColor.stripColor(lores.get(2)));
+                        User user = Database.users.get(userUuid);
+                        Nation nation = Database.nations.get(ChatColor.stripColor(event.getInventory().getItem(4).getItemMeta().getDisplayName()));
+                        if (nation == null) {
+                            return;
+                        }
+                        nation.removeInvite(user);
+                        player.openInventory(new NationInviteGui(nation).getInventory());
+                        player.sendMessage(ChatColor.GREEN + user.getName() + " 초대 취소 완료");
+                        return;
+                    }
                 }
                 return;
             }

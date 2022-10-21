@@ -5,7 +5,6 @@ import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.database.War;
 import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
-import com.tuenkle.earthintimeplugin.gui.NationGui;
 import com.tuenkle.earthintimeplugin.gui.nation.NationMainGui;
 import com.tuenkle.earthintimeplugin.scheduler.ParticlesScheduler;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
@@ -83,7 +82,6 @@ public class CommandNation implements CommandExecutor {
                     user.withdrawMoney(NATION_CREATION_MONEY);
                     user.setNation(nation);
                     Database.nations.put(nationName, nation);
-                    NationGui.makeNationsList();
                     NationDynmap.drawNation(nation);
                     player.sendMessage("나라 생성 완료");
                     return true;
@@ -126,7 +124,6 @@ public class CommandNation implements CommandExecutor {
                     }
                     Database.nations.remove(nation.getName());
                     NationDynmap.eraseNation(nation);
-                    NationGui.makeNationsList();
                     player.sendMessage("나라 삭제 완료: " + nation.getName());
                     return true;
                 }

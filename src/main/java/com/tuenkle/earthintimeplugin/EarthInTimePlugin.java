@@ -7,7 +7,6 @@ import java.util.Objects;
 import com.tuenkle.earthintimeplugin.commands.CommandClock;
 import com.tuenkle.earthintimeplugin.commands.CommandNation;
 import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
-import com.tuenkle.earthintimeplugin.gui.NationGui;
 import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
 import com.tuenkle.earthintimeplugin.gui.buttons.NationButtons;
 import com.tuenkle.earthintimeplugin.listeners.ClockListener;
@@ -30,7 +29,6 @@ public class EarthInTimePlugin extends JavaPlugin {
     public void onEnable() {
         GeneralButtons.makeAll();
         NationButtons.makeAll();
-        NationGui.makeAll();
         Objects.requireNonNull(this.getCommand("나라")).setExecutor(new CommandNation(this));
         Objects.requireNonNull(this.getCommand("clock")).setExecutor(new CommandClock());
         getServer().getPluginManager().registerEvents(new ClockListener(), this);
