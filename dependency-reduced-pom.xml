@@ -18,7 +18,7 @@
           </execution>
         </executions>
         <configuration>
-          <outputFile>C:/Users/tuenk/Desktop/Coding/EarthInTimeProject/EarthInTimeServer/plugins/${project.artifactId}.jar</outputFile>
+          <outputFile>${project.basedir}/../EarthInTimeServer/plugins/${project.artifactId}.jar</outputFile>
         </configuration>
       </plugin>
     </plugins>
@@ -41,7 +41,7 @@
       <artifactId>dynmapapi</artifactId>
       <version>3.4</version>
       <scope>system</scope>
-      <systemPath>C:/Users/tuenk/Desktop/Coding/EarthInTimeProject/dependencies/Dynmap-3.4-spigot.jar</systemPath>
+      <systemPath>${project.basedir}/../Dependencies/Dynmap-3.4-spigot.jar</systemPath>
     </dependency>
   </dependencies>
   <properties>

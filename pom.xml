@@ -22,7 +22,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.4.0</version>
                 <configuration>
-                    <outputFile>C:/Users/tuenk/Desktop/Coding/EarthInTimeProject/EarthInTimeServer/plugins/${project.artifactId}.jar</outputFile>
+                    <outputFile>${project.basedir}/../EarthInTimeServer/plugins/${project.artifactId}.jar</outputFile>
                 </configuration>
                 <executions>
                     <execution>
@@ -52,7 +52,7 @@
             <artifactId>dynmapapi</artifactId>
             <scope>system</scope>
             <version>3.4</version>
-            <systemPath>C:/Users/tuenk/Desktop/Coding/EarthInTimeProject/dependencies/Dynmap-3.4-spigot.jar</systemPath>
+            <systemPath>${project.basedir}/../Dependencies/Dynmap-3.4-spigot.jar</systemPath>
         </dependency>
     </dependencies>
 
