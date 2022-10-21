@@ -11,6 +11,7 @@ import com.tuenkle.earthintimeplugin.gui.buttons.NationButtons;
 import com.tuenkle.earthintimeplugin.scheduler.ParticlesScheduler;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import com.tuenkle.earthintimeplugin.utils.NationUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -18,15 +19,26 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-import static com.tuenkle.earthintimeplugin.utils.NationUtils.getNationExpandMoney;
-import static com.tuenkle.earthintimeplugin.utils.NationUtils.isIntChunkInNation;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static com.tuenkle.earthintimeplugin.utils.NationUtils.*;
 
 public class NationGuiListener implements Listener {
 
     @EventHandler
     public void onGuiClick(InventoryClickEvent event) {
+        if (event.getClickedInventory() == null) {
+            return;
+        }
+        if (event.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
+            return;
+        }
         switch (event.getView().getTitle()) {
             case "나라" -> {
                 event.setCancelled(true);
@@ -323,6 +335,50 @@ public class NationGuiListener implements Listener {
                     return;
                 }
                 //TODO-전쟁 누르면 그 전쟁 info로 바로 가게
+            }
+            case "나라 초대 정보" -> {
+                event.setCancelled(true);
+                final ItemStack clickedItem = event.getCurrentItem();
+
+                if (clickedItem == null || clickedItem.equals(GeneralButtons.getDummyButton())) {
+                    return;
+                }
+                final Player player = (Player) event.getWhoClicked();
+
+                if (clickedItem.equals(GeneralButtons.getCloseButton())) {
+                    player.closeInventory();
+                    return;
+                }
+                if (clickedItem.equals(GeneralButtons.getBackButton())) {
+                    Nation nation = Database.nations.get(ChatColor.stripColor(event.getInventory().getItem(4).getItemMeta().getDisplayName()));
+                    User user = Database.users.get(player.getUniqueId());
+                    player.openInventory(NationGui.getNationInfo(nation, user));
+                    return;
+                }
+                if (clickedItem.equals(NationButtons.getInviteRequestButton())) {
+                    player.closeInventory();
+                    player.sendMessage(ChatColor.YELLOW + "/나라 초대 <유저이름>");
+                    return;
+                }
+                ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+                if (clickedItemMeta != null) {
+                    if (clickedItemMeta.hasLore()) {
+                        List<String> lores = clickedItemMeta.getLore();
+                        if (lores == null || lores.size() != 3) {
+                            return;
+                        }
+                        UUID userUuid = UUID.fromString(ChatColor.stripColor(lores.get(2)));
+                        User user = Database.users.get(userUuid);
+                        Nation nation = Database.nations.get(ChatColor.stripColor(event.getInventory().getItem(4).getItemMeta().getDisplayName()));
+                        if (nation == null) {
+                            return;
+                        }
+                        nation.removeInvite(user);
+                        player.openInventory(NationGui.getInvite(nation));
+                        return;
+                    }
+                }
+                //TODO-초대 누르면 취소
             }
         }
     }

@@ -133,7 +133,9 @@ public class Nation {
     public void removeChunk(int[] targetChunk) {
         chunks.removeIf(chunk -> chunk[0] == targetChunk[0] && chunk[1] == targetChunk[1]);
     }
-
+    public void removeInvite(User user) {
+        invites.remove(user);
+    }
 
 
 

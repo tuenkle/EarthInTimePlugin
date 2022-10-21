@@ -84,6 +84,7 @@ public class NationButtons {
     private static ItemStack spawnButton;
     private static ItemStack borderVisualizationButton;
     private static ItemStack depositButton;
+    private static ItemStack inviteRequestButton;
 
 
     //    private static ItemStack attackButton;
@@ -104,6 +105,7 @@ public class NationButtons {
         makeWarsButton();
         makeWithdrawButton();
         makeInviteButton();
+        makeInviteRequestButton();
 //        makeAttackButton();
 //        makeAllyButton();
     }
@@ -127,6 +129,16 @@ public class NationButtons {
 //        button.setItemMeta(buttonMeta);
 //        allyButton = button;
 //    }
+    public static void makeInviteRequestButton() {
+        ItemStack button = new ItemStack(Material.WRITABLE_BOOK);
+        ItemMeta buttonMeta = button.getItemMeta();
+        buttonMeta.setDisplayName(ChatColor.GREEN + "유저 초대");
+        ArrayList<String> lores = new ArrayList<>();
+        lores.add(ChatColor.GRAY + "유저를 초대하려면 클릭하세요!");
+        buttonMeta.setLore(lores);
+        button.setItemMeta(buttonMeta);
+        inviteRequestButton = button;
+    }
     public static void makeNationInfoButton() {
         ItemStack button = new ItemStack(Material.CRAFTING_TABLE);
         ItemMeta buttonMeta = button.getItemMeta();
@@ -407,6 +419,8 @@ public class NationButtons {
         ArrayList<String> lores = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         lores.add(ChatColor.GRAY + "초대 시간: " + registeredTime.format(formatter));
+        lores.add(ChatColor.GRAY + "초대를 취소하려면 클릭하세요!");
+        lores.add(ChatColor.GRAY + user.getUuid().toString());
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
         return button;
@@ -427,5 +441,8 @@ public class NationButtons {
     }
     public static ItemStack getNationListButton() {
         return nationListButton;
+    }
+    public static ItemStack getInviteRequestButton() {
+        return inviteRequestButton;
     }
 }
