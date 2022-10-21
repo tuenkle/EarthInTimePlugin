@@ -605,6 +605,10 @@ public class CommandNation implements CommandExecutor {
                         player.sendMessage("왕이 아닙니다.");
                         return true;
                     }
+                    if (nation.getChunks().size() <= 1) {
+                        player.sendMessage("영토가 한칸일 때는 축소할 수 없습니다.");
+                        return true;
+                    }
                     int[] chunk = {player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ()};
                     if (!isIntChunkInNation(chunk, nation)){
                         player.sendMessage("본인 나라 안에 있지 않습니다.");

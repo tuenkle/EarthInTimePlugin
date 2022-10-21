@@ -404,10 +404,11 @@ public class NationButtons {
     public static ItemStack getWarInfoButton(War war) {
         ItemStack button = new ItemStack(Material.PLAYER_HEAD);
         ItemMeta buttonMeta = button.getItemMeta();
-        buttonMeta.setDisplayName(ChatColor.GREEN + war.getAttackNation().getName() + "->" + war.getDefendNation().getName());
+        buttonMeta.setDisplayName(ChatColor.GREEN + war.getAttackNation().getName() + " -> " + war.getDefendNation().getName());
         ArrayList<String> lores = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         lores.add(ChatColor.GRAY + "전쟁시작시간: " + war.getDefendStartTime().format(formatter));
+        lores.add(ChatColor.GRAY + "더 자세한 정보를 보려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
         return button;

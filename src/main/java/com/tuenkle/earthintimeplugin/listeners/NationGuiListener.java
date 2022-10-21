@@ -251,6 +251,15 @@ public class NationGuiListener implements Listener {
                     player.openInventory(NationGui.getNationsList());
                     return;
                 }
+                Nation nation = Database.nations.get(ChatColor.stripColor(event.getInventory().getItem(4).getItemMeta().getDisplayName()));
+                User user = Database.users.get(player.getUniqueId());
+                if (!nation.getKing().equals(user)) {
+                    player.closeInventory();
+                    return;
+                }
+                if (event.getRawSlot() == 29) {
+                    String relation = Database.getRelation(nation, nation);
+                }
                 //TODO 버튼 늘어남에 따라 추가
             }
             case "나라 정보(타국)-시민" -> {
@@ -379,7 +388,6 @@ public class NationGuiListener implements Listener {
                         return;
                     }
                 }
-                //TODO-초대 누르면 취소
             }
         }
     }
