@@ -375,6 +375,7 @@ public class NationGuiListener implements Listener {
                         }
                         nation.removeInvite(user);
                         player.openInventory(NationGui.getInvite(nation));
+                        player.sendMessage(ChatColor.GREEN + user.getName() + " 초대 취소 완료");
                         return;
                     }
                 }
