@@ -281,8 +281,8 @@ public class NationGuiListener implements Listener {
                     player.closeInventory();
                     return;
                 }
+                Nation nation = ((NationWarsGui) inventory.getHolder()).getNation();
                 if (clickedItem.equals(GeneralButtons.getBackButton())) {
-                    Nation nation = ((NationWarsGui) inventory.getHolder()).getNation();
                     if (!Database.nations.containsValue(nation)) {
                         player.closeInventory();
                         return;
@@ -291,7 +291,18 @@ public class NationGuiListener implements Listener {
                     player.openInventory(new NationInfoGui(nation, user, "main").getInventory());
                     return;
                 }
-                //TODO-전쟁 누르면 그 전쟁 info로 바로 가게
+                ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+                if (clickedItemMeta == null) {
+                    return;
+                }
+                String clickedItemMetaDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
+                String[] clickedItemMetaDisplayNameSplited = clickedItemMetaDisplayName.split(" -> ");
+                War war = Database.getWar(Database.nations.get(clickedItemMetaDisplayNameSplited[0]), Database.nations.get(clickedItemMetaDisplayNameSplited[1]));
+                if (war == null) {
+                    player.openInventory(new NationWarsGui(nation).getInventory());
+                    return;
+                }
+                player.openInventory(new WarInfoGui(war).getInventory());
                 return;
             }
             if (inventory.getHolder() instanceof NationInviteGui) {
