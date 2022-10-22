@@ -1,0 +1,39 @@
+package com.tuenkle.earthintimeplugin.gui.war;
+
+import com.tuenkle.earthintimeplugin.database.User;
+import com.tuenkle.earthintimeplugin.database.War;
+import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
+import com.tuenkle.earthintimeplugin.gui.buttons.NationButtons;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Map;
+
+public class WarGui {
+    protected final War war;
+    protected ItemStack getButton(Material material, String name) {
+        ItemStack button = new ItemStack(material);
+        ItemMeta buttonMeta = button.getItemMeta();
+        buttonMeta.setDisplayName(name);
+        button.setItemMeta(buttonMeta);
+        return button;
+    }
+    protected ItemStack getButtonWithLores(Material material, String name, String ...lores) {
+        ItemStack button = new ItemStack(material);
+        ItemMeta buttonMeta = button.getItemMeta();
+        buttonMeta.setDisplayName(name);
+        buttonMeta.setLore(Arrays.stream(lores).toList());
+        button.setItemMeta(buttonMeta);
+        return button;
+    }
+    public WarGui(War war) {
+        this.war = war;
+    }
+}

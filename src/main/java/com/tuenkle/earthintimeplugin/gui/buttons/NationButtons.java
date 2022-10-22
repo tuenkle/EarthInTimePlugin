@@ -303,12 +303,13 @@ public class NationButtons {
         ArrayList<String> lores = new ArrayList<>();
         switch (relation) {
             case "전쟁" -> {
-                buttonMeta.setDisplayName(ChatColor.GREEN + "전쟁 정보");
+                buttonMeta.setDisplayName(ChatColor.GREEN + "전쟁 중");
                 lores.add(String.format("%s%s - %s: %s",
                         ChatColor.GRAY,
                         nation.getName(),
                         targetNation.getName(),
                         relation));
+                lores.add(ChatColor.GRAY + "더 자세한 정보를 보려면 클릭하세요!");
             }
             case "동맹" -> {
                 buttonMeta.setDisplayName(ChatColor.GREEN + "전쟁 불가");
@@ -325,6 +326,7 @@ public class NationButtons {
                         nation.getName(),
                         targetNation.getName(),
                         relation));
+                lores.add(ChatColor.GRAY + "전쟁을 선포하려면 클릭하세요!");
             }
         }
         buttonMeta.setLore(lores);

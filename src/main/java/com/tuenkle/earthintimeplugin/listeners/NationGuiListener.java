@@ -4,10 +4,12 @@ import com.tuenkle.earthintimeplugin.EarthInTimePlugin;
 import com.tuenkle.earthintimeplugin.database.Database;
 import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
+import com.tuenkle.earthintimeplugin.database.War;
 import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
 import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
 import com.tuenkle.earthintimeplugin.gui.buttons.NationButtons;
 import com.tuenkle.earthintimeplugin.gui.nation.*;
+import com.tuenkle.earthintimeplugin.gui.war.WarInfoGui;
 import com.tuenkle.earthintimeplugin.scheduler.ParticlesScheduler;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import com.tuenkle.earthintimeplugin.utils.NationUtils;
@@ -72,7 +74,7 @@ public class NationGuiListener implements Listener {
                 }
                 return;
             }
-            if (inventory.getHolder() instanceof NationInfoGui) {
+            if (inventory.getHolder() instanceof NationInfoGui nationInfoGui) {
                 event.setCancelled(true);
                 int clickedSlot = event.getRawSlot();
                 switch (clickedSlot) { // - 시민, 왕, 타민
@@ -194,6 +196,24 @@ public class NationGuiListener implements Listener {
                     User user = Database.users.get(player.getUniqueId());
                     Nation nation = user.getNation();
                     player.openInventory(new NationInviteGui(nation).getInventory());
+                    return;
+                }
+                String clickedItemDisplayName = clickedItem.getItemMeta().getDisplayName();
+                if (clickedItemDisplayName.equals("전쟁 선포")) {
+                    player.closeInventory();
+                    player.sendMessage("/전쟁 선포 <나라이름>");
+                    return;
+                }
+                if (clickedItemDisplayName.equals("전쟁 중")) {
+                    User user = Database.users.get(player.getUniqueId());
+                    Nation userNation = user.getNation();
+                    Nation targetNation = nationInfoGui.getNation();
+                    War war = Database.getWar(userNation, targetNation);
+                    if (war == null) {
+                        player.openInventory(new NationInfoGui(targetNation, user, "main").getInventory());
+                        return;
+                    }
+                    player.openInventory(new WarInfoGui(war).getInventory());
                     return;
                 }
                 //TODO 버튼 늘어남에 따라 추가
