@@ -50,7 +50,7 @@ public class WarInfoGui extends WarGui implements InventoryHolder {
         inventory.setItem(23, getDefendNationButton());
         inventory.setItem(24, getDefendNationsButton());
         inventory.setItem(48, GeneralButtons.getBackButton());
-
+        inventory.setItem(45, GeneralButtons.getCloseButton());
         return inventory;
     }
 }
