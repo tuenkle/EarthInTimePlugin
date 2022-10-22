@@ -1,6 +1,9 @@
 package com.tuenkle.earthintimeplugin.database;
 
 import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
+import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
+import com.tuenkle.earthintimeplugin.utils.NationUtils;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 
 import java.time.LocalDateTime;
@@ -8,6 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
+
+import static com.tuenkle.earthintimeplugin.utils.NationUtils.getNationExpandMoney;
+import static com.tuenkle.earthintimeplugin.utils.NationUtils.isIntChunkInNation;
 
 public class Nation {
     private User king;
@@ -137,8 +143,55 @@ public class Nation {
         invites.remove(user);
     }
 
+    public String shrink(int[] chunk) {
+        if (chunks.size() == 1) {
+            return "영토가 한 청크일 때는 축소할 수 없습니다.";
+        }
+        if (!isIntChunkInNation(chunk)) {
+            return "나라 안에 있지 않습니다.";
+        }
+        //TODO-도넛 모양
+        removeChunk(chunk);
+        NationDynmap.eraseAndDrawNation(this);
+        return "나라 축소 완료";
+    }
+    public String expand(int[] chunk) {
+        long requiredMoney = getExpandRequireMoney();
 
-
+        if (money < requiredMoney) {
+            return "나라 잔고가 부족합니다. 필요 잔고: " + GeneralUtils.secondToUniversalTime(requiredMoney);
+        }
+        if (NationUtils.isIntChunkInNations(chunk)) {
+            return "나라 안에 있습니다.";
+        }
+        if (!isIntChunkNearNation(chunk)) {
+            return "본인 나라에 근접한 청크가 아닙니다.";
+        }
+        //TODO-도넛 모양
+        withdrawMoney(requiredMoney);
+        addChunk(chunk);
+        NationDynmap.eraseAndDrawNation(this);
+        return "나라 확장 완료";
+    }
+    public long getExpandRequireMoney() {
+        return 600;
+    }
+    public boolean isIntChunkNearNation(int[] chunk) {
+        for (int[] nationChunk : chunks) {
+            if ((Math.abs(nationChunk[0] - chunk[0]) + Math.abs(nationChunk[1] - chunk[1])) == 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isIntChunkInNation(int[] chunk) {
+        for (int[] nationChunk : chunks) {
+            if (nationChunk[0] == chunk[0] && nationChunk[1] == chunk[1]){
+                return true;
+            }
+        }
+        return false;
+    }
     public Nation(String name, User king, int[] chunk, Location spawn) {
         this.name = name;
         this.king = king;

@@ -14,8 +14,8 @@ import java.util.*;
 import static com.tuenkle.earthintimeplugin.database.Database.nations;
 
 public class NationUtils {
-    public static boolean isIntChunkInNations(int[] playerChunk, HashMap<String, Nation> nations) {
-        for (Nation nation : nations.values()) {
+    public static boolean isIntChunkInNations(int[] playerChunk) {
+        for (Nation nation : Database.nations.values()) {
             for (int[] chunk : nation.getChunks()) {
                 if (chunk[0] == playerChunk[0] && chunk[1] == playerChunk[1]){
                     return true;

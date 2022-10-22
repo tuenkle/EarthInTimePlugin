@@ -43,14 +43,14 @@ public class CommandNation implements CommandExecutor {
                 player.openInventory(new NationMainGui().getInventory());
                 return true;
             }
+            UUID userUuid = player.getUniqueId();
+            User user = Database.users.get(userUuid);
             switch (args[0]) {
                 case "만들기" -> {
                     if (args.length != 2) {
                         player.sendMessage(ChatColor.YELLOW + "/나라 만들기 <나라이름> - " + "나라를 생성합니다.(비용: 1시간)");
                         return true;
                     }
-                    UUID userUuid = player.getUniqueId();
-                    User user = Database.users.get(userUuid);
                     if (user.getNation() != null) {
                         player.sendMessage("이미 나라가 있습니다.");
                         return true;
@@ -74,11 +74,12 @@ public class CommandNation implements CommandExecutor {
                     }
                     Chunk playerChunk = player.getLocation().getChunk();
                     int[] chunk = {playerChunk.getX(), playerChunk.getZ()};
-                    if (NationUtils.isIntChunkInNations(chunk, Database.nations)) {
+                    if (NationUtils.isIntChunkInNations(chunk)) {
                         player.sendMessage("이 땅은 이미 다른 나라가 소유중입니다.");
                         return true;
                     }
                     Nation nation = new Nation(nationName, user, chunk, player.getLocation());
+                    user.withdrawMoney(NATION_CREATION_MONEY);
                     user.withdrawMoney(NATION_CREATION_MONEY);
                     user.setNation(nation);
                     Database.nations.put(nationName, nation);
@@ -91,8 +92,6 @@ public class CommandNation implements CommandExecutor {
                         player.sendMessage(ChatColor.YELLOW + "/나라 삭제");
                         return true;
                     }
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
                     Nation nation = user.getNation();
                     if (nation == null) {
                         player.sendMessage("소속된 나라가 없습니다.");
@@ -132,8 +131,6 @@ public class CommandNation implements CommandExecutor {
                         player.sendMessage(ChatColor.YELLOW + "/나라 동맹 신청 <나라이름>", ChatColor.YELLOW + "/나라 동맹 수락 <나라이름>", ChatColor.YELLOW + "/나라 동맹 거절 <나라이름>", ChatColor.YELLOW + "/나라 동맹 파기 <나라이름>");
                         return true;
                     }
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
                     Nation nation = user.getNation();
                     if (nation == null) {
                         player.sendMessage("소속된 나라가 없습니다.");
@@ -211,8 +208,6 @@ public class CommandNation implements CommandExecutor {
                         player.sendMessage(ChatColor.YELLOW + "/나라 전쟁 선포 <나라이름> - 해당 나라에 전쟁을 선포합니다.(비용: 1일)");
                         return true;
                     }
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
                     Nation nation = user.getNation();
                     switch (args[1]) {
                         case "선포" -> {
@@ -383,8 +378,7 @@ public class CommandNation implements CommandExecutor {
                                 ChatColor.YELLOW + "/나라 초대 거절 <나라이름> - 해당 나라로부터 온 초대를 거절합니다.");
                         return true;
                     }
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
+
                     Nation nation = user.getNation();
                     if (args.length == 2) {
                         if (nation == null) {
@@ -540,8 +534,6 @@ public class CommandNation implements CommandExecutor {
                     }
                 }
                 case "떠나기" -> {
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
                     Nation nation = user.getNation();
                     if (nation == null) {
                         player.sendMessage("소속된 나라가 없습니다.");
@@ -558,8 +550,6 @@ public class CommandNation implements CommandExecutor {
                     return true;
                 }
                 case "확장" -> {
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
                     Nation nation = user.getNation();
                     if (nation == null) {
                         player.sendMessage("소속된 나라가 없습니다.");
@@ -567,33 +557,14 @@ public class CommandNation implements CommandExecutor {
                     }
                     if (!nation.getKing().equals(user)) {
                         player.sendMessage("왕이 아닙니다.");
-                        return true;
-                    }
-                    long requiredMoney = getNationExpandMoney(nation);
-                    if (nation.getMoney() < requiredMoney) {
-                        player.sendMessage("나라 잔고가 부족합니다. 필요 잔고: " + GeneralUtils.secondToUniversalTime(requiredMoney));
                         return true;
                     }
                     Chunk playerChunk = player.getLocation().getChunk();
                     int[] chunk = {playerChunk.getX(), playerChunk.getZ()};
-                    if (NationUtils.isIntChunkInNations(chunk, Database.nations)) {
-                        player.sendMessage("나라 안에 있습니다.");
-                        return true;
-                    }
-                    if (!NationUtils.isChunkNearChunks(playerChunk.getX(), playerChunk.getZ(), nation.getChunks())) {
-                        player.sendMessage("본인 나라에 근접한 청크가 아닙니다.");
-                        return true;
-                    }
-                    //TODO-도넛모양 막기
-                    nation.withdrawMoney(requiredMoney);
-                    nation.addChunk(chunk);
-                    NationDynmap.eraseAndDrawNation(nation);
-                    player.sendMessage("나라 확장 완료. 소모된 시간: " + GeneralUtils.secondToUniversalTime(requiredMoney));
+                    player.sendMessage(nation.expand(chunk));
                     return true;
                 }
                 case "축소" -> {
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
                     Nation nation = user.getNation();
                     if (nation == null) {
                         player.sendMessage("소속된 나라가 없습니다.");
@@ -603,23 +574,12 @@ public class CommandNation implements CommandExecutor {
                         player.sendMessage("왕이 아닙니다.");
                         return true;
                     }
-                    if (nation.getChunks().size() <= 1) {
-                        player.sendMessage("영토가 한칸일 때는 축소할 수 없습니다.");
-                        return true;
-                    }
-                    int[] chunk = {player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ()};
-                    if (!isIntChunkInNation(chunk, nation)){
-                        player.sendMessage("본인 나라 안에 있지 않습니다.");
-                        return true;
-                    }
-                    nation.removeChunk(chunk);
-                    NationDynmap.eraseAndDrawNation(nation);
-                    player.sendMessage("나라 축소 완료.");
+                    Chunk playerChunk = player.getLocation().getChunk();
+                    int[] chunk = {playerChunk.getX(), playerChunk.getZ()};
+                    player.sendMessage(nation.shrink(chunk));
                     return true;
                 }
                 case "스폰설정" -> {
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
                     Nation nation = user.getNation();
                     if (nation == null) {
                         player.sendMessage("소속된 나라가 없습니다.");
@@ -639,8 +599,6 @@ public class CommandNation implements CommandExecutor {
                     return true;
                 }
                 case "스폰" -> {
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
                     Nation nation = user.getNation();
                     if (nation == null) {
                         player.sendMessage("소속된 나라가 없습니다.");
@@ -651,8 +609,6 @@ public class CommandNation implements CommandExecutor {
                     return true;
                 }
                 case "강퇴" -> {
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
                     Nation nation = user.getNation();
                     if (nation == null) {
                         player.sendMessage("소속된 나라가 없습니다.");
@@ -677,8 +633,6 @@ public class CommandNation implements CommandExecutor {
                     player.sendMessage("유저를 나라에서 내보냈습니다.");
                 }
                 case "경계" -> {
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
                     Nation nation = user.getNation();
                     if (nation == null) {
                         player.sendMessage("소속된 나라가 없습니다.");
@@ -698,8 +652,6 @@ public class CommandNation implements CommandExecutor {
                     return true;
                 }
                 case "입금" -> {
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
                     Nation nation = user.getNation();
                     if (nation == null) {
                         player.sendMessage("소속된 나라가 없습니다.");
@@ -720,8 +672,6 @@ public class CommandNation implements CommandExecutor {
                     }
                 }
                 case "출금" -> {
-                    UUID userUUID = player.getUniqueId();
-                    User user = Database.users.get(userUUID);
                     Nation nation = user.getNation();
                     if (nation == null) {
                         player.sendMessage("소속된 나라가 없습니다.");

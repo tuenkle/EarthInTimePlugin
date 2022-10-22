@@ -179,19 +179,7 @@ public class NationGuiListener implements Listener {
                     }
                     Chunk playerChunk = player.getLocation().getChunk();
                     int[] chunk = {playerChunk.getX(), playerChunk.getZ()};
-                    if (NationUtils.isIntChunkInNations(chunk, Database.nations)) {
-                        player.sendMessage("나라 안에 있습니다.");
-                        return;
-                    }
-                    if (!NationUtils.isChunkNearChunks(playerChunk.getX(), playerChunk.getZ(), nation.getChunks())) {
-                        player.sendMessage("본인 나라에 근접한 청크가 아닙니다.");
-                        return;
-                    }
-                    //TODO-도넛모양 막기
-                    nation.withdrawMoney(requiredMoney);
-                    nation.addChunk(chunk);
-                    NationDynmap.eraseAndDrawNation(nation);
-                    player.sendMessage("나라 확장 완료. 소모된 시간: " + GeneralUtils.secondToUniversalTime(requiredMoney));
+                    player.sendMessage(nation.expand(chunk));
                     return;
                 }
                 if (clickedItem.equals(NationButtons.getShrinkButton())) {
@@ -199,14 +187,7 @@ public class NationGuiListener implements Listener {
                     User user = Database.users.get(player.getUniqueId());
                     Nation nation = user.getNation();
                     int[] chunk = {player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ()};
-                    if (!isIntChunkInNation(chunk, nation)) {
-                        player.sendMessage("본인 나라 안에 있지 않습니다.");
-                        return;
-                    }
-                    //TODO-이상한 모양으로 축소 안되게
-                    nation.removeChunk(chunk);
-                    NationDynmap.eraseAndDrawNation(nation);
-                    player.sendMessage("나라 축소 완료.");
+                    player.sendMessage(nation.shrink(chunk));
                     return;
                 }
                 if (clickedItem.equals(NationButtons.getInviteButton())) {
