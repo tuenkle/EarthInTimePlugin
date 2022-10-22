@@ -198,7 +198,7 @@ public class NationGuiListener implements Listener {
                     player.openInventory(new NationInviteGui(nation).getInventory());
                     return;
                 }
-                String clickedItemDisplayName = clickedItem.getItemMeta().getDisplayName();
+                String clickedItemDisplayName = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
                 if (clickedItemDisplayName.equals("전쟁 선포")) {
                     player.closeInventory();
                     player.sendMessage("/전쟁 선포 <나라이름>");
