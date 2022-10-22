@@ -1,5 +1,6 @@
 package com.tuenkle.earthintimeplugin;
 
+import com.tuenkle.earthintimeplugin.listeners.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -9,10 +10,6 @@ import com.tuenkle.earthintimeplugin.commands.CommandNation;
 import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
 import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
 import com.tuenkle.earthintimeplugin.gui.buttons.NationButtons;
-import com.tuenkle.earthintimeplugin.listeners.ClockListener;
-import com.tuenkle.earthintimeplugin.listeners.NationGuiListener;
-import com.tuenkle.earthintimeplugin.listeners.NationListener;
-import com.tuenkle.earthintimeplugin.listeners.PlayerJoinListener;
 import com.tuenkle.earthintimeplugin.recipes.ClockRecipes;
 import com.tuenkle.earthintimeplugin.scheduler.OneSecondScheduler;
 
@@ -35,6 +32,7 @@ public class EarthInTimePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new NationListener(), this);
         getServer().getPluginManager().registerEvents(new NationGuiListener(), this);
+        getServer().getPluginManager().registerEvents(new WarGuiListener(), this);
 
         ClockRecipes.EmptyClock(this);
         ClockRecipes.Clock10Minute(this);

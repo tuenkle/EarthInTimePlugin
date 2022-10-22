@@ -16,30 +16,25 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 public class WarInfoGui extends WarGui implements InventoryHolder {
-    public ItemStack getWarTitleButton() {
-        return getButton(Material.GREEN_WOOL,ChatColor.GREEN + war.getAttackNation().getName() + " -> " + war.getDefendNation().getName());
-    }
+
     public ItemStack getAttackNationsButton() {
-        return getButtonWithLores(Material.GREEN_WOOL, "공격국 목록"
+        return getButtonWithLores(Material.RED_BANNER, ChatColor.WHITE + "공격국 목록"
         , ChatColor.GRAY + "공격국 목록을 보려면 클릭하세요!");
     }
     public ItemStack getAttackNationButton() {
-        return getButtonWithLores(Material.GREEN_WOOL, "공격국"
+        return getButtonWithLores(Material.RED_WOOL, ChatColor.WHITE + "공격국"
                 , ChatColor.GREEN + war.getAttackNation().getName());
     }
     public ItemStack getDefendNationButton() {
-        return getButtonWithLores(Material.GREEN_WOOL, "수비국"
+        return getButtonWithLores(Material.BLUE_WOOL, ChatColor.WHITE + "수비국"
                 , ChatColor.GREEN + war.getDefendNation().getName());
     }
     public ItemStack getDefendNationsButton() {
-        return getButtonWithLores(Material.GREEN_WOOL, "수비국 목록"
-                , ChatColor.GRAY + "공격국 목록을 보려면 클릭하세요!");
+        return getButtonWithLores(Material.BLUE_BANNER, ChatColor.WHITE + "수비국 목록"
+                , ChatColor.GRAY + "수비국 목록을 보려면 클릭하세요!");
     }
     public WarInfoGui(War war) {
         super(war);
-    }
-    @Override
-    public Inventory getInventory() {
         Inventory inventory = Bukkit.createInventory(this, 54, "전쟁 정보");
         for (int i = 0; i < 54; i++) {
             inventory.setItem(i, GeneralButtons.getDummyButton());
@@ -50,7 +45,15 @@ public class WarInfoGui extends WarGui implements InventoryHolder {
         inventory.setItem(23, getDefendNationButton());
         inventory.setItem(24, getDefendNationsButton());
         inventory.setItem(48, GeneralButtons.getBackButton());
-        inventory.setItem(45, GeneralButtons.getCloseButton());
+        inventory.setItem(49, GeneralButtons.getCloseButton());
+        this.inventory = inventory;
+    }
+    private final Inventory inventory;
+    public War getWar() {
+        return war;
+    }
+    @Override
+    public Inventory getInventory() {
         return inventory;
     }
 }

@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ff9a010-2f69-4dd7-a253-791bfff52c11" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/listeners/NationGuiListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/listeners/NationGuiListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/EarthInTimePlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/EarthInTimePlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/gui/war/WarInfoGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/gui/war/WarInfoGui.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +62,7 @@
       <workItem from="1666410640775" duration="7243000" />
       <workItem from="1666429027713" duration="1335000" />
       <workItem from="1666430419396" duration="4001000" />
+      <workItem from="1666458264321" duration="908000" />
     </task>
     <servers />
   </component>
@@ -79,5 +82,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
