@@ -47,7 +47,6 @@ public class User {
     public Nation getNation() {
         return nation;
     }
-
     public void setNation(Nation nation) {
         this.nation = nation;
     }

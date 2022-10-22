@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ff9a010-2f69-4dd7-a253-791bfff52c11" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/commands/CommandNation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/commands/CommandNation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/database/Nation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/database/Nation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/listeners/NationGuiListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/listeners/NationGuiListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/utils/NationUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/utils/NationUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/database/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/database/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +58,7 @@
       <workItem from="1666307813575" duration="141000" />
       <workItem from="1666307961234" duration="25380000" />
       <workItem from="1666410640775" duration="7243000" />
+      <workItem from="1666429027713" duration="564000" />
     </task>
     <servers />
   </component>

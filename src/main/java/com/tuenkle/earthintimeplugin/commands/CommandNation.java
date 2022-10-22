@@ -80,7 +80,6 @@ public class CommandNation implements CommandExecutor {
                     }
                     Nation nation = new Nation(nationName, user, chunk, player.getLocation());
                     user.withdrawMoney(NATION_CREATION_MONEY);
-                    user.withdrawMoney(NATION_CREATION_MONEY);
                     user.setNation(nation);
                     Database.nations.put(nationName, nation);
                     NationDynmap.drawNation(nation);
