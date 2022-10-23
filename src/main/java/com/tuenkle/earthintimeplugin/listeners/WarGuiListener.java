@@ -33,14 +33,14 @@ public class WarGuiListener implements Listener {
         if (!(inventory.getHolder() instanceof WarGui)) {
             return;
         }
-        WarGui warGui = (WarGui) inventory.getHolder();
         event.setCancelled(true);
+        WarGui warGui = (WarGui) inventory.getHolder();
         final ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null) {
             return;
         }
         HumanEntity player = event.getWhoClicked();
-        User user = Database.users.get(player.getUniqueId());
+        User user = warGui.getUser();
         if (inventory.getHolder() instanceof WarInfoGui warInfoGui) {
             if (clickedItem.equals(GeneralButtons.getBackButton())) {
                 player.openInventory(user.getLastGui().getInventory());
@@ -81,7 +81,7 @@ public class WarGuiListener implements Listener {
                 return;
             }
             user.addLastGui(warAttackNationsGui);
-            player.openInventory(new NationInfoGui(nation, user, "main").getInventory());
+            player.openInventory(new NationInfoGui(nation, user).getInventory());
             return;
         }
         if (inventory.getHolder() instanceof WarDefendNationsGui warDefendNationsGui) {
@@ -99,7 +99,7 @@ public class WarGuiListener implements Listener {
                 return;
             }
             user.addLastGui(warDefendNationsGui);
-            player.openInventory(new NationInfoGui(nation, user, "main").getInventory());
+            player.openInventory(new NationInfoGui(nation, user).getInventory());
             return;
         }
     }

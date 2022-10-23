@@ -6,10 +6,12 @@ import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
 import com.tuenkle.earthintimeplugin.gui.buttons.NationButtons;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 
-public class NationInfoGui implements InventoryHolder {
+public class NationInfoGui extends NationGui {
     public static final int NATIONNAME_SLOT = 4;
     public static final int RESIDENTS_SLOT = 20;
     public static final int MONEY_SLOT = 21;
@@ -32,26 +34,23 @@ public class NationInfoGui implements InventoryHolder {
     public static final int ALLY_SLOT = 30;
     public static final int CLOSE_SLOT = 49;
     public static final int BACK_SLOT = 48;
-    private final Nation nation;
-    private final User user;
-    private String cameFrom;
-    public Nation getNation() {
-        return nation;
-    }
-    public String getCameFrom() {
-        return cameFrom;
+
+    public NationInfoGui(Nation nation, User user) {
+        super(nation, user);
     }
 
-    public NationInfoGui(Nation nation, User user, String cameFrom) {
-        this.nation = nation;
-        this.user = user;
-        this.cameFrom = cameFrom;
-    }
     @Override
     public Inventory getInventory() {
         Inventory inventory = Bukkit.createInventory(this, 54, "나라 정보");
         for (int i = 0; i < 54; i++) {
             inventory.setItem(i, GeneralButtons.getDummyButton());
+        }
+        inventory.setItem(CLOSE_SLOT, GeneralButtons.getCloseButton());
+        inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
+        inventory.setItem(NATIONNAME_SLOT, NationButtons.getNationNameOnlyButton(nation.getName()));
+        if (nation.isRemoved) {
+            inventory.setItem(22, getNationRemovedButton());
+            return inventory;
         }
         if (nation.getResidents().containsKey(user)) {
             if (nation.getKing().equals(user)) {
@@ -75,13 +74,10 @@ public class NationInfoGui implements InventoryHolder {
                 inventory.setItem(ALLY_SLOT, NationButtons.getAllyButton(userNation, nation, Database.getRelation(userNation, nation)));
             }
         }
-        inventory.setItem(NATIONNAME_SLOT, NationButtons.getNationNameOnlyButton(nation.getName()));
         inventory.setItem(RESIDENTS_SLOT, NationButtons.getResidentsButton());
         inventory.setItem(MONEY_SLOT, NationButtons.getMoneyButton(nation));
         inventory.setItem(ALLIES_SLOT, NationButtons.getAlliesButton());
         inventory.setItem(WARS_SLOT, NationButtons.getWarsButton());
-        inventory.setItem(CLOSE_SLOT, GeneralButtons.getCloseButton());
-        inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
 
         return inventory;
     }

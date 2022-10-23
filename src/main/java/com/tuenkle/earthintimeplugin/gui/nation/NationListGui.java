@@ -11,12 +11,11 @@ import org.bukkit.inventory.InventoryHolder;
 
 import java.util.Map;
 
-public class NationListGui implements InventoryHolder {
-    private final User user;
+public class NationListGui extends NationGui {
     public static final int CLOSE_SLOT = 49;
     public static final int BACK_SLOT = 48;
-    public NationListGui(User user) {
-        this.user = user;
+    public NationListGui(Nation nation, User user) {
+        super(nation, user);
     }
     @Override
     public Inventory getInventory() {

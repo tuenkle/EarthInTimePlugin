@@ -1,10 +1,8 @@
-package com.tuenkle.earthintimeplugin.gui.war;
+package com.tuenkle.earthintimeplugin.gui.nation;
 
+import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.database.War;
-import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
-import com.tuenkle.earthintimeplugin.gui.buttons.NationButtons;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -12,18 +10,16 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Map;
 
-public class WarGui {
-    protected final War war;
+public class NationGui implements InventoryHolder {
+    protected final Nation nation;
     protected final User user;
     public User getUser() {
         return user;
     }
-    public ItemStack getWarTitleButton() {
-        return getButton(Material.GREEN_WOOL,ChatColor.GREEN + war.getAttackNation().getName() + " -> " + war.getDefendNation().getName());
+    public Nation getNation() {
+        return nation;
     }
     protected ItemStack getButton(Material material, String name) {
         ItemStack button = new ItemStack(material);
@@ -40,9 +36,16 @@ public class WarGui {
         button.setItemMeta(buttonMeta);
         return button;
     }
-    public WarGui(War war, User user) {
-        this.war = war;
+    public ItemStack getNationRemovedButton() {
+        return getButton(Material.BARRIER, "삭제된 나라입니다.");
+    }
+    public NationGui(Nation nation, User user) {
+        this.nation = nation;
         this.user = user;
+    }
 
+    @Override
+    public Inventory getInventory() {
+        return null;
     }
 }

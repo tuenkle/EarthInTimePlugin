@@ -16,6 +16,9 @@ public class User {
     private Nation nation;
     private ArrayList<InventoryHolder> guiList = new ArrayList<>();
     public InventoryHolder getLastGui() {
+        if (guiList.size() == 0) {
+            return null;
+        }
         return guiList.remove(guiList.size() - 1);
     }
     public void addLastGui(InventoryHolder warGui) {

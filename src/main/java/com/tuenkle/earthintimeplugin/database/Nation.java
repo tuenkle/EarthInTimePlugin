@@ -19,7 +19,7 @@ public class Nation {
     private User king;
     private HashMap<User, LocalDateTime> residents = new HashMap<>();
     private HashMap<User, LocalDateTime> invites = new HashMap<>();
-
+    public boolean isRemoved = false;
     private LocalDateTime createdAt;
     private Location spawn;
     private String name;

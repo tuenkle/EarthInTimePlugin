@@ -11,16 +11,12 @@ import org.bukkit.inventory.InventoryHolder;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-public class NationResidentsGui implements InventoryHolder {
+public class NationResidentsGui extends NationGui {
     public static final int CLOSE_SLOT = 49;
     public static final int BACK_SLOT = 48;
 
-    private final Nation nation;
-    public Nation getNation() {
-        return nation;
-    }
-    public NationResidentsGui(Nation nation) {
-        this.nation = nation;
+    public NationResidentsGui(Nation nation, User user) {
+        super(nation, user);
     }
     @Override
     public Inventory getInventory() {
@@ -29,13 +25,17 @@ public class NationResidentsGui implements InventoryHolder {
             inventory.setItem(i, GeneralButtons.getDummyButton());
         }
         inventory.setItem(4, NationButtons.getNationNameOnlyButton(nation.getName()));
+        inventory.setItem(CLOSE_SLOT, GeneralButtons.getCloseButton());
+        inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
+        if (nation.isRemoved) {
+            inventory.setItem(22, getNationRemovedButton());
+            return inventory;
+        }
         int i = 0;
         for (Map.Entry<User, LocalDateTime> user : nation.getResidents().entrySet()) {
             inventory.setItem(i + 9, NationButtons.getUserButton(user.getKey(), user.getValue(), nation.getKing().equals(user.getKey())));
             i++;
         }
-        inventory.setItem(CLOSE_SLOT, GeneralButtons.getCloseButton());
-        inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
 
         return inventory;
     }

@@ -35,7 +35,6 @@ public class WarInfoGui extends WarGui implements InventoryHolder {
     }
     public WarInfoGui(War war, User user) {
         super(war, user);
-        user.addLastGui(this);
     }
     public War getWar() {
         return war;

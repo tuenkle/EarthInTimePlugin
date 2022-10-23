@@ -77,4 +77,8 @@ public class Database {
         }
         return "중립";
     }
+    public static void removeNation(Nation nation) {
+        nation.isRemoved = true;
+        nations.remove(nation.getName());
+    }
 }

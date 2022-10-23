@@ -39,12 +39,13 @@ public class CommandNation implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
-            if (args.length == 0) {
-                player.openInventory(new NationMainGui().getInventory());
-                return true;
-            }
             UUID userUuid = player.getUniqueId();
             User user = Database.users.get(userUuid);
+
+            if (args.length == 0) {
+                player.openInventory(new NationMainGui(user.getNation(), user).getInventory());
+                return true;
+            }
             switch (args[0]) {
                 case "만들기" -> {
                     if (args.length != 2) {
@@ -120,7 +121,7 @@ public class CommandNation implements CommandExecutor {
                     for (Map.Entry<User, LocalDateTime> resident : nation.getResidents().entrySet()) {
                         resident.getKey().setNation(null);
                     }
-                    Database.nations.remove(nation.getName());
+                    Database.removeNation(nation);
                     NationDynmap.eraseNation(nation);
                     player.sendMessage("나라 삭제 완료: " + nation.getName());
                     return true;

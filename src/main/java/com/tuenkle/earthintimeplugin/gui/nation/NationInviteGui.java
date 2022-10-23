@@ -11,19 +11,22 @@ import org.bukkit.inventory.InventoryHolder;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-public class NationInviteGui implements InventoryHolder {
-    private final Nation nation;
-    public Nation getNation() {
-        return nation;
-    }
+public class NationInviteGui extends NationGui {
     public static final int CLOSE_SLOT = 49;
     public static final int BACK_SLOT = 48;
-    public NationInviteGui(Nation nation) {
-        this.nation = nation;
+    public NationInviteGui(Nation nation, User user) {
+        super(nation, user);
     }
     @Override
     public Inventory getInventory() {
         Inventory inventory = Bukkit.createInventory(this, 54, "나라 초대 정보");
+        inventory.setItem(48, GeneralButtons.getBackButton());
+        inventory.setItem(49, GeneralButtons.getCloseButton());
+        inventory.setItem(4, NationButtons.getNationNameOnlyButton(nation.getName()));
+        if (nation.isRemoved) {
+            inventory.setItem(22, getNationRemovedButton());
+            return inventory;
+        }
         for (int i = 0; i <= 8; i++) {
             inventory.setItem(i, GeneralButtons.getDummyButton());
         }
@@ -31,9 +34,7 @@ public class NationInviteGui implements InventoryHolder {
             inventory.setItem(i, GeneralButtons.getDummyButton());
         }
         inventory.setItem(31, NationButtons.getInviteRequestButton());
-        inventory.setItem(48, GeneralButtons.getBackButton());
-        inventory.setItem(49, GeneralButtons.getCloseButton());
-        inventory.setItem(4, NationButtons.getNationNameOnlyButton(nation.getName()));
+
         int i = 0;
         for (Map.Entry<User, LocalDateTime> user : nation.getInvites().entrySet()) {
             inventory.setItem(i + 9, NationButtons.getInvitedUserButton(user.getKey(), user.getValue()));
