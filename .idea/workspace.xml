@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ff9a010-2f69-4dd7-a253-791bfff52c11" name="Changes" comment="" />
+    <list default="true" id="4ff9a010-2f69-4dd7-a253-791bfff52c11" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/gui/nation/NationInviteGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tuenkle/earthintimeplugin/gui/nation/NationInviteGui.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -59,7 +61,7 @@
       <workItem from="1666430419396" duration="4001000" />
       <workItem from="1666458264321" duration="7750000" />
       <workItem from="1666500167518" duration="10910000" />
-      <workItem from="1666513543140" duration="3914000" />
+      <workItem from="1666513543140" duration="4315000" />
     </task>
     <servers />
   </component>

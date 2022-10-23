@@ -20,6 +20,12 @@ public class NationInviteGui extends NationGui {
     @Override
     public Inventory getInventory() {
         Inventory inventory = Bukkit.createInventory(this, 54, "나라 초대 정보");
+        for (int i = 0; i <= 8; i++) {
+            inventory.setItem(i, GeneralButtons.getDummyButton());
+        }
+        for (int i = 18; i <= 53; i++) {
+            inventory.setItem(i, GeneralButtons.getDummyButton());
+        }
         inventory.setItem(48, GeneralButtons.getBackButton());
         inventory.setItem(49, GeneralButtons.getCloseButton());
         if (nation == null) {
@@ -31,14 +37,7 @@ public class NationInviteGui extends NationGui {
             inventory.setItem(22, getNationRemovedButton());
             return inventory;
         }
-        for (int i = 0; i <= 8; i++) {
-            inventory.setItem(i, GeneralButtons.getDummyButton());
-        }
-        for (int i = 18; i <= 53; i++) {
-            inventory.setItem(i, GeneralButtons.getDummyButton());
-        }
         inventory.setItem(31, NationButtons.getInviteRequestButton());
-
         int i = 0;
         for (Map.Entry<User, LocalDateTime> user : nation.getInvites().entrySet()) {
             inventory.setItem(i + 9, NationButtons.getInvitedUserButton(user.getKey(), user.getValue()));
