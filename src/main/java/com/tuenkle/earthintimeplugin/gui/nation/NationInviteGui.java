@@ -22,6 +22,10 @@ public class NationInviteGui extends NationGui {
         Inventory inventory = Bukkit.createInventory(this, 54, "나라 초대 정보");
         inventory.setItem(48, GeneralButtons.getBackButton());
         inventory.setItem(49, GeneralButtons.getCloseButton());
+        if (nation == null) {
+            inventory.setItem(22, getNationNullButton());
+            return inventory;
+        }
         inventory.setItem(4, NationButtons.getNationNameOnlyButton(nation.getName()));
         if (nation.isRemoved) {
             inventory.setItem(22, getNationRemovedButton());

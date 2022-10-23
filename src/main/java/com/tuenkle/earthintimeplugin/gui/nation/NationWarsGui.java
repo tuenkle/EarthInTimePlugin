@@ -27,6 +27,10 @@ public class NationWarsGui extends NationGui {
         }
         inventory.setItem(CLOSE_SLOT, GeneralButtons.getCloseButton());
         inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
+        if (nation == null) {
+            inventory.setItem(22, getNationNullButton());
+            return inventory;
+        }
         inventory.setItem(4, NationButtons.getNationNameOnlyButton(nation.getName()));
         if (nation.isRemoved) {
             inventory.setItem(22, getNationRemovedButton());

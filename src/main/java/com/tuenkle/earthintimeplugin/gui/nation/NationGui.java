@@ -39,6 +39,9 @@ public class NationGui implements InventoryHolder {
     public ItemStack getNationRemovedButton() {
         return getButton(Material.BARRIER, "삭제된 나라입니다.");
     }
+    public ItemStack getNationNullButton() {
+        return getButtonWithLores(Material.BARRIER, "나라가 존재하지 않습니다.", "/나라 만들기 <나라이름>");
+    }
     public NationGui(Nation nation, User user) {
         this.nation = nation;
         this.user = user;

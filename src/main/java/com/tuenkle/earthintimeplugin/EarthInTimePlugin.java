@@ -31,7 +31,7 @@ public class EarthInTimePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ClockListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new NationListener(), this);
-        getServer().getPluginManager().registerEvents(new NationGuiListener(), this);
+        getServer().getPluginManager().registerEvents(new NationGuiListenerNew(), this);
         getServer().getPluginManager().registerEvents(new WarGuiListener(), this);
 
         ClockRecipes.EmptyClock(this);

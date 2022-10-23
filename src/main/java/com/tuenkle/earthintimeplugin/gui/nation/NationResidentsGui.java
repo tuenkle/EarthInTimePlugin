@@ -24,9 +24,13 @@ public class NationResidentsGui extends NationGui {
         for (int i = 0; i < 54; i++) {
             inventory.setItem(i, GeneralButtons.getDummyButton());
         }
-        inventory.setItem(4, NationButtons.getNationNameOnlyButton(nation.getName()));
         inventory.setItem(CLOSE_SLOT, GeneralButtons.getCloseButton());
         inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
+        if (nation == null) {
+            inventory.setItem(22, getNationNullButton());
+            return inventory;
+        }
+        inventory.setItem(4, NationButtons.getNationNameOnlyButton(nation.getName()));
         if (nation.isRemoved) {
             inventory.setItem(22, getNationRemovedButton());
             return inventory;
