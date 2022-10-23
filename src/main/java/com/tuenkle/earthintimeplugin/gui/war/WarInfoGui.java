@@ -33,8 +33,15 @@ public class WarInfoGui extends WarGui implements InventoryHolder {
         return getButtonWithLores(Material.BLUE_BANNER, ChatColor.WHITE + "수비국 목록"
                 , ChatColor.GRAY + "수비국 목록을 보려면 클릭하세요!");
     }
-    public WarInfoGui(War war) {
-        super(war);
+    public WarInfoGui(War war, User user) {
+        super(war, user);
+        user.addLastGui(this);
+    }
+    public War getWar() {
+        return war;
+    }
+    @Override
+    public Inventory getInventory() {
         Inventory inventory = Bukkit.createInventory(this, 54, "전쟁 정보");
         for (int i = 0; i < 54; i++) {
             inventory.setItem(i, GeneralButtons.getDummyButton());
@@ -46,14 +53,6 @@ public class WarInfoGui extends WarGui implements InventoryHolder {
         inventory.setItem(24, getDefendNationsButton());
         inventory.setItem(48, GeneralButtons.getBackButton());
         inventory.setItem(49, GeneralButtons.getCloseButton());
-        this.inventory = inventory;
-    }
-    private final Inventory inventory;
-    public War getWar() {
-        return war;
-    }
-    @Override
-    public Inventory getInventory() {
         return inventory;
     }
 }

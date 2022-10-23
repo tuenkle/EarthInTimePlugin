@@ -18,6 +18,7 @@ import java.util.Map;
 
 public class WarGui {
     protected final War war;
+    protected final User user;
     public ItemStack getWarTitleButton() {
         return getButton(Material.GREEN_WOOL,ChatColor.GREEN + war.getAttackNation().getName() + " -> " + war.getDefendNation().getName());
     }
@@ -36,7 +37,9 @@ public class WarGui {
         button.setItemMeta(buttonMeta);
         return button;
     }
-    public WarGui(War war) {
+    public WarGui(War war, User user) {
         this.war = war;
+        this.user = user;
+
     }
 }

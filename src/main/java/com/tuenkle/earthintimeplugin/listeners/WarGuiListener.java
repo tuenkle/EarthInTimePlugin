@@ -1,11 +1,17 @@
 package com.tuenkle.earthintimeplugin.listeners;
 
+import com.tuenkle.earthintimeplugin.database.Database;
+import com.tuenkle.earthintimeplugin.database.Nation;
+import com.tuenkle.earthintimeplugin.database.User;
+import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
+import com.tuenkle.earthintimeplugin.gui.nation.NationInfoGui;
 import com.tuenkle.earthintimeplugin.gui.nation.NationMainGui;
 import com.tuenkle.earthintimeplugin.gui.war.WarAttackNationsGui;
 import com.tuenkle.earthintimeplugin.gui.war.WarDefendNationsGui;
 import com.tuenkle.earthintimeplugin.gui.war.WarGui;
 import com.tuenkle.earthintimeplugin.gui.war.WarInfoGui;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,27 +39,67 @@ public class WarGuiListener implements Listener {
         if (clickedItem == null) {
             return;
         }
-//        final ItemMeta clickedItemMeta = clickedItem.getItemMeta();
-//        if (clickedItemMeta == null) {
-//            return;
-//        }
         HumanEntity player = event.getWhoClicked();
+        User user = Database.users.get(player.getUniqueId());
         if (inventory.getHolder() instanceof WarInfoGui warInfoGui) {
-//            String clickedItemDisplayName = clickedItemMeta.getDisplayName();
+            if (clickedItem.equals(GeneralButtons.getBackButton())) {
+                player.openInventory(user.getLastGui().getInventory());
+                return;
+            }
             if (clickedItem.equals(warInfoGui.getAttackNationButton())) {
                 return;
             }
             if (clickedItem.equals(warInfoGui.getAttackNationsButton())) {
-                player.openInventory(new WarAttackNationsGui(warInfoGui.getWar()).getInventory());
+                WarAttackNationsGui warAttackNationsGui = new WarAttackNationsGui(warInfoGui.getWar(), user);
+                user.addLastGui(warInfoGui);
+                player.openInventory(warAttackNationsGui.getInventory());
                 return;
             }
             if (clickedItem.equals(warInfoGui.getDefendNationButton())) {
                 return;
             }
             if (clickedItem.equals(warInfoGui.getDefendNationsButton())) {
-                player.openInventory(new WarDefendNationsGui(warInfoGui.getWar()).getInventory());
+                WarDefendNationsGui warDefendNationsGui = new WarDefendNationsGui(warInfoGui.getWar(), user);
+                user.addLastGui(warInfoGui);
+                player.openInventory(warDefendNationsGui.getInventory());
                 return;
             }
+            return;
+        }
+        if (inventory.getHolder() instanceof WarAttackNationsGui warAttackNationsGui) {
+            if (clickedItem.equals(GeneralButtons.getBackButton())) {
+                player.openInventory(user.getLastGui().getInventory());
+                return;
+            }
+            ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+            if (clickedItemMeta == null) {
+                return;
+            }
+            String clickedItemDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
+            Nation nation = Database.nations.get(clickedItemDisplayName);
+            if (nation == null) {
+                return;
+            }
+            user.addLastGui(warAttackNationsGui);
+            player.openInventory(new NationInfoGui(nation, user, "main").getInventory());
+            return;
+        }
+        if (inventory.getHolder() instanceof WarDefendNationsGui warDefendNationsGui) {
+            if (clickedItem.equals(GeneralButtons.getBackButton())) {
+                player.openInventory(user.getLastGui().getInventory());
+                return;
+            }
+            ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+            if (clickedItemMeta == null) {
+                return;
+            }
+            String clickedItemDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
+            Nation nation = Database.nations.get(clickedItemDisplayName);
+            if (nation == null) {
+                return;
+            }
+            user.addLastGui(warDefendNationsGui);
+            player.openInventory(new NationInfoGui(nation, user, "main").getInventory());
             return;
         }
     }

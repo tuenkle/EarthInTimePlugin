@@ -213,7 +213,7 @@ public class NationGuiListener implements Listener {
                         player.openInventory(new NationInfoGui(targetNation, user, "main").getInventory());
                         return;
                     }
-                    player.openInventory(new WarInfoGui(war).getInventory());
+                    player.openInventory(new WarInfoGui(war, user).getInventory());
                     return;
                 }
                 //TODO 버튼 늘어남에 따라 추가
@@ -302,7 +302,8 @@ public class NationGuiListener implements Listener {
                     player.openInventory(new NationWarsGui(nation).getInventory());
                     return;
                 }
-                player.openInventory(new WarInfoGui(war).getInventory());
+                User user = Database.users.get(player.getUniqueId());
+                player.openInventory(new WarInfoGui(war, user).getInventory());
                 return;
             }
             if (inventory.getHolder() instanceof NationInviteGui) {
