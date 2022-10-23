@@ -17,6 +17,7 @@ import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import com.tuenkle.earthintimeplugin.utils.GuiUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -43,6 +44,9 @@ public class NationGuiListenerNew implements Listener {
             return;
         }
         event.setCancelled(true);
+        if (event.getRawSlot() >= nationGui.getSize()) {
+            return;
+        }
         final ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null) {
             return;
@@ -80,32 +84,13 @@ public class NationGuiListenerNew implements Listener {
                 return;
             }
         }
-        if (inventory.getHolder() instanceof NationInviteGui nationInviteGui) {
-            if (nation.getKing() != user) {
-                player.closeInventory();
-                return;
-            }
-            ItemMeta clickedItemMeta = clickedItem.getItemMeta();
-            if (clickedItemMeta == null) {
-                return;
-            }
-            List<String> clickedItemMetaLore = clickedItemMeta.getLore();
-            if (clickedItemMetaLore == null || clickedItemMetaLore.size() != 3) {
-                return;
-            }
-            UUID invitedUserUuid = UUID.fromString(ChatColor.stripColor(clickedItemMetaLore.get(2)));
-            User invitedUser = Database.users.get(invitedUserUuid);
-            nation.removeInvite(invitedUser);
-            player.openInventory(nationInviteGui.getInventory());
-            return;
-        }
         if (inventory.getHolder() instanceof NationInfoGui nationInfoGui) {
             if (clickedItem.equals(NationButtons.getResidentsButton())) {
                 GuiUtils.moveGui(nationInfoGui, new NationResidentsGui(nation, user), user, player);
                 return;
             }
             if (clickedItem.equals(NationButtons.getAlliesButton())) {
-                GuiUtils.moveGui(nationInfoGui, new NationInviteGui(nation, user), user, player);
+                GuiUtils.moveGui(nationInfoGui, new NationAlliesGui(nation, user), user, player);
                 return;
             }
             if (clickedItem.equals(NationButtons.getWarsButton())) {
@@ -210,6 +195,69 @@ public class NationGuiListenerNew implements Listener {
                 GuiUtils.moveGui(nationInfoGui, new WarInfoGui(war, user), user, player);
                 return;
             }
+        }
+        if (inventory.getHolder() instanceof NationInviteGui nationInviteGui) {
+            if (nation.getKing() != user) {
+                player.closeInventory();
+                return;
+            }
+            ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+            if (clickedItemMeta == null) {
+                return;
+            }
+            List<String> clickedItemMetaLore = clickedItemMeta.getLore();
+            if (clickedItemMetaLore == null || clickedItemMetaLore.size() != 3) {
+                return;
+            }
+            UUID invitedUserUuid = UUID.fromString(ChatColor.stripColor(clickedItemMetaLore.get(2)));
+            User invitedUser = Database.users.get(invitedUserUuid);
+            nation.removeInvite(invitedUser);
+            player.openInventory(nationInviteGui.getInventory());
+            return;
+        }
+        if (inventory.getHolder() instanceof NationListGui nationListGui) {
+            ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+            if (clickedItemMeta == null) {
+                return;
+            }
+            String targetNationName = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
+            Nation targetNation = Database.nations.get(targetNationName);
+            if (targetNation == null) {
+                return;
+            }
+            GuiUtils.moveGui(nationListGui, new NationInfoGui(targetNation, user), user, player);
+            return;
+        }
+        if (inventory.getHolder() instanceof NationResidentsGui) {
+            return;//TODO-눌렀을때 유저 gui로(미정)
+        }
+        if (inventory.getHolder() instanceof NationAlliesGui nationAlliesGui) {
+            ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+            if (clickedItemMeta == null) {
+                return;
+            }
+            String targetNationName = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
+            Nation targetNation = Database.nations.get(targetNationName);
+            if (targetNation == null) {
+                return;
+            }
+            GuiUtils.moveGui(nationAlliesGui, new NationInfoGui(targetNation, user), user, player);
+            return;
+        }
+        if (inventory.getHolder() instanceof NationWarsGui nationWarsGui) {
+            ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+            if (clickedItemMeta == null) {
+                return;
+            }
+            String clickedItemDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
+            String[] clickedItemDisplayNameSplited = clickedItemDisplayName.split(" -> ");
+            War war = Database.getWar(Database.nations.get(clickedItemDisplayNameSplited[0]), Database.nations.get(clickedItemDisplayNameSplited[1]));
+            if (war == null) {
+                player.openInventory(nationWarsGui.getInventory());
+                return;
+            }
+            GuiUtils.moveGui(nationWarsGui, new WarInfoGui(war, user), user, player);
+            return;
         }
     }
 }

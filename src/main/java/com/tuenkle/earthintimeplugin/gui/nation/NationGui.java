@@ -15,6 +15,10 @@ import java.util.Arrays;
 public class NationGui implements InventoryHolder {
     protected final Nation nation;
     protected final User user;
+    protected int size = 54;
+    public int getSize() {
+        return size;
+    }
     public User getUser() {
         return user;
     }
