@@ -54,12 +54,12 @@ public class NationGuiListenerNew implements Listener {
         }
         User user = nationGui.getUser();
         if (clickedItem.equals(GeneralButtons.getBackButton())) {
-            InventoryHolder lastGui = user.getLastGui();
+            InventoryHolder lastGui = user.popLastGui();
             if (lastGui == null) {
                 player.closeInventory();
                 return;
             }
-            player.openInventory(user.getLastGui().getInventory());
+            player.openInventory(lastGui.getInventory());
             return;
         }
 

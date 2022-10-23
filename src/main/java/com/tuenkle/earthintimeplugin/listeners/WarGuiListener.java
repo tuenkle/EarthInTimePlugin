@@ -43,7 +43,7 @@ public class WarGuiListener implements Listener {
         User user = warGui.getUser();
         if (inventory.getHolder() instanceof WarInfoGui warInfoGui) {
             if (clickedItem.equals(GeneralButtons.getBackButton())) {
-                player.openInventory(user.getLastGui().getInventory());
+                player.openInventory(user.popLastGui().getInventory());
                 return;
             }
             if (clickedItem.equals(warInfoGui.getAttackNationButton())) {
@@ -68,7 +68,7 @@ public class WarGuiListener implements Listener {
         }
         if (inventory.getHolder() instanceof WarAttackNationsGui warAttackNationsGui) {
             if (clickedItem.equals(GeneralButtons.getBackButton())) {
-                player.openInventory(user.getLastGui().getInventory());
+                player.openInventory(user.popLastGui().getInventory());
                 return;
             }
             ItemMeta clickedItemMeta = clickedItem.getItemMeta();
@@ -86,7 +86,7 @@ public class WarGuiListener implements Listener {
         }
         if (inventory.getHolder() instanceof WarDefendNationsGui warDefendNationsGui) {
             if (clickedItem.equals(GeneralButtons.getBackButton())) {
-                player.openInventory(user.getLastGui().getInventory());
+                player.openInventory(user.popLastGui().getInventory());
                 return;
             }
             ItemMeta clickedItemMeta = clickedItem.getItemMeta();
