@@ -79,13 +79,20 @@ public class NationGuiListenerNew implements Listener {
 
         Nation nation = nationGui.getNation();
 
-        if (nation.isRemoved) {
+        if (nation != null && nation.isRemoved) {
             player.closeInventory();
             return;
         }
 
         if (inventory.getHolder() instanceof NationMainGui nationMainGui) {
             if (clickedItem.equals(NationButtons.getNationMyInfoButton())) {
+                if (nation == null) {
+                    player.closeInventory();
+                    player.sendMessage(ChatColor.YELLOW + "나라가 존재하지 않습니다.",
+                            ChatColor.YELLOW + "/나라 만들기 <나라이름>",
+                            ChatColor.YELLOW + "/나라 초대 수락 <나라이름>");
+                    return;
+                }
                 GuiUtils.moveGui(nationMainGui, new NationInfoGui(nation, user), user, player);
                 return;
             }
@@ -95,6 +102,13 @@ public class NationGuiListenerNew implements Listener {
             }
         }
         if (inventory.getHolder() instanceof NationInfoGui nationInfoGui) {
+            if (nation == null) {
+                player.closeInventory();
+                player.sendMessage(ChatColor.YELLOW + "나라가 존재하지 않습니다.",
+                        ChatColor.YELLOW + "/나라 만들기 <나라이름>",
+                        ChatColor.YELLOW + "/나라 초대 수락 <나라이름>");
+                return;
+            }
             if (clickedItem.equals(NationButtons.getResidentsButton())) {
                 GuiUtils.moveGui(nationInfoGui, new NationResidentsGui(nation, user), user, player);
                 return;
@@ -207,6 +221,13 @@ public class NationGuiListenerNew implements Listener {
             }
         }
         if (inventory.getHolder() instanceof NationInviteGui nationInviteGui) {
+            if (nation == null) {
+                player.closeInventory();
+                player.sendMessage(ChatColor.YELLOW + "나라가 존재하지 않습니다.",
+                        ChatColor.YELLOW + "/나라 만들기 <나라이름>",
+                        ChatColor.YELLOW + "/나라 초대 수락 <나라이름>");
+                return;
+            }
             if (nation.getKing() != user) {
                 player.closeInventory();
                 return;
@@ -242,6 +263,13 @@ public class NationGuiListenerNew implements Listener {
             return;//TODO-눌렀을때 유저 gui로(미정)
         }
         if (inventory.getHolder() instanceof NationAlliesGui nationAlliesGui) {
+            if (nation == null) {
+                player.closeInventory();
+                player.sendMessage(ChatColor.YELLOW + "나라가 존재하지 않습니다.",
+                        ChatColor.YELLOW + "/나라 만들기 <나라이름>",
+                        ChatColor.YELLOW + "/나라 초대 수락 <나라이름>");
+                return;
+            }
             ItemMeta clickedItemMeta = clickedItem.getItemMeta();
             if (clickedItemMeta == null) {
                 return;
@@ -255,6 +283,13 @@ public class NationGuiListenerNew implements Listener {
             return;
         }
         if (inventory.getHolder() instanceof NationWarsGui nationWarsGui) {
+            if (nation == null) {
+                player.closeInventory();
+                player.sendMessage(ChatColor.YELLOW + "나라가 존재하지 않습니다.",
+                        ChatColor.YELLOW + "/나라 만들기 <나라이름>",
+                        ChatColor.YELLOW + "/나라 초대 수락 <나라이름>");
+                return;
+            }
             ItemMeta clickedItemMeta = clickedItem.getItemMeta();
             if (clickedItemMeta == null) {
                 return;
