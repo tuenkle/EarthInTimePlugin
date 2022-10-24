@@ -4,10 +4,8 @@ import java.util.*;
 
 public class War {
     public boolean isAttackStarted() {
-
         return isAttackStarted;
     }
-
     public void setAttackStarted(boolean attackStarted) {
         isAttackStarted = attackStarted;
     }
