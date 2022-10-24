@@ -16,9 +16,6 @@ public class WarDefendNationsGui extends WarGui implements InventoryHolder {
     public WarDefendNationsGui(War war, User user) {
         super(war, user);
     }
-    public War getWar() {
-        return war;
-    }
     @Override
     public Inventory getInventory() {
         Inventory inventory = Bukkit.createInventory(this, 54, "전쟁 수비국 목록");
@@ -30,7 +27,7 @@ public class WarDefendNationsGui extends WarGui implements InventoryHolder {
         inventory.setItem(49, GeneralButtons.getCloseButton());
         int i = 0;
         for (Nation nation : war.getDefendNations()) {
-            inventory.setItem(i + 9, NationButtons.getNationNameOnlyButton(nation.getName()));
+            inventory.setItem(i + 9, NationButtons.getNationNameButton(nation.getName()));
         }
         return inventory;
     }

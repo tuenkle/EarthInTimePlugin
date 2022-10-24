@@ -3,6 +3,7 @@ package com.tuenkle.earthintimeplugin.listeners;
 import com.tuenkle.earthintimeplugin.database.Database;
 import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
+import com.tuenkle.earthintimeplugin.database.War;
 import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
 import com.tuenkle.earthintimeplugin.gui.nation.NationInfoGui;
 import com.tuenkle.earthintimeplugin.gui.nation.NationMainGui;
@@ -31,11 +32,10 @@ public class WarGuiListener implements Listener {
         if (inventory == null) {
             return;
         }
-        if (!(inventory.getHolder() instanceof WarGui)) {
+        if (!(inventory.getHolder() instanceof WarGui warGui)) {
             return;
         }
         event.setCancelled(true);
-        WarGui warGui = (WarGui) inventory.getHolder();
         final ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null) {
             return;
@@ -46,23 +46,24 @@ public class WarGuiListener implements Listener {
             GuiUtils.backGui(user, player);
             return;
         }
+        War war = warGui.getWar();
+        if (war == null || war.isRemoved) {
+            player.closeInventory();
+            return;
+        }
         if (inventory.getHolder() instanceof WarInfoGui warInfoGui) {
             if (clickedItem.equals(warInfoGui.getAttackNationButton())) {
                 return;
             }
             if (clickedItem.equals(warInfoGui.getAttackNationsButton())) {
-                WarAttackNationsGui warAttackNationsGui = new WarAttackNationsGui(warInfoGui.getWar(), user);
-                user.addLastGui(warInfoGui);
-                player.openInventory(warAttackNationsGui.getInventory());
+                GuiUtils.moveGui(warInfoGui, new WarAttackNationsGui(war, user), user, player);
                 return;
             }
             if (clickedItem.equals(warInfoGui.getDefendNationButton())) {
                 return;
             }
             if (clickedItem.equals(warInfoGui.getDefendNationsButton())) {
-                WarDefendNationsGui warDefendNationsGui = new WarDefendNationsGui(warInfoGui.getWar(), user);
-                user.addLastGui(warInfoGui);
-                player.openInventory(warDefendNationsGui.getInventory());
+                GuiUtils.moveGui(warInfoGui, new WarDefendNationsGui(war, user), user, player);
                 return;
             }
             return;
@@ -77,8 +78,7 @@ public class WarGuiListener implements Listener {
             if (nation == null) {
                 return;
             }
-            user.addLastGui(warAttackNationsGui);
-            player.openInventory(new NationInfoGui(nation, user).getInventory());
+            GuiUtils.moveGui(warAttackNationsGui, new NationInfoGui(nation, user), user, player);
             return;
         }
         if (inventory.getHolder() instanceof WarDefendNationsGui warDefendNationsGui) {
@@ -91,8 +91,7 @@ public class WarGuiListener implements Listener {
             if (nation == null) {
                 return;
             }
-            user.addLastGui(warDefendNationsGui);
-            player.openInventory(new NationInfoGui(nation, user).getInventory());
+            GuiUtils.moveGui(warDefendNationsGui, new NationInfoGui(nation, user), user, player);
             return;
         }
     }

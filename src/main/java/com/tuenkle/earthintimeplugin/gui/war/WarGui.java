@@ -19,6 +19,10 @@ import java.util.Map;
 public class WarGui {
     protected final War war;
     protected final User user;
+    public War getWar() {
+        return war;
+    }
+
     public User getUser() {
         return user;
     }

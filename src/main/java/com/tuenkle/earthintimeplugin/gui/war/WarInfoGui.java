@@ -36,9 +36,6 @@ public class WarInfoGui extends WarGui implements InventoryHolder {
     public WarInfoGui(War war, User user) {
         super(war, user);
     }
-    public War getWar() {
-        return war;
-    }
     @Override
     public Inventory getInventory() {
         Inventory inventory = Bukkit.createInventory(this, 54, "전쟁 정보");
