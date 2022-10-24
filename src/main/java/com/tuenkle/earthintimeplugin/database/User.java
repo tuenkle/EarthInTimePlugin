@@ -15,14 +15,24 @@ public class User {
     private UUID uuid;
     private Nation nation;
     private ArrayList<InventoryHolder> guiList = new ArrayList<>();
+    public boolean isGuiMoving = false;
     public InventoryHolder popLastGui() {
         if (guiList.size() == 0) {
             return null;
         }
         return guiList.remove(guiList.size() - 1);
     }
+    public InventoryHolder getLastGui() {
+        if (guiList.size() == 0) {
+            return null;
+        }
+        return guiList.get(guiList.size() - 1);
+    }
     public void addLastGui(InventoryHolder gui) {
         guiList.add(gui);
+    }
+    public void resetGuiList() {
+        guiList.clear();
     }
     public HashSet<int[]> getSafeChunk() {
         return nation.getChunks();

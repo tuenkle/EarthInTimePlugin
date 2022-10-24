@@ -15,6 +15,7 @@ import com.tuenkle.earthintimeplugin.gui.war.WarInfoGui;
 import com.tuenkle.earthintimeplugin.scheduler.ParticlesScheduler;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import com.tuenkle.earthintimeplugin.utils.GuiUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -23,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -34,6 +36,19 @@ import java.util.UUID;
 import static com.tuenkle.earthintimeplugin.utils.NationUtils.isChunkInNation;
 
 public class NationGuiListenerNew implements Listener {
+    @EventHandler
+    public void onGuiClose(InventoryCloseEvent event) {
+        Inventory inventory = event.getInventory();
+        if (!(inventory.getHolder() instanceof NationGui nationGui)) {
+            return;
+        }
+        User user = nationGui.getUser();
+        if (user.isGuiMoving) {
+            return;
+        }
+        Bukkit.getLogger().info("closed");
+        user.resetGuiList();
+    }
     @EventHandler
     public void onNationGuiClick(InventoryClickEvent event) {
         Inventory inventory = event.getClickedInventory();
@@ -58,12 +73,7 @@ public class NationGuiListenerNew implements Listener {
         }
         User user = nationGui.getUser();
         if (clickedItem.equals(GeneralButtons.getBackButton())) {
-            InventoryHolder lastGui = user.popLastGui();
-            if (lastGui == null) {
-                player.closeInventory();
-                return;
-            }
-            player.openInventory(lastGui.getInventory());
+            GuiUtils.backGui(user, player);
             return;
         }
 

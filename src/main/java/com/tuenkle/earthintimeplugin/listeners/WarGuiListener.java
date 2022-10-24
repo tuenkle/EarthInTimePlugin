@@ -10,6 +10,7 @@ import com.tuenkle.earthintimeplugin.gui.war.WarAttackNationsGui;
 import com.tuenkle.earthintimeplugin.gui.war.WarDefendNationsGui;
 import com.tuenkle.earthintimeplugin.gui.war.WarGui;
 import com.tuenkle.earthintimeplugin.gui.war.WarInfoGui;
+import com.tuenkle.earthintimeplugin.utils.GuiUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
@@ -39,13 +40,13 @@ public class WarGuiListener implements Listener {
         if (clickedItem == null) {
             return;
         }
-        HumanEntity player = event.getWhoClicked();
+        Player player = (Player) event.getWhoClicked();
         User user = warGui.getUser();
+        if (clickedItem.equals(GeneralButtons.getBackButton())) {
+            GuiUtils.backGui(user, player);
+            return;
+        }
         if (inventory.getHolder() instanceof WarInfoGui warInfoGui) {
-            if (clickedItem.equals(GeneralButtons.getBackButton())) {
-                player.openInventory(user.popLastGui().getInventory());
-                return;
-            }
             if (clickedItem.equals(warInfoGui.getAttackNationButton())) {
                 return;
             }
@@ -67,10 +68,6 @@ public class WarGuiListener implements Listener {
             return;
         }
         if (inventory.getHolder() instanceof WarAttackNationsGui warAttackNationsGui) {
-            if (clickedItem.equals(GeneralButtons.getBackButton())) {
-                player.openInventory(user.popLastGui().getInventory());
-                return;
-            }
             ItemMeta clickedItemMeta = clickedItem.getItemMeta();
             if (clickedItemMeta == null) {
                 return;
@@ -85,10 +82,6 @@ public class WarGuiListener implements Listener {
             return;
         }
         if (inventory.getHolder() instanceof WarDefendNationsGui warDefendNationsGui) {
-            if (clickedItem.equals(GeneralButtons.getBackButton())) {
-                player.openInventory(user.popLastGui().getInventory());
-                return;
-            }
             ItemMeta clickedItemMeta = clickedItem.getItemMeta();
             if (clickedItemMeta == null) {
                 return;
