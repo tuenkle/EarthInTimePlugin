@@ -41,8 +41,6 @@ public class NationWarsGui extends NationGui {
             inventory.setItem(i + 9, NationButtons.getWarInfoButton(war));
             i++;
         }
-
-
         return inventory;
     }
 }

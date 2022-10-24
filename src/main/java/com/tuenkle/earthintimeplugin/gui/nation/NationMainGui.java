@@ -23,6 +23,7 @@ public class NationMainGui extends NationGui {
             inventory.setItem(i, GeneralButtons.getDummyButton());
         }
         inventory.setItem(CLOSE_SLOT, GeneralButtons.getCloseButton());
+        inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
         inventory.setItem(INFO_SLOT, NationButtons.getNationMyInfoButton());
         inventory.setItem(LIST_SLOT, NationButtons.getNationListButton());
 

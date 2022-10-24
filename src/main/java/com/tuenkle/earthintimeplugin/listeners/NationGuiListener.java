@@ -49,7 +49,7 @@ public class NationGuiListener implements Listener {
         if (inventory == null) {
             return;
         }
-        if (!(inventory.getHolder() instanceof NationGui nationGui)) {
+        if (!(inventory.getHolder() instanceof NationGui nationGui)) { //TODO-모든 inventory.getHolder() 변경
             return;
         }
         event.setCancelled(true);
@@ -77,7 +77,38 @@ public class NationGuiListener implements Listener {
             player.closeInventory();
             return;
         }
-
+        if (inventory.getHolder() instanceof WarMainGui warMainGui) {
+            if (clickedItem.equals(warMainGui.warMyInfoButton)) {
+                if (nation == null) {
+                    player.closeInventory();
+                    player.sendMessage(ChatColor.YELLOW + "나라가 존재하지 않습니다.",
+                            ChatColor.YELLOW + "/나라 만들기 <나라이름>",
+                            ChatColor.YELLOW + "/나라 초대 수락 <나라이름>");
+                    return;
+                }
+                GuiUtils.moveGui(warMainGui, new NationWarsGui(nation, user), user, player);
+                return;
+            }
+            if (clickedItem.equals(warMainGui.warListButton)) {
+                GuiUtils.moveGui(warMainGui, new WarListGui(nation, user), user, player);
+                return;
+            }
+        }
+        if (inventory.getHolder() instanceof WarListGui warListGui) {
+            ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+            if (clickedItemMeta == null) {
+                return;
+            }
+            String clickedItemDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
+            String[] clickedItemDisplayNameSplited = clickedItemDisplayName.split(" -> ");
+            War war = Database.getWar(Database.nations.get(clickedItemDisplayNameSplited[0]), Database.nations.get(clickedItemDisplayNameSplited[1]));
+            if (war == null) {
+                player.openInventory(warListGui.getInventory());
+                return;
+            }
+            GuiUtils.moveGui(warListGui, new WarInfoGui(war, user), user, player);
+            return;
+        }
         if (inventory.getHolder() instanceof NationMainGui nationMainGui) {
             if (clickedItem.equals(NationButtons.getNationMyInfoButton())) {
                 if (nation == null) {

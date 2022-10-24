@@ -6,6 +6,7 @@ import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.database.War;
 import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
 import com.tuenkle.earthintimeplugin.gui.nation.NationMainGui;
+import com.tuenkle.earthintimeplugin.gui.nation.WarMainGui;
 import com.tuenkle.earthintimeplugin.scheduler.ParticlesScheduler;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import com.tuenkle.earthintimeplugin.utils.NationUtils;
@@ -204,11 +205,11 @@ public class CommandNation implements CommandExecutor {
                     }
                 }
                 case "전쟁" -> {
+                    Nation nation = user.getNation();
                     if (args.length == 1) {
-                        player.sendMessage(ChatColor.YELLOW + "/나라 전쟁 선포 <나라이름> - 해당 나라에 전쟁을 선포합니다.(비용: 1일)");
+                        player.openInventory(new WarMainGui(nation, user).getInventory());
                         return true;
                     }
-                    Nation nation = user.getNation();
                     switch (args[1]) {
                         case "선포" -> {
                             if (nation == null) {
