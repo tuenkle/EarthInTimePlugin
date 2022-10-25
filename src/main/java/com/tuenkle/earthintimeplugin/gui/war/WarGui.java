@@ -2,6 +2,7 @@ package com.tuenkle.earthintimeplugin.gui.war;
 
 import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.database.War;
+import com.tuenkle.earthintimeplugin.gui.Gui;
 import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
 import com.tuenkle.earthintimeplugin.gui.buttons.NationButtons;
 import org.bukkit.Bukkit;
@@ -16,13 +17,11 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Map;
 
-public class WarGui {
+public class WarGui extends Gui {
     protected final War war;
-    protected final User user;
     public War getWar() {
         return war;
     }
-
     public User getUser() {
         return user;
     }
@@ -45,8 +44,7 @@ public class WarGui {
         return button;
     }
     public WarGui(War war, User user) {
+        super(user);
         this.war = war;
-        this.user = user;
-
     }
 }

@@ -6,7 +6,7 @@ import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.database.War;
 import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
 import com.tuenkle.earthintimeplugin.gui.nation.NationMainGui;
-import com.tuenkle.earthintimeplugin.gui.nation.WarMainGui;
+import com.tuenkle.earthintimeplugin.gui.war.WarMainGui;
 import com.tuenkle.earthintimeplugin.scheduler.ParticlesScheduler;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import com.tuenkle.earthintimeplugin.utils.NationUtils;
@@ -44,7 +44,7 @@ public class CommandNation implements CommandExecutor {
             User user = Database.users.get(userUuid);
 
             if (args.length == 0) {
-                player.openInventory(new NationMainGui(user.getNation(), user).getInventory());
+                player.openInventory(new NationMainGui(user).getInventory());
                 return true;
             }
             switch (args[0]) {
@@ -207,7 +207,7 @@ public class CommandNation implements CommandExecutor {
                 case "전쟁" -> {
                     Nation nation = user.getNation();
                     if (args.length == 1) {
-                        player.openInventory(new WarMainGui(nation, user).getInventory());
+                        player.openInventory(new WarMainGui(user).getInventory());
                         return true;
                     }
                     switch (args[1]) {

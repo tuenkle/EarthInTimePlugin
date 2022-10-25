@@ -12,7 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-public class WarAttackNationsGui extends WarGui implements InventoryHolder {
+public class WarAttackNationsGui extends WarGui{
     public WarAttackNationsGui(War war, User user) {
         super(war, user);
     }

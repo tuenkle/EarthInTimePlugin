@@ -15,7 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-public class WarInfoGui extends WarGui implements InventoryHolder {
+public class WarInfoGui extends WarGui{
 
     public ItemStack getAttackNationsButton() {
         return getButtonWithLores(Material.RED_BANNER, ChatColor.WHITE + "공격국 목록"
