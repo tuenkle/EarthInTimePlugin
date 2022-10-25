@@ -24,11 +24,7 @@ public class WarListGui extends Gui {
     @Override
     public Inventory getInventory() {
         Inventory inventory = Bukkit.createInventory(this, 54, "전쟁");
-        for (int i = 0; i < 54; i++) {
-            inventory.setItem(i, GeneralButtons.getDummyButton());
-        }
-        inventory.setItem(CLOSE_SLOT, GeneralButtons.getCloseButton());
-        inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
+        setDefaultInventory(inventory);
         int i = 0; //TODO-다음페이지
         for (War war : Database.wars) {
             inventory.setItem(i + 9, NationButtons.getWarInfoButton(war));

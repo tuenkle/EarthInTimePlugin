@@ -6,6 +6,7 @@ import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.database.War;
 import com.tuenkle.earthintimeplugin.gui.Gui;
+import com.tuenkle.earthintimeplugin.gui.MainGui;
 import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
 import com.tuenkle.earthintimeplugin.gui.buttons.NationButtons;
 import com.tuenkle.earthintimeplugin.gui.nation.*;
@@ -16,6 +17,7 @@ import com.tuenkle.earthintimeplugin.utils.GuiUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.entity.Panda;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,7 +43,6 @@ public class GuiListener implements Listener {
         if (user.isGuiMoving) {
             return;
         }
-        Bukkit.getLogger().info("closed");
         user.resetGuiList();
     }
     @EventHandler
@@ -71,6 +72,20 @@ public class GuiListener implements Listener {
         if (clickedItem.equals(GeneralButtons.getBackButton())) {
             GuiUtils.backGui(user, player);
             return;
+        }
+        if (clickedItem.equals(GeneralButtons.mainMenuButton)) {
+            GuiUtils.moveToMainGui(new MainGui(user), user, player);
+            return;
+        }
+        if (gui instanceof MainGui mainGui) {
+            if (clickedItem.equals(GeneralButtons.nationMenuButton)) {
+                GuiUtils.moveGui(mainGui, new NationMainGui(user), user ,player);
+                return;
+            }
+            if (clickedItem.equals(GeneralButtons.warMenuButton)) {
+                GuiUtils.moveGui(mainGui, new WarMainGui(user), user ,player);
+                return;
+            }
         }
         if (gui instanceof NationMainGui nationMainGui) {
             Nation nation = user.getNation();

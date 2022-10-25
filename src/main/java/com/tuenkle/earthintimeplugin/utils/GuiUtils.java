@@ -21,4 +21,10 @@ public class GuiUtils {
         player.openInventory(lastGui.getInventory());
         user.isGuiMoving = false;
     }
+    public static void moveToMainGui(InventoryHolder newGui, User user, Player player) {
+        user.isGuiMoving = true;
+        user.resetGuiList();
+        player.openInventory(newGui.getInventory());
+        user.isGuiMoving = false;
+    }
 }

@@ -29,18 +29,15 @@ public class WarMainGui extends Gui {
     public WarMainGui(User user) {
         super(user);
         warMyInfoButton = getButtonWithLores(Material.CRAFTING_TABLE, ChatColor.GREEN + "전쟁 정보", ChatColor.GRAY + "소속된 나라의 전쟁 정보를 봅니다!");
-        warListButton = getButtonWithLores(Material.BOOKSHELF, ChatColor.GREEN + "전쟁 목록", ChatColor.GRAY + "소속된 나라의 전쟁 정보를 봅니다!");
+        warListButton = getButtonWithLores(Material.BOOKSHELF, ChatColor.GREEN + "전쟁 목록", ChatColor.GRAY + "현재 전쟁중인 나라의 목록을 봅니다!");
     }
+    public ItemStack warDeclareButton;
     public ItemStack warMyInfoButton;
     public ItemStack warListButton;
     @Override
     public Inventory getInventory() {
         Inventory inventory = Bukkit.createInventory(this, 54, "전쟁");
-        for (int i = 0; i < 54; i++) {
-            inventory.setItem(i, GeneralButtons.getDummyButton());
-        }
-        inventory.setItem(CLOSE_SLOT, GeneralButtons.getCloseButton());
-        inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
+        setDefaultInventory(inventory);
         inventory.setItem(INFO_SLOT, warMyInfoButton);
         inventory.setItem(LIST_SLOT, warListButton);
         return inventory;

@@ -20,9 +20,8 @@ public class NationListGui extends NationGui {
     @Override
     public Inventory getInventory() {
         Inventory inventory = Bukkit.createInventory(this, 54, "나라 목록");
-        for (int i = 0; i < 54; i++) {
-            inventory.setItem(i, GeneralButtons.getDummyButton());
-        }
+        setDefaultInventory(inventory);
+
         int j = 0;
         for (Map.Entry<String, Nation> nationEntry : Database.nations.entrySet()) {
             if (j == 45) {
@@ -32,8 +31,6 @@ public class NationListGui extends NationGui {
             inventory.setItem(j, NationButtons.getNationNameButton(nationName));
             j++;
         }
-        inventory.setItem(CLOSE_SLOT, GeneralButtons.getCloseButton());
-        inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
 
         return inventory;
     }

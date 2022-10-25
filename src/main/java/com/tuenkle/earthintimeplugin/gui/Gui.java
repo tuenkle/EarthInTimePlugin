@@ -14,9 +14,10 @@ import java.util.Arrays;
 
 public class Gui implements InventoryHolder {
     protected User user;
-    private static final int CLOSE_SLOT = 49;
-    private static final int BACK_SLOT = 48;
-    private final int size = 54;
+    protected static final int CLOSE_SLOT = 49;
+    protected static final int BACK_SLOT = 48;
+    protected static final int MAINMENU_SLOT = 45;
+    public final int size = 54;
     public int getSize() {
         return size;
     }
@@ -46,7 +47,10 @@ public class Gui implements InventoryHolder {
             inventory.setItem(i, GeneralButtons.getDummyButton());
         }
         inventory.setItem(CLOSE_SLOT, GeneralButtons.getCloseButton());
-        inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
+        inventory.setItem(MAINMENU_SLOT, GeneralButtons.mainMenuButton);
+        if (user.hasLastGui()) {
+            inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
+        }
     }
     protected void setDefaultInventoryOneLine (Inventory inventory) {
         for (int i = 0; i <= 8; i++) {

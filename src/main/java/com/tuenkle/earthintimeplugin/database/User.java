@@ -28,6 +28,9 @@ public class User {
         }
         return guiList.get(guiList.size() - 1);
     }
+    public boolean hasLastGui() {
+        return guiList.size() != 0;
+    }
     public void addLastGui(InventoryHolder gui) {
         guiList.add(gui);
     }

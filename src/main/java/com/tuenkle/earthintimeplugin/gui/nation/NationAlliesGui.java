@@ -20,11 +20,7 @@ public class NationAlliesGui extends NationGui {
     @Override
     public Inventory getInventory() {
         Inventory inventory = Bukkit.createInventory(this, 54, "나라 동맹 정보");
-        for (int i = 0; i < 54; i++) {
-            inventory.setItem(i, GeneralButtons.getDummyButton());
-        }
-        inventory.setItem(CLOSE_SLOT, GeneralButtons.getCloseButton());
-        inventory.setItem(BACK_SLOT, GeneralButtons.getBackButton());
+        setDefaultInventory(inventory);
         if (nation == null) {
             inventory.setItem(22, getNationNullButton());
             return inventory;
