@@ -17,7 +17,7 @@ public class CommandGui implements CommandExecutor {
             return true;
         }
         User user = Database.users.get(player.getUniqueId());
-        GuiUtils.openGui(new MainGui(user), player);
+        GuiUtils.openGui(new MainGui(user), user, player);
         return false;
     }
 }

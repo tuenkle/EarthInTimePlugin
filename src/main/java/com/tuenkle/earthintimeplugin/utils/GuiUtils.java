@@ -27,7 +27,8 @@ public class GuiUtils {
         player.openInventory(newGui.getInventory());
         user.isGuiMoving = false;
     }
-    public static void openGui(InventoryHolder newGui, Player player) {
+    public static void openGui(InventoryHolder newGui, User user, Player player) {
+        user.resetGuiList();
         player.openInventory(newGui.getInventory());
     }
 }
