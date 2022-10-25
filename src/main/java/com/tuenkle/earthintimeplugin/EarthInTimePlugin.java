@@ -1,5 +1,6 @@
 package com.tuenkle.earthintimeplugin;
 
+import com.tuenkle.earthintimeplugin.commands.CommandGui;
 import com.tuenkle.earthintimeplugin.listeners.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -28,6 +29,7 @@ public class EarthInTimePlugin extends JavaPlugin {
         NationButtons.makeAll();
         Objects.requireNonNull(this.getCommand("나라")).setExecutor(new CommandNation(this));
         Objects.requireNonNull(this.getCommand("clock")).setExecutor(new CommandClock());
+        Objects.requireNonNull(this.getCommand("메뉴")).setExecutor(new CommandGui());
         getServer().getPluginManager().registerEvents(new ClockListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new NationListener(), this);
