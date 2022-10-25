@@ -16,7 +16,7 @@ public class MainGui extends Gui {
     }
     @Override
     public Inventory getInventory() {
-        Inventory inventory = Bukkit.createInventory(this, 54, "전쟁");
+        Inventory inventory = Bukkit.createInventory(this, 54, "메인 메뉴");
         for (int i = 0; i < size; i++) {
             inventory.setItem(i, GeneralButtons.getDummyButton());
         }

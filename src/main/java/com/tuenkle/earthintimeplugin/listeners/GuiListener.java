@@ -36,10 +36,10 @@ public class GuiListener implements Listener {
     @EventHandler
     public void onGuiClose(InventoryCloseEvent event) {
         Inventory inventory = event.getInventory();
-        if (!(inventory.getHolder() instanceof NationGui nationGui)) {
+        if (!(inventory.getHolder() instanceof Gui gui)) {
             return;
         }
-        User user = nationGui.getUser();
+        User user = gui.getUser();
         if (user.isGuiMoving) {
             return;
         }
