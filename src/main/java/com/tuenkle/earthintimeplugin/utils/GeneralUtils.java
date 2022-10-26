@@ -2,6 +2,8 @@ package com.tuenkle.earthintimeplugin.utils;
 
 import org.bukkit.ChatColor;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 public class GeneralUtils {
@@ -31,5 +33,9 @@ public class GeneralUtils {
             long rh = rd % 3600;
             return String.format("%s%04d:%03d:%02d:%02d:%02d", ChatColor.DARK_PURPLE, second / 31536000, ry / 86400, rd / 3600, rh / 60, rh % 60);
         }
+    }
+    public static String dateTimeFormatter(LocalDateTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return time.format(formatter);
     }
 }

@@ -234,6 +234,10 @@ public class CommandNation implements CommandExecutor {
                                 player.sendMessage("존재하지 않는 나라입니다.");
                                 return true;
                             }
+                            if (nation == targetNation) {
+                                player.sendMessage("본인 나라입니다.");
+                                return true;
+                            }
                             if (nation.getAllies().containsKey(targetNation)) {
                                 player.sendMessage("해당 국가와 동맹국입니다. 동맹국에는 전쟁을 선포할 수 없습니다.");
                                 return true;
@@ -248,7 +252,7 @@ public class CommandNation implements CommandExecutor {
                             }
                             nation.getAllyInvites().remove(targetNation);
                             targetNation.getAllyInvites().remove(nation);
-                            Database.wars.add(new War(nation, targetNation));
+                            Database.wars.add(new War(nation, targetNation, LocalDateTime.now()));
                             player.sendMessage("전쟁을 선포하였습니다. 대상 국가: " + targetNationName);
                             Bukkit.broadcastMessage(String.format("%s 국가가 %s 국가에 전쟁을 선포하였습니다. 11시간안에 %s 국가는 전쟁시간을 확정하여야 합니다. 확정하지 못할시 전쟁은 %s에 시작됩니다.", nation.getName(), targetNationName, targetNationName, LocalDateTime.now().plusHours(11).format(formatter)));
                             return true;
@@ -294,7 +298,7 @@ public class CommandNation implements CommandExecutor {
                                         player.sendMessage("이미 해당 전쟁에 참가한 상태입니다.");
                                         return true;
                                     }
-                                    if (LocalDateTime.now().isAfter(war.getDefendStartTime())) {
+                                    if (LocalDateTime.now().isAfter(war.getPhase2Time())) {
                                         player.sendMessage("공격으로 전쟁에 참가할 수 있는 시간이 종료되었습니다.");
                                         return true;
                                     }
@@ -332,7 +336,7 @@ public class CommandNation implements CommandExecutor {
                                         player.sendMessage("이미 해당 전쟁에 참가한 상태입니다.");
                                         return true;
                                     }
-                                    if (LocalDateTime.now().isAfter(war.getAttackStartTime())) {
+                                    if (LocalDateTime.now().isAfter(war.getPhase1Time())) {
                                         player.sendMessage("수비로 전쟁에 참가할 수 있는 시간이 종료되었습니다.");
                                         return true;
                                     }

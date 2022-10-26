@@ -66,20 +66,25 @@ public class War {
         this.defendNation = defendNation;
     }
 
-    public LocalDateTime getAttackStartTime() {
-        return attackStartTime;
+    public LocalDateTime getPhase1Time() {
+        return phase1Time;
     }
 
-    public void setAttackStartTime(LocalDateTime attackStartTime) {
-        this.attackStartTime = attackStartTime;
+    public void setPhase1Time(LocalDateTime phase1Time) {
+        this.phase1Time = phase1Time;
     }
 
-    public LocalDateTime getDefendStartTime() {
-        return defendStartTime;
+    public LocalDateTime getPhase2Time() {
+        return phase2Time;
+    }
+    private LocalDateTime startTime;
+
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public void setDefendStartTime(LocalDateTime defendStartTime) {
-        this.defendStartTime = defendStartTime;
+    public void setPhase2Time(LocalDateTime phase2Time) {
+        this.phase2Time = phase2Time;
     }
     public void terminateWar() {
         Database.wars.remove(this);
@@ -92,23 +97,23 @@ public class War {
     private HashSet<User> defendPlayers = new HashSet<>();
     private Nation attackNation;
     private Nation defendNation;
-    private LocalDateTime attackStartTime;
-    private LocalDateTime defendStartTime;
+    private LocalDateTime phase1Time;
+    private LocalDateTime phase2Time;
     public boolean isRemoved = false;
-    public War (Nation attackNation, Nation defendNation) {
+    public War (Nation attackNation, Nation defendNation, LocalDateTime startTime) {
         this.attackNations.add(attackNation);
         this.attackNation = attackNation;
         this.defendNations.add(defendNation);
         this.defendNation = defendNation;
-        LocalDateTime declarationTime = LocalDateTime.now();
-        this.attackStartTime = declarationTime.plusHours(11);
-        this.defendStartTime = declarationTime.plusHours(1);
+        this.startTime = startTime;
+        this.phase1Time = startTime.plusHours(1);
+        this.phase2Time = startTime.plusHours(11);
     }
     public void warStartIfAttackStartTimeIsAfterNow () {
         if (isAttackStarted) {
             return;
         }
-        if (LocalDateTime.now().isAfter(attackStartTime)) {
+        if (LocalDateTime.now().isAfter(phase1Time)) {
             for (Nation nation : attackNations){
                 for (Map.Entry<User, LocalDateTime> resident: nation.getResidents().entrySet()) {
                     if (LocalDateTime.now().isAfter(resident.getValue().plusHours(48))) { //나라 가입한 지 48시간이 지나야 공격으로 참가 가능

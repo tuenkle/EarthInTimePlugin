@@ -142,7 +142,9 @@ public class Nation {
     public void removeInvite(User user) {
         invites.remove(user);
     }
-
+    public boolean isUserKing(User user) {
+        return king == user;
+    }
     public String shrink(int[] chunk) {
         if (chunks.size() == 1) {
             return "영토가 한 청크일 때는 축소할 수 없습니다.";

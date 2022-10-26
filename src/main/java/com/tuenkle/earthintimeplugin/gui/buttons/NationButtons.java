@@ -1,10 +1,8 @@
 package com.tuenkle.earthintimeplugin.gui.buttons;
-import com.tuenkle.earthintimeplugin.database.Database;
 import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.database.War;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -409,7 +407,7 @@ public class NationButtons {
         buttonMeta.setDisplayName(ChatColor.GREEN + war.getAttackNation().getName() + " -> " + war.getDefendNation().getName());
         ArrayList<String> lores = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        lores.add(ChatColor.GRAY + "전쟁시작시간: " + war.getDefendStartTime().format(formatter));
+        lores.add(ChatColor.GRAY + "전쟁시작시간: " + war.getPhase2Time().format(formatter));
         lores.add(ChatColor.GRAY + "더 자세한 정보를 보려면 클릭하세요!");
         buttonMeta.setLore(lores);
         button.setItemMeta(buttonMeta);
