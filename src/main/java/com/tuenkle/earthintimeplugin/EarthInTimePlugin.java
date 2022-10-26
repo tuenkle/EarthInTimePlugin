@@ -1,11 +1,19 @@
 package com.tuenkle.earthintimeplugin;
 
 import com.tuenkle.earthintimeplugin.commands.CommandGui;
+import com.tuenkle.earthintimeplugin.database.Database;
+import com.tuenkle.earthintimeplugin.database.Nation;
+import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.listeners.*;
+import com.tuenkle.earthintimeplugin.utils.WarUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Objects;
+import java.util.UUID;
+
 import com.tuenkle.earthintimeplugin.commands.CommandClock;
 import com.tuenkle.earthintimeplugin.commands.CommandNation;
 import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
@@ -43,6 +51,20 @@ public class EarthInTimePlugin extends JavaPlugin {
         NationDynmap.setNationDynmapAPI();
         NationDynmap.drawNations();
         BukkitTask task = new OneSecondScheduler(this).runTaskTimer(this, 0, 20);
+
+        //Development Only!!!
+        User user = new User(UUID.fromString("d8ea842a-9fc4-4104-a928-95e4b5aa6d42"), "StrawberryF");
+        User user2 = new User(UUID.fromString("3a4ee10c-cbf2-4269-bbc5-ed06ef90898a"), "MelonF");
+        Database.users.put(UUID.fromString("d8ea842a-9fc4-4104-a928-95e4b5aa6d42"), user);
+        Database.users.put(UUID.fromString("3a4ee10c-cbf2-4269-bbc5-ed06ef90898a"), user2);
+        int[] chunk = {0, 0};
+        Nation nation = new Nation("korea", user, chunk, new Location(Bukkit.getWorld("world"), 0,0,0));
+        Nation nation2 = new Nation("usa", user2, chunk, new Location(Bukkit.getWorld("world"), 0,0,0));
+        Database.nations.put("korea", nation);
+        Database.nations.put("usa", nation2);
+        WarUtils.declareWar(nation, nation2);
+        //Development Only!!!
+
         getLogger().info("====EarthInTime is Enabled====");
     }
     public void onDisable() {

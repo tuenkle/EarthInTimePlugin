@@ -93,6 +93,23 @@ public class War {
     private boolean isScheduled = false;
     private HashSet<Nation> attackNations = new HashSet<>();
     private HashSet<Nation> defendNations = new HashSet<>();
+    public HashSet<Nation> attackJoinApplicationNations = new HashSet<>();
+    public HashSet<Nation> defendJoinApplicationNations = new HashSet<>();
+    public boolean isRelated(Nation nation) {
+        if (attackNations.contains(nation)) {
+            return true;
+        }
+        if (attackJoinApplicationNations.contains(nation)) {
+            return true;
+        }
+        if (defendNations.contains(nation)) {
+            return true;
+        }
+        if (defendJoinApplicationNations.contains(nation)) {
+            return true;
+        }
+        return false;
+    }
     private HashSet<User> attackPlayers = new HashSet<>();
     private HashSet<User> defendPlayers = new HashSet<>();
     private Nation attackNation;

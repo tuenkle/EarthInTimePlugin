@@ -16,6 +16,8 @@ public class GeneralButtons {
     public static ItemStack mainMenuButton;
     public static ItemStack warMenuButton;
     public static ItemStack nationMenuButton;
+    public static ItemStack attackJoinButton;
+    public static ItemStack defendJoinButton;
     public static ItemStack getBackButton() {
         return backButton;
     }
@@ -51,6 +53,15 @@ public class GeneralButtons {
         makeMainMenuButton();
         makeWarMenuButton();
         makeNationMenuButton();
+        makeAttackJoinButton();
+        makeDefendJoinButton();
+    }
+    public static void makeAttackJoinButton() {
+        attackJoinButton =  getButtonWithLores(Material.DIAMOND_SWORD, ChatColor.GREEN + "공격국 연합 참가 신청", ChatColor.GRAY + "공격국 연합에 참가 신청하려면 클릭하세요!");
+    }
+    public static void makeDefendJoinButton() {
+        defendJoinButton =  getButtonWithLores(Material.SHIELD, ChatColor.GREEN + "수비국 연합 참가 신청", ChatColor.GRAY + "수비국 연합에 참가 신청하려면 클릭하세요!");
+
     }
     public static void makeNationMenuButton() {
         nationMenuButton = getButtonWithLores(Material.GREEN_WOOL, ChatColor.GREEN + "나라 메뉴로 가기", ChatColor.GRAY + "나라 메뉴로 가려면 클릭하세요!");

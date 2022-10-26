@@ -366,6 +366,12 @@ public class GuiListener implements Listener {
                 GuiUtils.moveGui(warInfoGui, new WarDefendNationsGui(war, user), user, player);
                 return;
             }
+            if (clickedItem.equals(GeneralButtons.attackJoinButton)) {
+
+            }
+            if (clickedItem.equals(GeneralButtons.defendJoinButton)) {
+
+            }
             return;
         }
         if (gui instanceof WarAttackNationsGui warAttackNationsGui) {

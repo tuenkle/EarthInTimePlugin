@@ -1,7 +1,9 @@
 package com.tuenkle.earthintimeplugin.gui.war;
 
+import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.database.War;
+import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -54,14 +56,12 @@ public class WarInfoGui extends WarGui{
                     ChatColor.GRAY + "수비국 왕은 1회에 한해 해당 시간을 설정할 수 있습니다.",
                     ChatColor.GRAY + "미설정시 전쟁 선포 11시간 이후로 설정됩니다.");
         }
-
     }
     public ItemStack getEndTimeButton() {
         return getButtonWithLores(Material.CLOCK, ChatColor.GREEN + "전쟁 종료 시간",
-                ChatColor.GREEN + "(미확정)" + GeneralUtils.dateTimeFormatter(war.getPhase2Time()),
+                ChatColor.GREEN + "(미확정)" + GeneralUtils.dateTimeFormatter(war.getPhase2Time().plusHours(1)),
                 ChatColor.GRAY + "이 시간이 되면 전쟁이 종료됩니다.");
     }
-
     public WarInfoGui(War war, User user) {
         super(war, user);
     }
@@ -78,6 +78,11 @@ public class WarInfoGui extends WarGui{
         inventory.setItem(21, getAttackNationButton());
         inventory.setItem(23, getDefendNationButton());
         inventory.setItem(24, getDefendNationsButton());
+        Nation nation = user.getNation();
+        if (nation != null && nation.isUserKing(user) && !war.isRelated(nation)) {
+            inventory.setItem(19, GeneralButtons.attackJoinButton);
+            inventory.setItem(25, GeneralButtons.defendJoinButton);
+        }
         return inventory;
     }
 }
