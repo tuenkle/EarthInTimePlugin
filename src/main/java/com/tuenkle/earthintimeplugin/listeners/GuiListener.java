@@ -14,10 +14,8 @@ import com.tuenkle.earthintimeplugin.gui.war.*;
 import com.tuenkle.earthintimeplugin.scheduler.ParticlesScheduler;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import com.tuenkle.earthintimeplugin.utils.GuiUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
-import org.bukkit.entity.Panda;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -88,26 +86,34 @@ public class GuiListener implements Listener {
             }
         }
         if (gui instanceof NationMainGui nationMainGui) {
-            Nation nation = user.getNation();
+            Nation userNation = user.getNation();
             if (clickedItem.equals(NationButtons.getNationMyInfoButton())) {
-                if (nation == null) {
+                if (userNation == null) {
                     player.closeInventory();
                     player.sendMessage(ChatColor.YELLOW + "나라가 존재하지 않습니다.",
                             ChatColor.YELLOW + "/나라 만들기 <나라이름>",
                             ChatColor.YELLOW + "/나라 초대 수락 <나라이름>");
                     return;
                 }
-                GuiUtils.moveGui(nationMainGui, new NationInfoGui(nation, user), user, player);
+                if (!(Database.nations.containsKey(userNation.getName()))) {
+                    player.closeInventory();
+                    return;
+                }
+                GuiUtils.moveGui(nationMainGui, new NationInfoGui(userNation, user), user, player);
                 return;
             }
             if (clickedItem.equals(NationButtons.getNationListButton())) {
-                GuiUtils.moveGui(nationMainGui, new NationListGui(nation, user), user, player);
+                GuiUtils.moveGui(nationMainGui, new NationListGui(userNation, user), user, player);
                 return;
             }
         }
         if (gui instanceof NationInfoGui nationInfoGui) {
-            Nation nation = nationInfoGui.getNation();
-            if (nation == null) {
+            Nation guiNation = nationInfoGui.getNation();
+            if (guiNation != null && !Database.nations.containsKey(guiNation.getName())) {
+                player.closeInventory();
+                return;
+            }
+            if (guiNation == null) {
                 player.closeInventory();
                 player.sendMessage(ChatColor.YELLOW + "나라가 존재하지 않습니다.",
                         ChatColor.YELLOW + "/나라 만들기 <나라이름>",
@@ -115,25 +121,25 @@ public class GuiListener implements Listener {
                 return;
             }
             if (clickedItem.equals(NationButtons.getResidentsButton())) {
-                GuiUtils.moveGui(nationInfoGui, new NationResidentsGui(nation, user), user, player);
+                GuiUtils.moveGui(nationInfoGui, new NationResidentsGui(guiNation, user), user, player);
                 return;
             }
             if (clickedItem.equals(NationButtons.getAlliesButton())) {
-                GuiUtils.moveGui(nationInfoGui, new NationAlliesGui(nation, user), user, player);
+                GuiUtils.moveGui(nationInfoGui, new NationAlliesGui(guiNation, user), user, player);
                 return;
             }
             if (clickedItem.equals(NationButtons.getWarsButton())) {
-                GuiUtils.moveGui(nationInfoGui, new NationWarsGui(nation, user), user, player);
+                GuiUtils.moveGui(nationInfoGui, new NationWarsGui(guiNation, user), user, player);
                 return;
             }
             //이 위로는 공용 버튼
-            if (user.getNation() != nation){
+            if (user.getNation() != guiNation){
                 return;
             }
             //이 아래로는 시민, 왕 버튼
             if (clickedItem.equals(NationButtons.getSpawnButton())) {
                 player.closeInventory();
-                player.teleport(nation.getSpawn());
+                player.teleport(guiNation.getSpawn());
                 player.sendMessage("나라 스폰으로 이동되었습니다.");
                 return;
             }
@@ -144,7 +150,7 @@ public class GuiListener implements Listener {
             }
             if (clickedItem.equals(NationButtons.getBorderVisualizationButton())) {
                 player.closeInventory();
-                if (nation.isParticleOn()) {
+                if (guiNation.isParticleOn()) {
                     player.sendMessage("이미 실행중입니다.");
                     return;
                 }
@@ -153,11 +159,11 @@ public class GuiListener implements Listener {
                     player.sendMessage("플레이어의 위치가 너무 높습니다.");
                     return;
                 }
-                new ParticlesScheduler(player, nation).runTaskTimer(EarthInTimePlugin.getMainInstance(), 0, 20);
+                new ParticlesScheduler(player, guiNation).runTaskTimer(EarthInTimePlugin.getMainInstance(), 0, 20);
                 player.sendMessage("나라 청크의 경계를 표시합니다.(지속시간 20초)");
                 return;
             }
-            if (nation.getKing() != user){
+            if (guiNation.isUserKing(user)){
                 return;
             }
             //이 아래로는 왕 버튼
@@ -173,34 +179,34 @@ public class GuiListener implements Listener {
             }
             if (clickedItem.equals(NationButtons.getSetSpawnButton())) {
                 player.closeInventory();
-                if (!isChunkInNation(player.getLocation().getChunk(), nation)){
+                if (!isChunkInNation(player.getLocation().getChunk(), guiNation)){
                     player.sendMessage("본인 나라 안에 있지 않습니다.");
                     return;
                 }
-                nation.setSpawn(player.getLocation());
+                guiNation.setSpawn(player.getLocation());
                 player.sendMessage("플레이어의 위치를 나라 스폰으로 설정하였습니다.");
                 return;
             }
             if (clickedItem.equals(NationButtons.getExpandButton())) {
                 player.closeInventory();
-                long requiredMoney = nation.getExpandRequireMoney();
-                if (nation.getMoney() < requiredMoney) {
+                long requiredMoney = guiNation.getExpandRequireMoney();
+                if (guiNation.getMoney() < requiredMoney) {
                     player.sendMessage("나라 잔고가 부족합니다. 필요 잔고: " + GeneralUtils.secondToUniversalTime(requiredMoney));
                     return;
                 }
                 Chunk playerChunk = player.getLocation().getChunk();
                 int[] chunk = {playerChunk.getX(), playerChunk.getZ()};
-                player.sendMessage(nation.expand(chunk));
+                player.sendMessage(guiNation.expand(chunk));
                 return;
             }
             if (clickedItem.equals(NationButtons.getShrinkButton())) {
                 player.closeInventory();
                 int[] chunk = {player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ()};
-                player.sendMessage(nation.shrink(chunk));
+                player.sendMessage(guiNation.shrink(chunk));
                 return;
             }
             if (clickedItem.equals(NationButtons.getInviteButton())) {
-                GuiUtils.moveGui(nationInfoGui, new NationInviteGui(nation, user), user, player);
+                GuiUtils.moveGui(nationInfoGui, new NationInviteGui(guiNation, user), user, player);
                 return;
             }
             ItemMeta clickedItemMeta = clickedItem.getItemMeta();
@@ -226,15 +232,19 @@ public class GuiListener implements Listener {
             }
         }
         if (gui instanceof NationInviteGui nationInviteGui) {
-            Nation nation = nationInviteGui.getNation();
-            if (nation == null) {
+            Nation guiNation = nationInviteGui.getNation();
+            if (guiNation != null && !Database.nations.containsKey(guiNation.getName())) {
+                player.closeInventory();
+                return;
+            }
+            if (guiNation == null) {
                 player.closeInventory();
                 player.sendMessage(ChatColor.YELLOW + "나라가 존재하지 않습니다.",
                         ChatColor.YELLOW + "/나라 만들기 <나라이름>",
                         ChatColor.YELLOW + "/나라 초대 수락 <나라이름>");
                 return;
             }
-            if (nation.getKing() != user) {
+            if (!(guiNation.isUserKing(user))) {
                 player.closeInventory();
                 return;
             }
@@ -248,12 +258,11 @@ public class GuiListener implements Listener {
             }
             UUID invitedUserUuid = UUID.fromString(ChatColor.stripColor(clickedItemMetaLore.get(2)));
             User invitedUser = Database.users.get(invitedUserUuid);
-            nation.removeInvite(invitedUser);
+            guiNation.removeInvite(invitedUser);
             player.openInventory(nationInviteGui.getInventory());
             return;
         }
         if (gui instanceof NationListGui nationListGui) {
-            Nation nation = user.getNation();
             ItemMeta clickedItemMeta = clickedItem.getItemMeta();
             if (clickedItemMeta == null) {
                 return;
@@ -270,8 +279,12 @@ public class GuiListener implements Listener {
             return;//TODO-눌렀을때 유저 gui로(미정)
         }
         if (gui instanceof NationAlliesGui nationAlliesGui) {
-            Nation nation = nationAlliesGui.getNation();
-            if (nation == null) {
+            Nation guiNation = nationAlliesGui.getNation(); //user.getNation()이 아닌 gui에서 nation을 얻었을 경우 꼭 검증
+            if (guiNation != null && !Database.nations.containsKey(guiNation.getName())) {
+                player.closeInventory();
+                return;
+            }
+            if (guiNation == null) {
                 player.closeInventory();
                 player.sendMessage(ChatColor.YELLOW + "나라가 존재하지 않습니다.",
                         ChatColor.YELLOW + "/나라 만들기 <나라이름>",
@@ -291,8 +304,12 @@ public class GuiListener implements Listener {
             return;
         }
         if (gui instanceof NationWarsGui nationWarsGui) {
-            Nation nation = nationWarsGui.getNation();
-            if (nation == null) {
+            Nation guiNation = nationWarsGui.getNation();
+            if (guiNation != null && !Database.nations.containsKey(guiNation.getName())) {
+                player.closeInventory();
+                return;
+            }
+            if (guiNation == null) {
                 player.closeInventory();
                 player.sendMessage(ChatColor.YELLOW + "나라가 존재하지 않습니다.",
                         ChatColor.YELLOW + "/나라 만들기 <나라이름>",
@@ -315,15 +332,15 @@ public class GuiListener implements Listener {
         }
         if (gui instanceof WarMainGui warMainGui) {
             if (clickedItem.equals(warMainGui.warMyInfoButton)) {
-                Nation nation = user.getNation();
-                if (nation == null) {
+                Nation userNation = user.getNation();
+                if (userNation == null) {
                     player.closeInventory();
                     player.sendMessage(ChatColor.YELLOW + "나라가 존재하지 않습니다.",
                             ChatColor.YELLOW + "/나라 만들기 <나라이름>",
                             ChatColor.YELLOW + "/나라 초대 수락 <나라이름>");
                     return;
                 }
-                GuiUtils.moveGui(warMainGui, new NationWarsGui(nation, user), user, player);
+                GuiUtils.moveGui(warMainGui, new NationWarsGui(userNation, user), user, player);
                 return;
             }
             if (clickedItem.equals(warMainGui.warListButton)) {
@@ -338,6 +355,11 @@ public class GuiListener implements Listener {
             }
             String clickedItemDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
             String[] clickedItemDisplayNameSplited = clickedItemDisplayName.split(" -> ");
+            Nation attackNation = Database.nations.get(clickedItemDisplayNameSplited[0]);
+            Nation defendNation = Database.nations.get(clickedItemDisplayNameSplited[1]);
+            if (attackNation == null || defendNation == null) {
+                return;
+            }
             War war = Database.getWar(Database.nations.get(clickedItemDisplayNameSplited[0]), Database.nations.get(clickedItemDisplayNameSplited[1]));
             if (war == null) {
                 player.openInventory(warListGui.getInventory());
@@ -348,7 +370,7 @@ public class GuiListener implements Listener {
         }
         if (gui instanceof WarInfoGui warInfoGui) {
             War war = warInfoGui.getWar();
-            if (war == null || war.isRemoved) {
+            if (war == null || !Database.wars.contains(war)) {
                 player.closeInventory();
                 return;
             }
@@ -367,16 +389,26 @@ public class GuiListener implements Listener {
                 return;
             }
             if (clickedItem.equals(GeneralButtons.attackJoinButton)) {
-
+                Nation userNation = user.getNation();
+                if (userNation != null && userNation.isUserKing(user) && Database.nations.containsKey(userNation.getName())) {
+                    war.attackJoinApplicationNations.add(userNation);
+                    GuiUtils.moveGui(warInfoGui, new WarAttackJoinGui(war, user), user, player);
+                    return;
+                }
             }
             if (clickedItem.equals(GeneralButtons.defendJoinButton)) {
-
+                Nation nation = user.getNation();
+                if (nation != null && nation.isUserKing(user) && Database.nations.containsKey(nation.getName())) {
+                    war.defendJoinApplicationNations.add(user.getNation());
+                    GuiUtils.moveGui(warInfoGui, new WarDefendJoinGui(war, user), user, player);
+                    return;
+                }
             }
             return;
         }
         if (gui instanceof WarAttackNationsGui warAttackNationsGui) {
             War war = warAttackNationsGui.getWar();
-            if (war == null || war.isRemoved) {
+            if (war == null || !Database.wars.contains(war)) {
                 player.closeInventory();
                 return;
             }
@@ -394,7 +426,7 @@ public class GuiListener implements Listener {
         }
         if (gui instanceof WarDefendNationsGui warDefendNationsGui) {
             War war = warDefendNationsGui.getWar();
-            if (war == null || war.isRemoved) {
+            if (war == null || !Database.wars.contains(war)) {
                 player.closeInventory();
                 return;
             }

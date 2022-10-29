@@ -116,7 +116,6 @@ public class War {
     private Nation defendNation;
     private LocalDateTime phase1Time;
     private LocalDateTime phase2Time;
-    public boolean isRemoved = false;
     public War (Nation attackNation, Nation defendNation, LocalDateTime startTime) {
         this.attackNations.add(attackNation);
         this.attackNation = attackNation;
