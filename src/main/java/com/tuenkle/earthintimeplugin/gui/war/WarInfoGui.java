@@ -79,7 +79,11 @@ public class WarInfoGui extends WarGui{
         inventory.setItem(23, getDefendNationButton());
         inventory.setItem(24, getDefendNationsButton());
         Nation nation = user.getNation();
-        if (nation != null && nation.isUserKing(user) && !war.isRelated(nation)) {
+        if (war.attackJoinApplicationNations.contains(nation)) {
+            inventory.setItem(19, GeneralButtons.attackJoinInfoButton);
+        } else if (war.defendJoinApplicationNations.contains(nation)) {
+            inventory.setItem(25, GeneralButtons.defendJoinInfoButton);
+        } else if (nation != null && nation.isUserKing(user)) {
             inventory.setItem(19, GeneralButtons.attackJoinButton);
             inventory.setItem(25, GeneralButtons.defendJoinButton);
         }

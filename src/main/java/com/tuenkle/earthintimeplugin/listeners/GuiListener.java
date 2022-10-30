@@ -224,7 +224,7 @@ public class GuiListener implements Listener {
                 Nation targetNation = nationInfoGui.getNation();
                 War war = Database.getWar(userNation, targetNation);
                 if (war == null) {
-                    player.openInventory(nationInfoGui.getInventory());
+                    GuiUtils.reopenGui(nationInfoGui, user, player);
                     return;
                 }
                 GuiUtils.moveGui(nationInfoGui, new WarInfoGui(war, user), user, player);
@@ -259,7 +259,8 @@ public class GuiListener implements Listener {
             UUID invitedUserUuid = UUID.fromString(ChatColor.stripColor(clickedItemMetaLore.get(2)));
             User invitedUser = Database.users.get(invitedUserUuid);
             guiNation.removeInvite(invitedUser);
-            player.openInventory(nationInviteGui.getInventory());
+            GuiUtils.reopenGui(nationInviteGui, user, player);
+
             return;
         }
         if (gui instanceof NationListGui nationListGui) {
@@ -324,7 +325,8 @@ public class GuiListener implements Listener {
             String[] clickedItemDisplayNameSplited = clickedItemDisplayName.split(" -> ");
             War war = Database.getWar(Database.nations.get(clickedItemDisplayNameSplited[0]), Database.nations.get(clickedItemDisplayNameSplited[1]));
             if (war == null) {
-                player.openInventory(nationWarsGui.getInventory());
+                GuiUtils.reopenGui(nationWarsGui, user, player);
+
                 return;
             }
             GuiUtils.moveGui(nationWarsGui, new WarInfoGui(war, user), user, player);
@@ -355,6 +357,9 @@ public class GuiListener implements Listener {
             }
             String clickedItemDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
             String[] clickedItemDisplayNameSplited = clickedItemDisplayName.split(" -> ");
+            if (clickedItemDisplayNameSplited.length != 2) {
+                return;
+            }
             Nation attackNation = Database.nations.get(clickedItemDisplayNameSplited[0]);
             Nation defendNation = Database.nations.get(clickedItemDisplayNameSplited[1]);
             if (attackNation == null || defendNation == null) {
@@ -362,7 +367,7 @@ public class GuiListener implements Listener {
             }
             War war = Database.getWar(Database.nations.get(clickedItemDisplayNameSplited[0]), Database.nations.get(clickedItemDisplayNameSplited[1]));
             if (war == null) {
-                player.openInventory(warListGui.getInventory());
+                GuiUtils.reopenGui(warListGui, user, player);
                 return;
             }
             GuiUtils.moveGui(warListGui, new WarInfoGui(war, user), user, player);
@@ -395,12 +400,62 @@ public class GuiListener implements Listener {
                     GuiUtils.moveGui(warInfoGui, new WarAttackJoinGui(war, user), user, player);
                     return;
                 }
+                return;
             }
             if (clickedItem.equals(GeneralButtons.defendJoinButton)) {
                 Nation nation = user.getNation();
                 if (nation != null && nation.isUserKing(user) && Database.nations.containsKey(nation.getName())) {
                     war.defendJoinApplicationNations.add(user.getNation());
                     GuiUtils.moveGui(warInfoGui, new WarDefendJoinGui(war, user), user, player);
+                    return;
+                }
+                return;
+            }
+            if (clickedItem.equals(GeneralButtons.attackJoinInfoButton)) {
+                Nation userNation = user.getNation();
+                if (userNation != null && userNation.isUserKing(user) && Database.nations.containsKey(userNation.getName())) {
+                    GuiUtils.moveGui(warInfoGui, new WarAttackJoinGui(war, user), user, player);
+                    return;
+                }
+                return;
+            }
+            if (clickedItem.equals(GeneralButtons.defendJoinInfoButton)) {
+                Nation userNation = user.getNation();
+                if (userNation != null && userNation.isUserKing(user) && Database.nations.containsKey(userNation.getName())) {
+                    GuiUtils.moveGui(warInfoGui, new WarDefendJoinGui(war, user), user, player);
+                    return;
+                }
+                return;
+            }
+            return;
+        }
+        if (gui instanceof WarAttackJoinGui warAttackJoinGui) {
+            ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+            if (clickedItemMeta == null) {
+                return;
+            }
+            Nation userNation = user.getNation();
+            if (userNation != null && userNation.isUserKing(user) && Database.nations.containsKey(userNation.getName())) {
+                String clickedItemDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
+                if (clickedItemDisplayName.equals(userNation.getName())) {
+                    warAttackJoinGui.getWar().attackJoinApplicationNations.remove(userNation);
+                    GuiUtils.reopenGui(warAttackJoinGui, user, player);
+                    return;
+                }
+            }
+            return;
+        }
+        if (gui instanceof WarDefendJoinGui warDefendJoinGui) {
+            ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+            if (clickedItemMeta == null) {
+                return;
+            }
+            Nation userNation = user.getNation();
+            if (userNation != null && userNation.isUserKing(user) && Database.nations.containsKey(userNation.getName())) {
+                String clickedItemDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
+                if (clickedItemDisplayName.equals(userNation.getName())) {
+                    warDefendJoinGui.getWar().defendJoinApplicationNations.remove(userNation);
+                    GuiUtils.reopenGui(warDefendJoinGui, user, player);
                     return;
                 }
             }
@@ -441,6 +496,20 @@ public class GuiListener implements Listener {
             }
             GuiUtils.moveGui(warDefendNationsGui, new NationInfoGui(nation, user), user, player);
             return;
+        }
+        if (gui instanceof WarAttackJoinGui warAttackJoinGui) {
+            War war = warAttackJoinGui.getWar();
+            if (war == null || !Database.wars.contains(war)) {
+                player.closeInventory();
+                return;
+            }
+        }
+        if (gui instanceof WarDefendJoinGui warDefendJoinGui) {
+            War war = warDefendJoinGui.getWar();
+            if (war == null || !Database.wars.contains(war)) {
+                player.closeInventory();
+                return;
+            }
         }
     }
 
