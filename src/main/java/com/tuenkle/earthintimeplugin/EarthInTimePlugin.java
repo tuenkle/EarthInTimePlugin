@@ -48,10 +48,6 @@ public class EarthInTimePlugin extends JavaPlugin {
         ClockRecipes.Clock10Minute(this);
         ClockRecipes.Clock1Hour(this);
 
-        NationDynmap.setNationDynmapAPI();
-        NationDynmap.drawNations();
-        BukkitTask task = new OneSecondScheduler(this).runTaskTimer(this, 0, 20);
-
         //Development Only!!!
         User user = new User(UUID.fromString("d8ea842a-9fc4-4104-a928-95e4b5aa6d42"), "StrawberryF");
         User user2 = new User(UUID.fromString("3a4ee10c-cbf2-4269-bbc5-ed06ef90898a"), "MelonF");
@@ -70,6 +66,12 @@ public class EarthInTimePlugin extends JavaPlugin {
         Database.nations.put("orangef", nation3);
         WarUtils.declareWar(nation, nation2);
         //Development Only!!!
+
+        NationDynmap.setNationDynmapAPI();
+        NationDynmap.drawNations();
+        BukkitTask task = new OneSecondScheduler(this).runTaskTimer(this, 0, 20);
+
+
 
         getLogger().info("====EarthInTime is Enabled====");
     }
