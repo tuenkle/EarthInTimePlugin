@@ -41,6 +41,14 @@ public class WarInfoGui extends WarGui{
     }
     public ItemStack getPhase2TimeButton() {
         if (war.getDefendNation().isUserKing(user)) {
+            if (war.isScheduled()) {
+                return getButtonWithLores(Material.CLOCK, ChatColor.GREEN + "수비국 방어 시작 시간",
+                        ChatColor.GREEN + "(확정) " + GeneralUtils.dateTimeFormatter(war.getPhase2Time()),
+                        ChatColor.GRAY + "이 시간이 지나면 1시간동안 공격국 연합은 수비국을 공격할 수 있습니다.",
+                        ChatColor.GRAY + "이 시간이 지나면 수비국 연합에 다른 나라가 참전할 수 없습니다.",
+                        ChatColor.GRAY + "수비국 왕은 1회에 한해 해당 시간을 설정할 수 있습니다.",
+                        ChatColor.GRAY + "미설정시 전쟁 선포 11시간 이후로 설정됩니다.");
+            }
             return getButtonWithLores(Material.CLOCK, ChatColor.GREEN + "수비국 방어 시작 시간",
                     ChatColor.GREEN + "(미확정) " + GeneralUtils.dateTimeFormatter(war.getPhase2Time()),
                     ChatColor.RED + "시계를 클릭하여 방어 시간을 설정하세요!.",
@@ -49,6 +57,14 @@ public class WarInfoGui extends WarGui{
                     ChatColor.GRAY + "수비국 왕은 1회에 한해 해당 시간을 설정할 수 있습니다.",
                     ChatColor.GRAY + "미설정시 전쟁 선포 11시간 이후로 설정됩니다.");
         } else {
+            if (war.isScheduled()) {
+                return getButtonWithLores(Material.CLOCK, ChatColor.GREEN + "수비국 방어 시작 시간",
+                        ChatColor.GREEN + "(확정) " + GeneralUtils.dateTimeFormatter(war.getPhase2Time()),
+                        ChatColor.GRAY + "이 시간이 지나면 1시간동안 공격국 연합은 수비국을 공격할 수 있습니다.",
+                        ChatColor.GRAY + "이 시간이 지나면 수비국 연합에 다른 나라가 참전할 수 없습니다.",
+                        ChatColor.GRAY + "수비국 왕은 1회에 한해 해당 시간을 설정할 수 있습니다.",
+                        ChatColor.GRAY + "미설정시 전쟁 선포 11시간 이후로 설정됩니다.");
+            }
             return getButtonWithLores(Material.CLOCK, ChatColor.GREEN + "수비국 방어 시작 시간",
                     ChatColor.GREEN + "(미확정) " + GeneralUtils.dateTimeFormatter(war.getPhase2Time()),
                     ChatColor.GRAY + "이 시간이 지나면 1시간동안 공격국 연합은 수비국을 공격할 수 있습니다.",
@@ -78,14 +94,22 @@ public class WarInfoGui extends WarGui{
         inventory.setItem(21, getAttackNationButton());
         inventory.setItem(23, getDefendNationButton());
         inventory.setItem(24, getDefendNationsButton());
-        Nation nation = user.getNation();
-        if (war.attackJoinApplicationNations.contains(nation)) {
-            inventory.setItem(19, GeneralButtons.attackJoinInfoButton);
-        } else if (war.defendJoinApplicationNations.contains(nation)) {
-            inventory.setItem(25, GeneralButtons.defendJoinInfoButton);
-        } else if (nation != null && nation.isUserKing(user)) {
-            inventory.setItem(19, GeneralButtons.attackJoinButton);
-            inventory.setItem(25, GeneralButtons.defendJoinButton);
+        Nation userNation = user.getNation();
+        if (userNation != null) {
+            if (userNation.isUserKing(user)) {
+                if (userNation == war.getAttackNation()) {
+                    inventory.setItem(19, GeneralButtons.attackJoinNationListButton);
+                } else if (userNation == war.getDefendNation()) {
+                    inventory.setItem(25, GeneralButtons.defendJoinNationListButton);
+                } else if (war.attackJoinApplicationNations.contains(userNation)) {
+                    inventory.setItem(19, GeneralButtons.attackJoinInfoButton);
+                } else if (war.defendJoinApplicationNations.contains(userNation)) {
+                    inventory.setItem(25, GeneralButtons.defendJoinInfoButton);
+                } else if (!war.getAttackNations().contains(userNation) && !war.getDefendNations().contains(userNation)){
+                    inventory.setItem(19, GeneralButtons.attackJoinButton);
+                    inventory.setItem(25, GeneralButtons.defendJoinButton);
+                }
+            }
         }
         return inventory;
     }

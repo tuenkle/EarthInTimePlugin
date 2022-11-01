@@ -427,6 +427,68 @@ public class GuiListener implements Listener {
                 }
                 return;
             }
+            if (clickedItem.equals(GeneralButtons.attackJoinNationListButton)) {
+                Nation userNation = user.getNation();
+                if (userNation != null && userNation.isUserKing(user) && Database.nations.containsKey(userNation.getName())) {
+                    if (userNation == war.getAttackNation()) {
+                        GuiUtils.moveGui(warInfoGui, new WarAttackJoinNationListGui(war, user), user, player);
+                        return;
+                    }
+                    return;
+                }
+                return;
+            }
+            if (clickedItem.equals(GeneralButtons.defendJoinNationListButton)) {
+                Nation userNation = user.getNation();
+                if (userNation != null && userNation.isUserKing(user) && Database.nations.containsKey(userNation.getName())) {
+                    if (userNation == war.getDefendNation()) {
+                        GuiUtils.moveGui(warInfoGui, new WarDefendJoinNationListGui(war, user), user, player);
+                        return;
+                    }
+                    return;
+                }
+                return;
+            }
+            return;
+        }
+        if (gui instanceof WarAttackJoinNationListGui warAttackJoinNationListGui) {
+            Nation userNation = user.getNation();
+            if (!userNation.isUserKing(user)) {
+                return;
+            }
+            ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+            if (clickedItemMeta == null) {
+                return;
+            }
+            String clickedItemDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
+            Nation nation = Database.nations.get(clickedItemDisplayName);
+            if (nation == null) {
+                return;
+            }
+            if (warAttackJoinNationListGui.getWar().attackJoinApplicationNations.contains(nation)) {
+                GuiUtils.reopenGui(warAttackJoinNationListGui, user, player);
+                return;
+            }
+            return;
+        }
+        if (gui instanceof WarDefendJoinNationListGui warDefendJoinNationListGui) {
+            Nation userNation = user.getNation();
+            if (!userNation.isUserKing(user)) {
+                return;
+            }
+            ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+            if (clickedItemMeta == null) {
+                return;
+            }
+            String clickedItemDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
+            Nation nation = Database.nations.get(clickedItemDisplayName);
+            if (nation == null) {
+                return;
+            }
+            if (warDefendJoinNationListGui.getWar().defendJoinApplicationNations.contains(nation)) {
+                GuiUtils.reopenGui(warDefendJoinNationListGui, user, player);
+                return;
+            }
             return;
         }
         if (gui instanceof WarAttackJoinGui warAttackJoinGui) {

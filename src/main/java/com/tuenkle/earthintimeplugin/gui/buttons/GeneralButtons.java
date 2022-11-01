@@ -20,6 +20,8 @@ public class GeneralButtons {
     public static ItemStack defendJoinButton;
     public static ItemStack attackJoinInfoButton;
     public static ItemStack defendJoinInfoButton;
+    public static ItemStack attackJoinNationListButton;
+    public static ItemStack defendJoinNationListButton;
 
     public static ItemStack getBackButton() {
         return backButton;
@@ -60,6 +62,15 @@ public class GeneralButtons {
         makeDefendJoinButton();
         makeAttackJoinInfoButton();
         makeDefendJoinInfoButton();
+        makeAttackJoinNationListButton();
+        makeDefendJoinNationListButton();
+    }
+    public static void makeAttackJoinNationListButton() {
+        attackJoinNationListButton = getButtonWithLores(Material.DIAMOND_SWORD, ChatColor.GREEN + "공격국 참가 신청국 목록", ChatColor.GRAY + "공격국 참가 신청국 목록을 보려면 클릭하세요!");
+    }
+    public static void makeDefendJoinNationListButton() {
+        defendJoinNationListButton = getButtonWithLores(Material.DIAMOND_SWORD, ChatColor.GREEN + "수비국 참가 신청국 목록", ChatColor.GRAY + "수비국 참가 신청국 목록을 보려면 클릭하세요!");
+
     }
     public static void makeAttackJoinInfoButton() {
         attackJoinInfoButton = getButtonWithLores(Material.DIAMOND_SWORD, ChatColor.GREEN + "공격국 연합 참가 신청 내역", ChatColor.GRAY + "공격국 연합 참가 신청 내역을 보려면 클릭하세요!");

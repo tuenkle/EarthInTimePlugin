@@ -55,13 +55,19 @@ public class EarthInTimePlugin extends JavaPlugin {
         //Development Only!!!
         User user = new User(UUID.fromString("d8ea842a-9fc4-4104-a928-95e4b5aa6d42"), "StrawberryF");
         User user2 = new User(UUID.fromString("3a4ee10c-cbf2-4269-bbc5-ed06ef90898a"), "MelonF");
+        User user3 = new User(UUID.fromString("bd442907-892e-4586-ae50-629583eecdc0"), "OrangeF");
         Database.users.put(UUID.fromString("d8ea842a-9fc4-4104-a928-95e4b5aa6d42"), user);
         Database.users.put(UUID.fromString("3a4ee10c-cbf2-4269-bbc5-ed06ef90898a"), user2);
+        Database.users.put(user3.getUuid(), user3);
         int[] chunk = {0, 0};
+        int[] chunk2 = {1, 0};
+        int[] chunk3 = {2, 0};
         Nation nation = new Nation("korea", user, chunk, new Location(Bukkit.getWorld("world"), 0,0,0));
-        Nation nation2 = new Nation("usa", user2, chunk, new Location(Bukkit.getWorld("world"), 0,0,0));
+        Nation nation2 = new Nation("usa", user2, chunk2, new Location(Bukkit.getWorld("world"), 16,0,0));
+        Nation nation3 = new Nation("orangef", user3, chunk3, new Location(Bukkit.getWorld("world"), 16,0,0));
         Database.nations.put("korea", nation);
         Database.nations.put("usa", nation2);
+        Database.nations.put("orangef", nation3);
         WarUtils.declareWar(nation, nation2);
         //Development Only!!!
 
