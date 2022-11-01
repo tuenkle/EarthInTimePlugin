@@ -10,6 +10,7 @@ import com.tuenkle.earthintimeplugin.gui.war.WarMainGui;
 import com.tuenkle.earthintimeplugin.scheduler.ParticlesScheduler;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import com.tuenkle.earthintimeplugin.utils.NationUtils;
+import com.tuenkle.earthintimeplugin.utils.WarUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -252,6 +253,7 @@ public class CommandNation implements CommandExecutor {
                             }
                             nation.getAllyInvites().remove(targetNation);
                             targetNation.getAllyInvites().remove(nation);
+                            WarUtils.removeNationRelated(nation);
                             Database.wars.add(new War(nation, targetNation, LocalDateTime.now()));
                             player.sendMessage("전쟁을 선포하였습니다. 대상 국가: " + targetNationName);
                             Bukkit.broadcastMessage(String.format("%s 국가가 %s 국가에 전쟁을 선포하였습니다. 11시간안에 %s 국가는 전쟁시간을 확정하여야 합니다. 확정하지 못할시 전쟁은 %s에 시작됩니다.", nation.getName(), targetNationName, targetNationName, LocalDateTime.now().plusHours(11).format(formatter)));

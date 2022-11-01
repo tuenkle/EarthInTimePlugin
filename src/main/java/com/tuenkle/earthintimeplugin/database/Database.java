@@ -59,6 +59,14 @@ public class Database {
         }
         return null;
     }
+    public static War getRelatedWar(Nation nation) {
+        for (War war: wars) {
+            if (war.getAttackNations().contains(nation) || war.getDefendNations().contains(nation)) {
+                return war;
+            }
+        }
+        return null;
+    }
     public static ArrayList<War> getWarRelated(Nation nation) {
         ArrayList<War> relatedWars = new ArrayList<>();
         for (War war: wars) {

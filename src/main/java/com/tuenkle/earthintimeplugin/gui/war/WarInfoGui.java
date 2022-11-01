@@ -51,7 +51,7 @@ public class WarInfoGui extends WarGui{
             }
             return getButtonWithLores(Material.CLOCK, ChatColor.GREEN + "수비국 방어 시작 시간",
                     ChatColor.GREEN + "(미확정) " + GeneralUtils.dateTimeFormatter(war.getPhase2Time()),
-                    ChatColor.RED + "시계를 클릭하여 방어 시간을 설정하세요!.",
+                    ChatColor.RED + "시계를 클릭하여 방어 시작 시간을 설정하세요!.",
                     ChatColor.GRAY + "이 시간이 지나면 1시간동안 공격국 연합은 수비국을 공격할 수 있습니다.",
                     ChatColor.GRAY + "이 시간이 지나면 수비국 연합에 다른 나라가 참전할 수 없습니다.",
                     ChatColor.GRAY + "수비국 왕은 1회에 한해 해당 시간을 설정할 수 있습니다.",

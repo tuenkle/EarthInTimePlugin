@@ -8,6 +8,7 @@ import com.tuenkle.earthintimeplugin.listeners.*;
 import com.tuenkle.earthintimeplugin.utils.WarUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -24,12 +25,18 @@ import com.tuenkle.earthintimeplugin.scheduler.OneSecondScheduler;
 
 public class EarthInTimePlugin extends JavaPlugin {
     private static EarthInTimePlugin mainInstance;
+    private static World world;
+
 
     public EarthInTimePlugin() {
         mainInstance = this;
+        world = this.getServer().getWorld("world");
     }
     public static EarthInTimePlugin getMainInstance() {
         return mainInstance;
+    }
+    public static World getWorld() {
+        return world;
     }
     @Override
     public void onEnable() {

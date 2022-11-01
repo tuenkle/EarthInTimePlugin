@@ -1,15 +1,13 @@
 package com.tuenkle.earthintimeplugin.database;
+import org.bukkit.Chunk;
+import org.bukkit.ChunkSnapshot;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class War {
-    public boolean isAttackStarted() {
-        return isAttackStarted;
-    }
-    public void setAttackStarted(boolean attackStarted) {
-        isAttackStarted = attackStarted;
-    }
+import static com.tuenkle.earthintimeplugin.EarthInTimePlugin.getWorld;
 
+public class War {
     public boolean isScheduled() {
         return isScheduled;
     }
@@ -32,22 +30,6 @@ public class War {
 
     public void setDefendNations(HashSet<Nation> defendNations) {
         this.defendNations = defendNations;
-    }
-
-    public HashSet<User> getAttackPlayers() {
-        return attackPlayers;
-    }
-
-    public void setAttackPlayers(HashSet<User> attackPlayers) {
-        this.attackPlayers = attackPlayers;
-    }
-
-    public HashSet<User> getDefendPlayers() {
-        return defendPlayers;
-    }
-
-    public void setDefendPlayers(HashSet<User> defendPlayers) {
-        this.defendPlayers = defendPlayers;
     }
 
     public Nation getAttackNation() {
@@ -89,7 +71,6 @@ public class War {
     public void terminateWar() {
         Database.wars.remove(this);
     }
-    private boolean isAttackStarted = false;
     private boolean isScheduled = false;
     private HashSet<Nation> attackNations = new HashSet<>();
     private HashSet<Nation> defendNations = new HashSet<>();
@@ -110,12 +91,14 @@ public class War {
         }
         return false;
     }
-    private HashSet<User> attackPlayers = new HashSet<>();
-    private HashSet<User> defendPlayers = new HashSet<>();
     private Nation attackNation;
     private Nation defendNation;
     private LocalDateTime phase1Time;
     private LocalDateTime phase2Time;
+    public boolean isPhase1Start = false;
+    public boolean isPhase2Start = false;
+    public HashMap<Nation, HashSet<ChunkSnapshot>> attackNationsSnapShot = new HashMap<>();
+    public HashSet<ChunkSnapshot> defendNationSnapShot = new HashSet<>();
     public War (Nation attackNation, Nation defendNation, LocalDateTime startTime) {
         this.attackNations.add(attackNation);
         this.attackNation = attackNation;
@@ -125,25 +108,56 @@ public class War {
         this.phase1Time = startTime.plusHours(1);
         this.phase2Time = startTime.plusHours(11);
     }
-    public void warStartIfAttackStartTimeIsAfterNow () {
-        if (isAttackStarted) {
-            return;
+    public boolean isAttackUser(User user) {
+        for (Nation nation : attackNations) {
+            if (nation.getResidents().containsKey(user)) {
+                return true;
+            }
         }
-        if (LocalDateTime.now().isAfter(phase1Time)) {
-            for (Nation nation : attackNations){
-                for (Map.Entry<User, LocalDateTime> resident: nation.getResidents().entrySet()) {
-                    if (LocalDateTime.now().isAfter(resident.getValue().plusHours(48))) { //나라 가입한 지 48시간이 지나야 공격으로 참가 가능
-                        attackPlayers.add(resident.getKey());
+        return false;
+    }
+    public boolean isDefendUser(User user) {
+        for (Nation nation : defendNations) {
+            if (nation.getResidents().containsKey(user)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public void warStartIfAttackStartTimeIsAfterNow () {
+        LocalDateTime now = LocalDateTime.now();
+        if (!isPhase1Start) {
+            if (phase1Time.isAfter(now)) {
+                for (Nation nation : attackNations) {
+                    HashSet<ChunkSnapshot> chunks = new HashSet<>();
+                    for (int[] intChunk : nation.getChunks()) {
+                        chunks.add(getWorld().getChunkAt(intChunk[0], intChunk[1]).getChunkSnapshot());
                     }
+                    attackNationsSnapShot.put(nation, chunks);
                 }
+//                for (Nation nation : attackNations){
+//                    for (Map.Entry<User, LocalDateTime> resident: nation.getResidents().entrySet()) {
+//                        if (LocalDateTime.now().isAfter(resident.getValue().plusHours(48))) { //나라 가입한 지 48시간이 지나야 공격으로 참가 가능
+//                        }
+//                    }
+//                }
+                isPhase1Start = true;
             }
-            for (Nation nation : defendNations){
-                for (Map.Entry<User, LocalDateTime> residents: nation.getResidents().entrySet()) {
-                    defendPlayers.add(residents.getKey());
+        } else if (!isPhase2Start) {
+            if (phase2Time.isAfter(now)) {
+                isScheduled = true;
+                HashSet<ChunkSnapshot> chunks = new HashSet<>();
+                for (int[] intChunk : defendNation.getChunks()) {
+                    chunks.add(getWorld().getChunkAt(intChunk[0], intChunk[1]).getChunkSnapshot());
                 }
+                defendNationSnapShot = chunks;
+//                for (Nation nation : defendNations){
+//                    for (Map.Entry<User, LocalDateTime> residents: nation.getResidents().entrySet()) {
+//                        defendUsers.add(residents.getKey());
+//                    }
+//                }
+                isPhase2Start = true;
             }
-            isScheduled = true;
-            isAttackStarted = true;
         }
     }
 }

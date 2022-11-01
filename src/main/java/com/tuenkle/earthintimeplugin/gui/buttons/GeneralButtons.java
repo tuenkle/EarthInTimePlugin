@@ -79,7 +79,7 @@ public class GeneralButtons {
         defendJoinInfoButton = getButtonWithLores(Material.SHIELD, ChatColor.GREEN + "수비국 연합 참가 신청 내역", ChatColor.GRAY + "수비국 연합 참가 신청 내역을 보려면 클릭하세요!");
     }
     public static void makeAttackJoinButton() {
-        attackJoinButton =  getButtonWithLores(Material.DIAMOND_SWORD, ChatColor.GREEN + "공격국 연합 참가 신청", ChatColor.GRAY + "공격국 연합에 참가 신청하려면 클릭하세요!");
+        attackJoinButton =  getButtonWithLores(Material.DIAMOND_SWORD, ChatColor.GREEN + "공격국 연합 참가 신청", ChatColor.GRAY + "공격국 연합에 참가 신청하려면 클릭하세요!", ChatColor.GRAY + "공격국 연합에 참가 시 영토가 공격받을 수 있습니다.");
     }
     public static void makeDefendJoinButton() {
         defendJoinButton =  getButtonWithLores(Material.SHIELD, ChatColor.GREEN + "수비국 연합 참가 신청", ChatColor.GRAY + "수비국 연합에 참가 신청하려면 클릭하세요!");

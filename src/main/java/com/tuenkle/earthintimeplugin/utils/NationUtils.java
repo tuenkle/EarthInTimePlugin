@@ -32,6 +32,14 @@ public class NationUtils {
         }
         return false;
     }
+    public static boolean isChunkInSpecificNations(Chunk chunk, HashSet<Nation> nations) {
+        for (Nation nation : nations) {
+            if (isChunkInNation(chunk, nation)) {
+                return true;
+            }
+        }
+        return false;
+    }
     public static boolean isPlayerInChunks(Player player, ArrayList<int[]> chunks) {
         Chunk playerChunk = player.getLocation().getChunk();
         for (int[] chunk : chunks) {

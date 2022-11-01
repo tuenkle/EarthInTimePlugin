@@ -1,16 +1,18 @@
 package com.tuenkle.earthintimeplugin.scheduler;
 import com.tuenkle.earthintimeplugin.database.Database;
+import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.database.War;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
 import javax.xml.crypto.Data;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
 
 import static com.tuenkle.earthintimeplugin.utils.ScoreboardUtils.setPlayerScoreboard;
@@ -34,7 +36,32 @@ public class OneSecondScheduler extends BukkitRunnable {
                 user.withdrawMoney(1);
             }
             setPlayerScoreboard(onlinePlayer);
+            World world = Bukkit.getWorld("world");
+
             for (War war : Database.wars) {
+                LocalDateTime now = LocalDateTime.now();
+                if (!war.isPhase1Start) {
+                    if (war.getPhase1Time().isAfter(now)) {
+                        for (Nation nation : war.getAttackNations()) {
+                            HashSet<ChunkSnapshot> chunks = new HashSet<>();
+                            for (int[] intChunk : nation.getChunks()) {
+                                chunks.add(world.getChunkAt(intChunk[0], intChunk[1]).getChunkSnapshot());
+                            }
+                            war.attackNationsSnapShot.put(nation, chunks);
+                        }
+                        war.isPhase1Start = true;
+                    }
+                } else if (!war.isPhase2Start) {
+                    if (war.getPhase2Time().isAfter(now)) {
+                        Nation nation = war.getDefendNation();
+                        HashSet<ChunkSnapshot> chunks = new HashSet<>();
+                        for (int[] intChunk : nation.getChunks()) {
+                            chunks.add(world.getChunkAt(intChunk[0], intChunk[1]).getChunkSnapshot());
+                        }
+                        war.defendNationSnapShot = chunks;
+                        war.isPhase2Start = true;
+                    }
+                }
                 war.warStartIfAttackStartTimeIsAfterNow();
             }
         }
