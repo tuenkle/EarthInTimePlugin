@@ -456,16 +456,21 @@ public class GuiListener implements Listener {
             if (!userNation.isUserKing(user)) {
                 return;
             }
+            War war = warAttackJoinNationListGui.getWar();
+            if (userNation != war.getAttackNation()) {
+                return;
+            }
             ItemMeta clickedItemMeta = clickedItem.getItemMeta();
             if (clickedItemMeta == null) {
                 return;
             }
             String clickedItemDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
-            Nation nation = Database.nations.get(clickedItemDisplayName);
-            if (nation == null) {
+            Nation clickedNation = Database.nations.get(clickedItemDisplayName);
+            if (clickedNation == null) {
                 return;
             }
-            if (warAttackJoinNationListGui.getWar().attackJoinApplicationNations.contains(nation)) {
+            if (war.attackJoinApplicationNations.contains(clickedNation)) {
+                war.attackJoinApplicationNations.remove(clickedNation);
                 GuiUtils.reopenGui(warAttackJoinNationListGui, user, player);
                 return;
             }
@@ -476,16 +481,21 @@ public class GuiListener implements Listener {
             if (!userNation.isUserKing(user)) {
                 return;
             }
+            War war = warDefendJoinNationListGui.getWar();
+            if (userNation != war.getAttackNation()) {
+                return;
+            }
             ItemMeta clickedItemMeta = clickedItem.getItemMeta();
             if (clickedItemMeta == null) {
                 return;
             }
             String clickedItemDisplayName = ChatColor.stripColor(clickedItemMeta.getDisplayName());
-            Nation nation = Database.nations.get(clickedItemDisplayName);
-            if (nation == null) {
+            Nation clickedNation = Database.nations.get(clickedItemDisplayName);
+            if (clickedNation == null) {
                 return;
             }
-            if (warDefendJoinNationListGui.getWar().defendJoinApplicationNations.contains(nation)) {
+            if (war.defendJoinApplicationNations.contains(clickedNation)) {
+                war.defendJoinApplicationNations.remove(clickedNation);
                 GuiUtils.reopenGui(warDefendJoinNationListGui, user, player);
                 return;
             }
