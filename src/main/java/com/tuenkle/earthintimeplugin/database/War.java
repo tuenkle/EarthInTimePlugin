@@ -1,4 +1,5 @@
 package com.tuenkle.earthintimeplugin.database;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 
@@ -105,8 +106,8 @@ public class War {
         this.defendNations.add(defendNation);
         this.defendNation = defendNation;
         this.startTime = startTime;
-        this.phase1Time = startTime.plusHours(1);
-        this.phase2Time = startTime.plusHours(11);
+        this.phase1Time = startTime.plusSeconds(20);
+        this.phase2Time = startTime.plusSeconds(40);
     }
     public boolean isAttackUser(User user) {
         for (Nation nation : attackNations) {
@@ -127,7 +128,7 @@ public class War {
     public void warStartIfAttackStartTimeIsAfterNow () {
         LocalDateTime now = LocalDateTime.now();
         if (!isPhase1Start) {
-            if (phase1Time.isAfter(now)) {
+            if (phase1Time.isBefore(now)) {
                 for (Nation nation : attackNations) {
                     HashSet<ChunkSnapshot> chunks = new HashSet<>();
                     for (int[] intChunk : nation.getChunks()) {
@@ -135,28 +136,19 @@ public class War {
                     }
                     attackNationsSnapShot.put(nation, chunks);
                 }
-//                for (Nation nation : attackNations){
-//                    for (Map.Entry<User, LocalDateTime> resident: nation.getResidents().entrySet()) {
-//                        if (LocalDateTime.now().isAfter(resident.getValue().plusHours(48))) { //나라 가입한 지 48시간이 지나야 공격으로 참가 가능
-//                        }
-//                    }
-//                }
                 isPhase1Start = true;
+                Bukkit.getLogger().info("페이즈1시작");
             }
         } else if (!isPhase2Start) {
-            if (phase2Time.isAfter(now)) {
+            if (phase2Time.isBefore(now)) {
                 isScheduled = true;
                 HashSet<ChunkSnapshot> chunks = new HashSet<>();
                 for (int[] intChunk : defendNation.getChunks()) {
                     chunks.add(getWorld().getChunkAt(intChunk[0], intChunk[1]).getChunkSnapshot());
                 }
                 defendNationSnapShot = chunks;
-//                for (Nation nation : defendNations){
-//                    for (Map.Entry<User, LocalDateTime> residents: nation.getResidents().entrySet()) {
-//                        defendUsers.add(residents.getKey());
-//                    }
-//                }
                 isPhase2Start = true;
+                Bukkit.getLogger().info("페이즈2시작");
             }
         }
     }

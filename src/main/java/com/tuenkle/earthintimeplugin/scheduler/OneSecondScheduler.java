@@ -39,29 +39,6 @@ public class OneSecondScheduler extends BukkitRunnable {
             World world = Bukkit.getWorld("world");
 
             for (War war : Database.wars) {
-                LocalDateTime now = LocalDateTime.now();
-                if (!war.isPhase1Start) {
-                    if (war.getPhase1Time().isAfter(now)) {
-                        for (Nation nation : war.getAttackNations()) {
-                            HashSet<ChunkSnapshot> chunks = new HashSet<>();
-                            for (int[] intChunk : nation.getChunks()) {
-                                chunks.add(world.getChunkAt(intChunk[0], intChunk[1]).getChunkSnapshot());
-                            }
-                            war.attackNationsSnapShot.put(nation, chunks);
-                        }
-                        war.isPhase1Start = true;
-                    }
-                } else if (!war.isPhase2Start) {
-                    if (war.getPhase2Time().isAfter(now)) {
-                        Nation nation = war.getDefendNation();
-                        HashSet<ChunkSnapshot> chunks = new HashSet<>();
-                        for (int[] intChunk : nation.getChunks()) {
-                            chunks.add(world.getChunkAt(intChunk[0], intChunk[1]).getChunkSnapshot());
-                        }
-                        war.defendNationSnapShot = chunks;
-                        war.isPhase2Start = true;
-                    }
-                }
                 war.warStartIfAttackStartTimeIsAfterNow();
             }
         }
