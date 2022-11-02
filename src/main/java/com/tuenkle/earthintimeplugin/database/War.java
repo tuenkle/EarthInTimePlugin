@@ -96,8 +96,11 @@ public class War {
     private Nation defendNation;
     private LocalDateTime phase1Time;
     private LocalDateTime phase2Time;
+    private LocalDateTime phase3Time;
     public boolean isPhase1Start = false;
     public boolean isPhase2Start = false;
+    public boolean isPhase3Start = false;
+
     public HashMap<Nation, HashSet<ChunkSnapshot>> attackNationsSnapShot = new HashMap<>();
     public HashSet<ChunkSnapshot> defendNationSnapShot = new HashSet<>();
     public War (Nation attackNation, Nation defendNation, LocalDateTime startTime) {
@@ -108,6 +111,7 @@ public class War {
         this.startTime = startTime;
         this.phase1Time = startTime.plusSeconds(20);
         this.phase2Time = startTime.plusSeconds(40);
+        this.phase3Time = startTime.plusSeconds(20);
     }
     public boolean isAttackUser(User user) {
         for (Nation nation : attackNations) {
@@ -137,7 +141,7 @@ public class War {
                     attackNationsSnapShot.put(nation, chunks);
                 }
                 isPhase1Start = true;
-                Bukkit.getLogger().info("페이즈1시작");
+                Bukkit.getLogger().info("phase1start");
             }
         } else if (!isPhase2Start) {
             if (phase2Time.isBefore(now)) {
@@ -148,7 +152,12 @@ public class War {
                 }
                 defendNationSnapShot = chunks;
                 isPhase2Start = true;
-                Bukkit.getLogger().info("페이즈2시작");
+                Bukkit.getLogger().info("phase2start");
+            }
+        } else if (!isPhase3Start) {
+            if (phase3Time.isBefore(now)) {
+                isPhase3Start = true;
+                Bukkit.getLogger().info("phase3start");
             }
         }
     }
