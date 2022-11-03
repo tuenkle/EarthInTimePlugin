@@ -1,7 +1,6 @@
 package com.tuenkle.earthintimeplugin.database;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.ChunkSnapshot;
+import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -103,7 +102,10 @@ public class War {
     public boolean isPhase1Start = false;
     public boolean isPhase2Start = false;
     public boolean isPhase3Start = false;
-
+    public HashMap<Material, Long> defendRecoveryRequireMaterials = new HashMap<>();
+    public HashMap<int[], BlockData> defendRecoveryBlocks = new HashMap<>();
+    public HashMap<Nation, HashMap<Material, Long>> attacksRecoveryRequireMaterials = new HashMap<>();
+    public HashMap<Nation, HashMap<int[], BlockData>> attacksRecoveryBlocks = new HashMap<>();
     public HashMap<Nation, HashSet<ChunkSnapshot>> attackNationsSnapShot = new HashMap<>();
     public HashSet<ChunkSnapshot> defendNationSnapShot = new HashSet<>();
     public War (Nation attackNation, Nation defendNation, LocalDateTime startTime) {
@@ -159,6 +161,41 @@ public class War {
             }
         } else if (!isPhase3Start) {
             if (phase3Time.isBefore(now)) {
+                for (Map.Entry<Nation, HashSet<ChunkSnapshot>> attackNationSnapshot : attackNationsSnapShot.entrySet()) {
+                    Nation nation = attackNationSnapshot.getKey();
+                    HashMap<Material, Long> attackRecoveryRequireMaterials = new HashMap<>();
+                    HashMap<int[], BlockData> attackRecoveryBlocks = new HashMap<>();
+                    for (ChunkSnapshot chunkSnapshot : attackNationSnapshot.getValue()) {
+                        for (int y = -64; y <= 319; y++) {
+                            for (int x = 0; x <= 15; x++) {
+                                for (int z = 0; z <= 15; z++) {
+                                    BlockData oldBlockData = chunkSnapshot.getBlockData(x, y, z);
+                                    if (!getWorld().getBlockData(chunkSnapshot.getX() * 16 + x, y, chunkSnapshot.getZ() * 16 + z).equals(oldBlockData)) {
+                                        attackRecoveryBlocks.put(new int[]{x, y, z}, oldBlockData);
+                                        Material oldBlockDataMaterial = oldBlockData.getMaterial();
+                                        attackRecoveryRequireMaterials.put(oldBlockDataMaterial, attackRecoveryRequireMaterials.get(oldBlockDataMaterial) + 1);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    attacksRecoveryBlocks.put(nation, attackRecoveryBlocks);
+                    attacksRecoveryRequireMaterials.put(nation, attackRecoveryRequireMaterials);
+                }
+                for (ChunkSnapshot chunkSnapshot : defendNationSnapShot) {
+                    for (int y = -64; y <= 319; y++) {
+                        for (int x = 0; x <= 15; x++) {
+                            for (int z = 0; z <= 15; z++) {
+                                BlockData oldBlockData = chunkSnapshot.getBlockData(x, y, z);
+                                if (!getWorld().getBlockData(chunkSnapshot.getX() * 16 + x, y, chunkSnapshot.getZ() * 16 + z).equals(oldBlockData)) {
+                                    defendRecoveryBlocks.put(new int[]{x, y, z}, oldBlockData);
+                                    Material oldBlockDataMaterial = oldBlockData.getMaterial();
+                                    defendRecoveryRequireMaterials.put(oldBlockDataMaterial, defendRecoveryRequireMaterials.get(oldBlockDataMaterial) + 1);
+                                }
+                            }
+                        }
+                    }
+                }
                 isPhase3Start = true;
                 Bukkit.getLogger().info("phase3start");
             }
