@@ -30,7 +30,7 @@ public class EarthInTimePlugin extends JavaPlugin {
 
     public EarthInTimePlugin() {
         mainInstance = this;
-        world = this.getServer().getWorld("world");
+        world = Bukkit.getWorld("world");
     }
     public static EarthInTimePlugin getMainInstance() {
         return mainInstance;
