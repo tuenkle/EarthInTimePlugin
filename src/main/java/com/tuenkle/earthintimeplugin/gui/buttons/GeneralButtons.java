@@ -2,6 +2,8 @@ package com.tuenkle.earthintimeplugin.gui.buttons;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -22,7 +24,7 @@ public class GeneralButtons {
     public static ItemStack defendJoinInfoButton;
     public static ItemStack attackJoinNationListButton;
     public static ItemStack defendJoinNationListButton;
-
+    public static ItemStack warRecoveryButton;
     public static ItemStack getBackButton() {
         return backButton;
     }
@@ -47,6 +49,8 @@ public class GeneralButtons {
         ItemMeta buttonMeta = button.getItemMeta();
         buttonMeta.setDisplayName(name);
         buttonMeta.setLore(Arrays.stream(lores).toList());
+        buttonMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
+
         button.setItemMeta(buttonMeta);
         return button;
     }
@@ -64,6 +68,10 @@ public class GeneralButtons {
         makeDefendJoinInfoButton();
         makeAttackJoinNationListButton();
         makeDefendJoinNationListButton();
+        makeWarRecoveryButton();
+    }
+    public static void makeWarRecoveryButton() {
+        warRecoveryButton = getButtonWithLores(Material.WOODEN_AXE, ChatColor.GREEN + "나라 복구 메뉴", ChatColor.GRAY + "나라 복구 메뉴로 가려면 클릭하세요!");
     }
     public static void makeAttackJoinNationListButton() {
         attackJoinNationListButton = getButtonWithLores(Material.DIAMOND_SWORD, ChatColor.GREEN + "공격국 참가 신청국 목록", ChatColor.GRAY + "공격국 참가 신청국 목록을 보려면 클릭하세요!");

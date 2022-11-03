@@ -60,6 +60,9 @@ public class War {
     public LocalDateTime getPhase2Time() {
         return phase2Time;
     }
+    public LocalDateTime getPhase3Time() {
+        return phase3Time;
+    }
     private LocalDateTime startTime;
 
     public LocalDateTime getStartTime() {
