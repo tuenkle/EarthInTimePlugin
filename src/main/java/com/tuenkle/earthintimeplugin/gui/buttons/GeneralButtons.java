@@ -26,6 +26,7 @@ public class GeneralButtons {
     public static ItemStack defendJoinNationListButton;
     public static ItemStack warRecoveryButton;
     public static ItemStack previousPageButton;
+    public static ItemStack warRecoveryExecuteButton;
     public static ItemStack getBackButton() {
         return backButton;
     }
@@ -70,6 +71,10 @@ public class GeneralButtons {
         makeAttackJoinNationListButton();
         makeDefendJoinNationListButton();
         makeWarRecoveryButton();
+        makeWarRecoveryExecuteButton();
+    }
+    public static void makeWarRecoveryExecuteButton() {
+        warRecoveryExecuteButton = getButtonWithLores(Material.WOODEN_AXE, ChatColor.GREEN + "나라 복구", ChatColor.GRAY + "클릭하여 나라를 복구합니다!", ChatColor.RED + "전쟁당 1회만 사용 가능합니다!");
     }
     public static void makeWarRecoveryButton() {
         warRecoveryButton = getButtonWithLores(Material.WOODEN_AXE, ChatColor.GREEN + "나라 복구 메뉴", ChatColor.GRAY + "나라 복구 메뉴로 가려면 클릭하세요!");

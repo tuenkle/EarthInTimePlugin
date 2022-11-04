@@ -14,17 +14,21 @@ import com.tuenkle.earthintimeplugin.gui.war.*;
 import com.tuenkle.earthintimeplugin.scheduler.ParticlesScheduler;
 import com.tuenkle.earthintimeplugin.utils.GeneralUtils;
 import com.tuenkle.earthintimeplugin.utils.GuiUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,14 +50,88 @@ public class GuiListener implements Listener {
     @EventHandler
     public void onNationGuiClick(InventoryClickEvent event) {
         Inventory inventory = event.getClickedInventory();
+        InventoryView inventoryView = event.getView();
         if (inventory == null) {
             return;
         }
-
-        if (!(inventory.getHolder() instanceof Gui gui)) {
+        if (!(inventoryView.getTopInventory().getHolder() instanceof Gui gui)) {
             return;
         }
+
         event.setCancelled(true);
+        if (gui instanceof WarRecoveryGui warRecoveryGui) {
+            final ItemStack clickedItem = event.getCurrentItem();
+            if (clickedItem == null) {
+                return;
+            }
+            User user = gui.getUser();
+            Player player = (Player) event.getWhoClicked();
+            Nation userNation = user.getNation();
+            if (userNation == null || !Database.nations.containsKey(userNation.getName()) || !userNation.isUserKing(user)) {
+                player.closeInventory();
+                return;
+            }
+            War war = warRecoveryGui.getWar();
+            if (war == null || !Database.wars.contains(war)) {
+                player.closeInventory();
+                return;
+            }
+            if (event.getRawSlot() >= gui.getSize()) {
+                if (event.isLeftClick()) {
+                    Material clickedItemMaterial = clickedItem.getType();
+                    HashMap<Material, long[]> requireRecoveryMaterials = war.getRequireRecoveryMaterials(userNation);
+                    if (requireRecoveryMaterials == null) {
+                        return;
+                    }
+                    if (!requireRecoveryMaterials.containsKey(clickedItemMaterial)) {
+                        return;
+                    }
+                    long[] amount = requireRecoveryMaterials.get(clickedItemMaterial);
+                    long requireAmount = amount[1] - amount[0];
+                    if (event.isShiftClick()) {
+                        int itemAmount = clickedItem.getAmount();
+                        if (requireAmount >= itemAmount) {
+                            amount[0] += itemAmount;
+                            clickedItem.setAmount(0);
+                        } else {
+                            amount[0] += requireAmount;
+                            clickedItem.setAmount((int) (itemAmount - requireAmount));
+                        }
+                    } else {
+                        amount[0] += 1;
+                        clickedItem.setAmount(clickedItem.getAmount() - 1);
+                    }
+                    GuiUtils.reopenGui(warRecoveryGui, user, player);
+                }
+            } else {
+                if (clickedItem.equals(GeneralButtons.getCloseButton())) {
+                    player.closeInventory();
+                    return;
+                }
+                if (clickedItem.equals(GeneralButtons.getBackButton())) {
+                    GuiUtils.backGui(user, player);
+                    return;
+                }
+                if (clickedItem.equals(GeneralButtons.mainMenuButton)) {
+                    GuiUtils.moveToMainGui(new MainGui(user), user, player);
+                    return;
+                }
+                if (clickedItem.equals(GeneralButtons.getNextPageButton())) {
+                    warRecoveryGui.page++;
+                    GuiUtils.reopenGui(warRecoveryGui, user ,player);
+                    return;
+                }
+                if (clickedItem.equals(GeneralButtons.warRecoveryExecuteButton)) {
+                    if (userNation == war.getDefendNation() || war.getAttackNations().contains(userNation)) {
+                        war.executeRecovery(userNation);
+                        player.closeInventory();
+                        player.sendMessage("나라가 복구되었습니다.");
+                        return;
+                    }
+                    return;
+                }
+            }
+        }
         if (event.getRawSlot() >= gui.getSize()) {
             return;
         }
@@ -462,12 +540,32 @@ public class GuiListener implements Listener {
             }
             return;
         }
-        if (gui instanceof WarRecoveryGui warRecoveryGui) {
-            if (clickedItem.equals(GeneralButtons.getNextPageButton())) {
-                warRecoveryGui.page++;
-                GuiUtils.reopenGui(warRecoveryGui, user ,player);
-            }
-        }
+//        if (gui instanceof WarRecoveryGui warRecoveryGui) {
+//            if (clickedItem.equals(GeneralButtons.getNextPageButton())) {
+//                warRecoveryGui.page++;
+//                GuiUtils.reopenGui(warRecoveryGui, user ,player);
+//                return;
+//            }
+//            if (clickedItem.equals(GeneralButtons.warRecoveryExecuteButton)) {
+//                Nation userNation = user.getNation();
+//                if (userNation == null || !Database.nations.containsKey(userNation.getName()) || !userNation.isUserKing(user)) {
+//                    player.closeInventory();
+//                    return;
+//                }
+//                War war = warRecoveryGui.getWar();
+//                if (war == null || !Database.wars.contains(war)) {
+//                    player.closeInventory();
+//                    return;
+//                }
+//                if (userNation == war.getDefendNation() || war.getAttackNations().contains(userNation)) {
+//                    war.executeRecovery(userNation);
+//                    player.closeInventory();
+//                    player.sendMessage("나라가 복구되었습니다.");
+//                    return;
+//                }
+//                return;
+//            }
+//        }
         if (gui instanceof WarAttackJoinNationListGui warAttackJoinNationListGui) {
             Nation userNation = user.getNation();
             if (!userNation.isUserKing(user)) {

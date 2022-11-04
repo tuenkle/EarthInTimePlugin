@@ -104,7 +104,7 @@ public class War {
     public boolean isPhase3Start = false;
     public LinkedHashMap<Material, long[]> defendRecoveryRequireMaterials = new LinkedHashMap<>();
     public HashMap<int[], BlockData> defendRecoveryBlocks = new HashMap<>();
-    public HashMap<Nation, HashMap<Material, long[]>> attacksRecoveryRequireMaterials = new HashMap<>();
+    public HashMap<Nation, LinkedHashMap<Material, long[]>> attacksRecoveryRequireMaterials = new HashMap<>();
     public HashMap<Nation, HashMap<int[], BlockData>> attacksRecoveryBlocks = new HashMap<>();
     public HashMap<Nation, HashSet<ChunkSnapshot>> attackNationsSnapShot = new HashMap<>();
     public HashSet<ChunkSnapshot> defendNationSnapShot = new HashSet<>();
@@ -133,6 +133,42 @@ public class War {
             }
         }
         return false;
+    }
+    public HashMap<Material, long[]> getRequireRecoveryMaterials (Nation nation) {
+        if (defendNation == nation) {
+            return defendRecoveryRequireMaterials;
+        } else if (attackNations.contains(nation)) {
+            return attacksRecoveryRequireMaterials.get(nation);
+        } else {
+            return null;
+        }
+    }
+    public void executeRecovery(Nation nation) {
+        HashMap<int[], BlockData> recoveryBlocks = null;
+        LinkedHashMap<Material, long[]> recoveryRequireMaterials = null;
+        if (defendNation == nation) {
+            recoveryBlocks = defendRecoveryBlocks;
+            recoveryRequireMaterials = defendRecoveryRequireMaterials;
+        } else if (attackNations.contains(nation)) {
+            recoveryBlocks = attacksRecoveryBlocks.get(nation);
+            recoveryRequireMaterials = attacksRecoveryRequireMaterials.get(nation);
+        }
+        for (Map.Entry<int[], BlockData> recoveryBlock : recoveryBlocks.entrySet()) {
+            Bukkit.getLogger().info("a");
+            int[] intLocation = recoveryBlock.getKey();
+            BlockData blockData = recoveryBlock.getValue();
+            Material material = blockData.getMaterial();
+            if (material.isAir()){
+                getWorld().setBlockData(intLocation[0], intLocation[1], intLocation[2], blockData);
+                continue;
+            }
+            long[] amount = recoveryRequireMaterials.get(material);
+            if (amount[0] > 0) {
+                Bukkit.getLogger().info("b");
+                amount[0] -= 1;
+                getWorld().setBlockData(intLocation[0], intLocation[1], intLocation[2], blockData);
+            }
+        }
     }
     public void warStartIfAttackStartTimeIsAfterNow () {
         LocalDateTime now = LocalDateTime.now();
@@ -163,20 +199,24 @@ public class War {
             if (phase3Time.isBefore(now)) {
                 for (Map.Entry<Nation, HashSet<ChunkSnapshot>> attackNationSnapshot : attackNationsSnapShot.entrySet()) {
                     Nation nation = attackNationSnapshot.getKey();
-                    HashMap<Material, long[]> attackRecoveryRequireMaterials = new HashMap<>();
+                    LinkedHashMap<Material, long[]> attackRecoveryRequireMaterials = new LinkedHashMap<>();
                     HashMap<int[], BlockData> attackRecoveryBlocks = new HashMap<>();
                     for (ChunkSnapshot chunkSnapshot : attackNationSnapshot.getValue()) {
                         for (int y = -64; y <= 319; y++) {
                             for (int x = 0; x <= 15; x++) {
                                 for (int z = 0; z <= 15; z++) {
+                                    int realX = chunkSnapshot.getX() * 16 + x;
+                                    int realZ = chunkSnapshot.getZ() * 16 + z;
                                     BlockData oldBlockData = chunkSnapshot.getBlockData(x, y, z);
-                                    if (!getWorld().getBlockData(chunkSnapshot.getX() * 16 + x, y, chunkSnapshot.getZ() * 16 + z).equals(oldBlockData)) {
-                                        attackRecoveryBlocks.put(new int[]{x, y, z}, oldBlockData);
+                                    if (!getWorld().getBlockData(realX, y, realZ).equals(oldBlockData)) {
                                         Material oldBlockDataMaterial = oldBlockData.getMaterial();
-                                        if (attackRecoveryRequireMaterials.containsKey(oldBlockDataMaterial)) {
-                                            attackRecoveryRequireMaterials.get(oldBlockDataMaterial)[1]++;
-                                        } else {
-                                            attackRecoveryRequireMaterials.put(oldBlockDataMaterial, new long[]{0, 1});
+                                        attackRecoveryBlocks.put(new int[]{realX, y, realZ}, oldBlockData);
+                                        if (!oldBlockDataMaterial.isAir()) {
+                                            if (attackRecoveryRequireMaterials.containsKey(oldBlockDataMaterial)) {
+                                                attackRecoveryRequireMaterials.get(oldBlockDataMaterial)[1]++;
+                                            } else {
+                                                attackRecoveryRequireMaterials.put(oldBlockDataMaterial, new long[]{0, 1});
+                                            }
                                         }
                                     }
                                 }
@@ -190,14 +230,18 @@ public class War {
                     for (int y = -64; y <= 319; y++) {
                         for (int x = 0; x <= 15; x++) {
                             for (int z = 0; z <= 15; z++) {
+                                int realX = chunkSnapshot.getX() * 16 + x;
+                                int realZ = chunkSnapshot.getZ() * 16 + z;
                                 BlockData oldBlockData = chunkSnapshot.getBlockData(x, y, z);
-                                if (!getWorld().getBlockData(chunkSnapshot.getX() * 16 + x, y, chunkSnapshot.getZ() * 16 + z).equals(oldBlockData)) {
-                                    defendRecoveryBlocks.put(new int[]{x, y, z}, oldBlockData);
+                                if (!getWorld().getBlockData(realX, y, realZ).equals(oldBlockData)) {
                                     Material oldBlockDataMaterial = oldBlockData.getMaterial();
-                                    if (defendRecoveryRequireMaterials.containsKey(oldBlockDataMaterial)) {
-                                        defendRecoveryRequireMaterials.get(oldBlockDataMaterial)[1]++;
-                                    } else {
-                                        defendRecoveryRequireMaterials.put(oldBlockDataMaterial, new long[]{0, 1});
+                                    defendRecoveryBlocks.put(new int[]{realX, y, realZ}, oldBlockData);
+                                    if (!oldBlockDataMaterial.isAir()) {
+                                        if (defendRecoveryRequireMaterials.containsKey(oldBlockDataMaterial)) {
+                                            defendRecoveryRequireMaterials.get(oldBlockDataMaterial)[1]++;
+                                        } else {
+                                            defendRecoveryRequireMaterials.put(oldBlockDataMaterial, new long[]{0, 1});
+                                        }
                                     }
                                 }
                             }

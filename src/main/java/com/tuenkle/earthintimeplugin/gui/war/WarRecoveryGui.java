@@ -31,7 +31,11 @@ public class WarRecoveryGui extends WarGui {
                 if (i <= 45) {
                     if (currentItemPage == page) {
                         long[] amount = recoveryRequireMaterial.getValue();
-                        inventory.setItem(i + 9, getButtonWithLoresWithoutName(new ItemStack(recoveryRequireMaterial.getKey()), ChatColor.GREEN + Long.toString(amount[0]) + "/" + amount[1]));
+                        if (amount[0] == amount[1]) {
+                            inventory.setItem(i + 9, getButtonWithLoresWithoutName(new ItemStack(recoveryRequireMaterial.getKey()), ChatColor.GREEN + Long.toString(amount[0]) + "/" + amount[1]));
+                        } else {
+                            inventory.setItem(i + 9, getButtonWithLoresWithoutName(new ItemStack(recoveryRequireMaterial.getKey()), ChatColor.RED + Long.toString(amount[0]) + "/" + amount[1]));
+                        }
                     }
                     i++;
                 } else if (currentItemPage != page) {
@@ -42,10 +46,13 @@ public class WarRecoveryGui extends WarGui {
                 }
             }
             if (war.defendRecoveryRequireMaterials.size() / 45 > page - 1) {
-                inventory.setItem(53, GeneralButtons.getNextPageButton());
+                inventory.setItem(51, GeneralButtons.getNextPageButton());
             }
             if (page > 1) {
-                inventory.setItem(46, GeneralButtons.previousPageButton);
+                inventory.setItem(47, GeneralButtons.previousPageButton);
+            }
+            if (userNation.isUserKing(user)) {
+                inventory.setItem(50, GeneralButtons.warRecoveryExecuteButton);
             }
         } else if (war.getAttackNations().contains(userNation)) {
             int i = 0;
@@ -55,7 +62,15 @@ public class WarRecoveryGui extends WarGui {
                 if (i <= 45) {
                     if (currentItemPage == page) {
                         long[] amount = recoveryRequireMaterial.getValue();
-                        inventory.setItem(i + 9, getButtonWithLoresWithoutName(new ItemStack(recoveryRequireMaterial.getKey()), ChatColor.GREEN + Long.toString(amount[0]) + "/" + amount[1]));
+                        Material material = recoveryRequireMaterial.getKey();
+//                        if (material.isAir()) {
+//                            continue;
+//                        }
+                        if (amount[0] == amount[1]) {
+                            inventory.setItem(i + 9, getButtonWithLoresWithoutName(new ItemStack(material), ChatColor.GREEN + Long.toString(amount[0]) + "/" + amount[1]));
+                        } else {
+                            inventory.setItem(i + 9, getButtonWithLoresWithoutName(new ItemStack(material), ChatColor.RED + Long.toString(amount[0]) + "/" + amount[1]));
+                        }
                     }
                     i++;
                 } else if (currentItemPage != page) {
@@ -70,6 +85,9 @@ public class WarRecoveryGui extends WarGui {
             }
             if (page > 1) {
                 inventory.setItem(53, GeneralButtons.previousPageButton);
+            }
+            if (userNation.isUserKing(user)) {
+                inventory.setItem(50, GeneralButtons.warRecoveryExecuteButton);
             }
         }
         return inventory;
