@@ -41,7 +41,7 @@ public class NationListener implements Listener {
                 return;
             }
             War war = Database.getRelatedWar(userNation);
-            if (war != null) {
+            if (war != null && !war.isPhase3Start) {
                 if (war.isAttackUser(user)) {
                     if (war.isPhase2Start) {
                         if (NationUtils.isChunkInNation(blockChunk, war.getDefendNation()) || NationUtils.isChunkInSpecificNations(blockChunk, war.getAttackNations())) {
@@ -77,7 +77,7 @@ public class NationListener implements Listener {
                 return;
             }
             War war = Database.getRelatedWar(userNation);
-            if (war != null) {
+            if (war != null && !war.isPhase3Start) {
                 if (war.isAttackUser(user)) {
                     if (war.isPhase2Start) {
                         if (NationUtils.isChunkInNation(playerChunk, war.getDefendNation()) || NationUtils.isChunkInSpecificNations(playerChunk, war.getAttackNations())) {
@@ -122,7 +122,7 @@ public class NationListener implements Listener {
                 return;
             }
             War war = Database.getRelatedWar(damagerPlayerNation);
-            if (war != null) {
+            if (war != null && !war.isPhase3Start) {
                 if (war.isAttackUser(user)) {
                     if (war.isPhase2Start) {
                         if (NationUtils.isChunkInNation(damagedEntityChunk, war.getDefendNation())) {//공격자가 방어국에서 벌어난 일은 모든지 허용
@@ -186,7 +186,7 @@ public class NationListener implements Listener {
                         return;
                     }
                     War war = Database.getRelatedWar(damagerPlayerNation);
-                    if (war != null) {
+                    if (war != null && !war.isPhase3Start) {
                         if (war.isAttackUser(damagerUser)) {
                             if (war.isPhase2Start) {
                                 if (war.isDefendUser(damagedUser)) {

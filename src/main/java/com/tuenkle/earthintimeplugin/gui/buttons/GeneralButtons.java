@@ -25,6 +25,7 @@ public class GeneralButtons {
     public static ItemStack attackJoinNationListButton;
     public static ItemStack defendJoinNationListButton;
     public static ItemStack warRecoveryButton;
+    public static ItemStack previousPageButton;
     public static ItemStack getBackButton() {
         return backButton;
     }
@@ -108,6 +109,13 @@ public class GeneralButtons {
         buttonMeta.setDisplayName(ChatColor.GREEN + "다음 페이지");
         button.setItemMeta(buttonMeta);
         nextPageButton = button;
+    }
+    public static void makePreviousPageButton() {
+        ItemStack button = new ItemStack(Material.ARROW);
+        ItemMeta buttonMeta = button.getItemMeta();
+        buttonMeta.setDisplayName(ChatColor.GREEN + "이전 페이지");
+        button.setItemMeta(buttonMeta);
+        previousPageButton = button;
     }
     public static void makeBackButton() {
         ItemStack button = new ItemStack(Material.ARROW);

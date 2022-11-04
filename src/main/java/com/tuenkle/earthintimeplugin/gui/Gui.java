@@ -49,6 +49,12 @@ public class Gui implements InventoryHolder {
         button.setItemMeta(buttonMeta);
         return button;
     }
+    protected ItemStack getButtonWithLoresWithoutName(ItemStack button, String ...lores) {
+        ItemMeta buttonMeta = button.getItemMeta();
+        buttonMeta.setLore(Arrays.stream(lores).toList());
+        button.setItemMeta(buttonMeta);
+        return button;
+    }
     protected void setDefaultInventory (Inventory inventory) {
         for (int i = 0; i < size; i++) {
             inventory.setItem(i, GeneralButtons.getDummyButton());

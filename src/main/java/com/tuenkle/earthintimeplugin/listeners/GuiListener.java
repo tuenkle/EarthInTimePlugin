@@ -449,7 +449,24 @@ public class GuiListener implements Listener {
                 }
                 return;
             }
+            if (clickedItem.equals(GeneralButtons.warRecoveryButton)) {
+                Nation userNation = user.getNation();
+                if (userNation != null && Database.nations.containsKey(userNation.getName())) {
+                    if (userNation == war.getDefendNation() || war.getAttackNations().contains(userNation)) {
+                        GuiUtils.moveGui(warInfoGui, new WarRecoveryGui(war, user), user, player);
+                        return;
+                    }
+                    return;
+                }
+                return;
+            }
             return;
+        }
+        if (gui instanceof WarRecoveryGui warRecoveryGui) {
+            if (clickedItem.equals(GeneralButtons.getNextPageButton())) {
+                warRecoveryGui.page++;
+                GuiUtils.reopenGui(warRecoveryGui, user ,player);
+            }
         }
         if (gui instanceof WarAttackJoinNationListGui warAttackJoinNationListGui) {
             Nation userNation = user.getNation();

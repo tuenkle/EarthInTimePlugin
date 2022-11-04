@@ -30,7 +30,6 @@ public class EarthInTimePlugin extends JavaPlugin {
 
     public EarthInTimePlugin() {
         mainInstance = this;
-        world = Bukkit.getWorld("world");
     }
     public static EarthInTimePlugin getMainInstance() {
         return mainInstance;
@@ -77,7 +76,7 @@ public class EarthInTimePlugin extends JavaPlugin {
         NationDynmap.setNationDynmapAPI();
         NationDynmap.drawNations();
         BukkitTask task = new OneSecondScheduler(this).runTaskTimer(this, 0, 20);
-
+        world = Bukkit.getWorld("world");
 
 
         getLogger().info("====EarthInTime is Enabled====");

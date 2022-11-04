@@ -102,9 +102,9 @@ public class War {
     public boolean isPhase1Start = false;
     public boolean isPhase2Start = false;
     public boolean isPhase3Start = false;
-    public HashMap<Material, Long> defendRecoveryRequireMaterials = new HashMap<>();
+    public LinkedHashMap<Material, long[]> defendRecoveryRequireMaterials = new LinkedHashMap<>();
     public HashMap<int[], BlockData> defendRecoveryBlocks = new HashMap<>();
-    public HashMap<Nation, HashMap<Material, Long>> attacksRecoveryRequireMaterials = new HashMap<>();
+    public HashMap<Nation, HashMap<Material, long[]>> attacksRecoveryRequireMaterials = new HashMap<>();
     public HashMap<Nation, HashMap<int[], BlockData>> attacksRecoveryBlocks = new HashMap<>();
     public HashMap<Nation, HashSet<ChunkSnapshot>> attackNationsSnapShot = new HashMap<>();
     public HashSet<ChunkSnapshot> defendNationSnapShot = new HashSet<>();
@@ -114,9 +114,9 @@ public class War {
         this.defendNations.add(defendNation);
         this.defendNation = defendNation;
         this.startTime = startTime;
-        this.phase1Time = startTime.plusSeconds(20);
-        this.phase2Time = startTime.plusSeconds(40);
-        this.phase3Time = startTime.plusSeconds(20);
+        this.phase1Time = startTime.plusSeconds(10);
+        this.phase2Time = startTime.plusSeconds(20);
+        this.phase3Time = startTime.plusSeconds(30);
     }
     public boolean isAttackUser(User user) {
         for (Nation nation : attackNations) {
@@ -163,7 +163,7 @@ public class War {
             if (phase3Time.isBefore(now)) {
                 for (Map.Entry<Nation, HashSet<ChunkSnapshot>> attackNationSnapshot : attackNationsSnapShot.entrySet()) {
                     Nation nation = attackNationSnapshot.getKey();
-                    HashMap<Material, Long> attackRecoveryRequireMaterials = new HashMap<>();
+                    HashMap<Material, long[]> attackRecoveryRequireMaterials = new HashMap<>();
                     HashMap<int[], BlockData> attackRecoveryBlocks = new HashMap<>();
                     for (ChunkSnapshot chunkSnapshot : attackNationSnapshot.getValue()) {
                         for (int y = -64; y <= 319; y++) {
@@ -173,7 +173,11 @@ public class War {
                                     if (!getWorld().getBlockData(chunkSnapshot.getX() * 16 + x, y, chunkSnapshot.getZ() * 16 + z).equals(oldBlockData)) {
                                         attackRecoveryBlocks.put(new int[]{x, y, z}, oldBlockData);
                                         Material oldBlockDataMaterial = oldBlockData.getMaterial();
-                                        attackRecoveryRequireMaterials.put(oldBlockDataMaterial, attackRecoveryRequireMaterials.get(oldBlockDataMaterial) + 1);
+                                        if (attackRecoveryRequireMaterials.containsKey(oldBlockDataMaterial)) {
+                                            attackRecoveryRequireMaterials.get(oldBlockDataMaterial)[1]++;
+                                        } else {
+                                            attackRecoveryRequireMaterials.put(oldBlockDataMaterial, new long[]{0, 1});
+                                        }
                                     }
                                 }
                             }
@@ -190,7 +194,11 @@ public class War {
                                 if (!getWorld().getBlockData(chunkSnapshot.getX() * 16 + x, y, chunkSnapshot.getZ() * 16 + z).equals(oldBlockData)) {
                                     defendRecoveryBlocks.put(new int[]{x, y, z}, oldBlockData);
                                     Material oldBlockDataMaterial = oldBlockData.getMaterial();
-                                    defendRecoveryRequireMaterials.put(oldBlockDataMaterial, defendRecoveryRequireMaterials.get(oldBlockDataMaterial) + 1);
+                                    if (defendRecoveryRequireMaterials.containsKey(oldBlockDataMaterial)) {
+                                        defendRecoveryRequireMaterials.get(oldBlockDataMaterial)[1]++;
+                                    } else {
+                                        defendRecoveryRequireMaterials.put(oldBlockDataMaterial, new long[]{0, 1});
+                                    }
                                 }
                             }
                         }
