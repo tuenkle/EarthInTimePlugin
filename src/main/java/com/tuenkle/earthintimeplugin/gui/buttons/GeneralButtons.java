@@ -74,7 +74,7 @@ public class GeneralButtons {
         makeWarRecoveryExecuteButton();
     }
     public static void makeWarRecoveryExecuteButton() {
-        warRecoveryExecuteButton = getButtonWithLores(Material.WOODEN_AXE, ChatColor.GREEN + "나라 복구", ChatColor.GRAY + "클릭하여 나라를 복구합니다!", ChatColor.RED + "전쟁당 1회만 사용 가능합니다!");
+        warRecoveryExecuteButton = getButtonWithLores(Material.WOODEN_AXE, ChatColor.GREEN + "나라 복구", ChatColor.RED + "전쟁당 1회만 사용 가능합니다!", ChatColor.RED + "재료가 부족할 시 일부만 복구됩니다.", ChatColor.GRAY + "클릭하여 나라를 복구합니다!");
     }
     public static void makeWarRecoveryButton() {
         warRecoveryButton = getButtonWithLores(Material.WOODEN_AXE, ChatColor.GREEN + "나라 복구 메뉴", ChatColor.GRAY + "나라 복구 메뉴로 가려면 클릭하세요!");
