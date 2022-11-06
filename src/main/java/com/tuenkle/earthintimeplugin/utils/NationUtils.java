@@ -40,6 +40,14 @@ public class NationUtils {
         }
         return false;
     }
+    public static boolean isIntChunkInChunks(int[] chunk, HashSet<int[]> chunks) {
+        for (int[] nationChunk : chunks) {
+            if (nationChunk[0] == chunk[0] && nationChunk[1] == chunk[1]){
+                return true;
+            }
+        }
+        return false;
+    }
     public static boolean isPlayerInChunks(Player player, ArrayList<int[]> chunks) {
         Chunk playerChunk = player.getLocation().getChunk();
         for (int[] chunk : chunks) {
