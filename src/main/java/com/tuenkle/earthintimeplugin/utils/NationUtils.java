@@ -48,6 +48,14 @@ public class NationUtils {
         }
         return false;
     }
+    public static boolean removeChunkInChunks(HashSet<int[]> chunks, int[] chunk) {
+        for (int[] targetChunk : chunks) {
+            if (targetChunk[0] == chunk[0] && targetChunk[1] == chunk[1]) {
+                return chunks.remove(targetChunk);
+            }
+        }
+        return false;
+    }
     public static boolean isPlayerInChunks(Player player, ArrayList<int[]> chunks) {
         Chunk playerChunk = player.getLocation().getChunk();
         for (int[] chunk : chunks) {

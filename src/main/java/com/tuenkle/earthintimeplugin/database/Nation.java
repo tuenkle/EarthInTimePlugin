@@ -10,8 +10,7 @@ import org.bukkit.Location;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static com.tuenkle.earthintimeplugin.utils.NationUtils.getNationExpandMoney;
-import static com.tuenkle.earthintimeplugin.utils.NationUtils.isIntChunkInNation;
+import static com.tuenkle.earthintimeplugin.utils.NationUtils.*;
 
 public class Nation {
     private User king;
@@ -151,7 +150,6 @@ public class Nation {
             return "나라 안에 있지 않습니다.";
         }
         HashSet<int[]> newChunks = new HashSet<>(chunks);
-        newChunks.remove(chunk);
         if (isChunksDonut(newChunks)) {
             return "도넛 모양으로는 축소할 수 없습니다.";
         }
@@ -225,17 +223,16 @@ public class Nation {
         }
         for (int x = minX + 1; x < maxX; x++) {
             for (int z = minZ + 1; z < maxZ; z++) {
-                Bukkit.getLogger().info(String.valueOf(x) + z);
                 boolean isEscaped = false;
                 int[] verifyingChunk = new int[]{x, z};
-                if (isIntChunkInNation(verifyingChunk)) {
+                if (isIntChunkInChunks(verifyingChunk, chunks)) {
                     continue;
                 }
-                Stack<int[]> stack = new Stack<>();
-                stack.push(verifyingChunk);
-                HashSet<int[]> blocks = new HashSet<>(chunks);
-                while (stack.size() > 0) {
-                    int[] poppedChunk = stack.pop();
+                Stack<int[]> frontier = new Stack<>();
+                frontier.push(verifyingChunk);
+                HashSet<int[]> explored = new HashSet<>();
+                while (frontier.size() > 0) {
+                    int[] poppedChunk = frontier.pop();
                     int poppedX = poppedChunk[0];
                     int poppedZ = poppedChunk[1];
                     if (poppedX == minX || poppedX == maxX) {
@@ -256,25 +253,33 @@ public class Nation {
                     newChunk2[0] += 1;
                     newChunk3[1] -= 1;
                     newChunk4[1] += 1;
-                    if (!NationUtils.isIntChunkInChunks(newChunk, blocks)) {
-                        stack.push(newChunk);
-                        isMoved = true;
-//                        blocks.add(newChunk);
+                    if (!NationUtils.isIntChunkInChunks(newChunk, chunks)) {
+                        if (!NationUtils.isIntChunkInChunks(newChunk, explored)) {
+                            frontier.push(newChunk);
+                            isMoved = true;
+                            explored.add(newChunk);
+                        }
                     }
-                    if (!NationUtils.isIntChunkInChunks(newChunk2, blocks)) {
-                        stack.push(newChunk2);
-                        isMoved = true;
-//                        blocks.add(newChunk2);
+                    if (!NationUtils.isIntChunkInChunks(newChunk2, chunks)) {
+                        if (!NationUtils.isIntChunkInChunks(newChunk2, explored)) {
+                            frontier.push(newChunk2);
+                            isMoved = true;
+                            explored.add(newChunk2);
+                        }
                     }
-                    if (!NationUtils.isIntChunkInChunks(newChunk3, blocks)) {
-                        stack.push(newChunk3);
-                        isMoved = true;
-//                        blocks.add(newChunk3);
+                    if (!NationUtils.isIntChunkInChunks(newChunk3, chunks)) {
+                        if (!NationUtils.isIntChunkInChunks(newChunk3, explored)) {
+                            frontier.push(newChunk3);
+                            isMoved = true;
+                            explored.add(newChunk3);
+                        }
                     }
-                    if (!NationUtils.isIntChunkInChunks(newChunk4, blocks)) {
-                        stack.push(newChunk4);
-                        isMoved = true;
-//                        blocks.add(newChunk4);
+                    if (!NationUtils.isIntChunkInChunks(newChunk4, chunks)) {
+                        if (!NationUtils.isIntChunkInChunks(newChunk4, explored)) {
+                            frontier.push(newChunk4);
+                            isMoved = true;
+                            explored.add(newChunk4);
+                        }
                     }
 //                    if (!isMoved) {
 //                        blocks = new HashSet<>(chunks);
