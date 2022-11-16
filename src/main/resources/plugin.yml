@@ -17,3 +17,5 @@ commands:
     description: Admin Commands
   spawn:
     description: Spawn Command
+  economy:
+    description: Economy Command

@@ -6,6 +6,8 @@ import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
 import com.tuenkle.earthintimeplugin.listeners.*;
 import com.tuenkle.earthintimeplugin.utils.WarUtils;
+import com.tuenkle.earthintimeplugin.vault.EconomyImplementer;
+import com.tuenkle.earthintimeplugin.vault.VaultHook;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -24,10 +26,11 @@ import com.tuenkle.earthintimeplugin.scheduler.OneSecondScheduler;
 
 public class EarthInTimePlugin extends JavaPlugin {
     private static EarthInTimePlugin mainInstance;
+    public static EconomyImplementer economyImplementer;
     private static World world;
     private static Location spawnLocation;
     private static HashSet<int[]> spawnChunks;
-
+    private VaultHook vaultHook;
     public static HashSet<int[]> getSpawnChunks() {
         return spawnChunks;
     }
@@ -46,7 +49,9 @@ public class EarthInTimePlugin extends JavaPlugin {
     }
     @Override
     public void onEnable() {
-
+        economyImplementer = new EconomyImplementer();
+        vaultHook = new VaultHook();
+        vaultHook.hook();
         GeneralButtons.makeAll();
         NationButtons.makeAll();
         Objects.requireNonNull(this.getCommand("나라")).setExecutor(new CommandNation(this));
@@ -54,6 +59,8 @@ public class EarthInTimePlugin extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("메뉴")).setExecutor(new CommandGui());
         Objects.requireNonNull(this.getCommand("ad")).setExecutor(new CommandOp());
         Objects.requireNonNull(this.getCommand("spawn")).setExecutor(new CommandSpawn());
+        Objects.requireNonNull(this.getCommand("economy")).setExecutor(new CommandEconomy());
+
         getServer().getPluginManager().registerEvents(new ClockListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new NationListener(), this);
@@ -99,6 +106,7 @@ public class EarthInTimePlugin extends JavaPlugin {
         getLogger().info("====EarthInTime is Enabled====");
     }
     public void onDisable() {
+        vaultHook.unhook();
         getLogger().info("====EarthInTime is Disabled====");
     }
 }
