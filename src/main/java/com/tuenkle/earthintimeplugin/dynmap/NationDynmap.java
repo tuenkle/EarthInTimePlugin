@@ -8,6 +8,9 @@ import org.bukkit.Bukkit;
 import org.dynmap.markers.AreaMarker;
 
 import java.util.*;
+
+import static com.tuenkle.earthintimeplugin.EarthInTimePlugin.getSpawnChunks;
+
 public class NationDynmap {
     private static DynmapAPI dynmapAPI;
     private static MarkerSet markerSet;
@@ -34,6 +37,22 @@ public class NationDynmap {
 
         markerSet.findAreaMarker(nation.getName()).deleteMarker();
         AreaMarker marker = markerSet.createAreaMarker(nation.getName(), nation.getName(), true, "world", x, z, false);
+        setMarkerStyle(marker);
+    }
+    public static void drawSpawn() {
+        ArrayList<int[]> points = chunksToPoints(getSpawnChunks());
+        ArrayList<int[]> vertices = pointsToVertices(points);
+        ArrayList<int[]> sortedVertices = verticesToSortedVertices(vertices);
+        ArrayList<Integer> sortedVerticeX = new ArrayList<>();
+        ArrayList<Integer> sortedVerticeZ = new ArrayList<>();
+        for (int[] vertex: sortedVertices){
+            sortedVerticeX.add(vertex[0]);
+            sortedVerticeZ.add(vertex[1]);
+        }
+        double[] x = sortedVerticeX.stream().mapToDouble(i -> i).toArray();
+        double[] z = sortedVerticeZ.stream().mapToDouble(i -> i).toArray();
+
+        AreaMarker marker = markerSet.createAreaMarker("스폰", "스폰", true, "world", x, z, false);
         setMarkerStyle(marker);
     }
     public static void drawNations() {
@@ -73,6 +92,7 @@ public class NationDynmap {
         AreaMarker marker = markerSet.createAreaMarker(nation.getName(), nation.getName(), true, "world", x, z, false);
         setMarkerStyle(marker);
     }
+
     public static ArrayList<int[]> chunksToSortedVertices(HashSet<int[]> chunks) {
         ArrayList<int[]> points = chunksToPoints(chunks);
         ArrayList<int[]> vertices = pointsToVertices(points);

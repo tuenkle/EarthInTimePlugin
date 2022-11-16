@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -25,6 +26,11 @@ public class EarthInTimePlugin extends JavaPlugin {
     private static EarthInTimePlugin mainInstance;
     private static World world;
     private static Location spawnLocation;
+    private static HashSet<int[]> spawnChunks;
+
+    public static HashSet<int[]> getSpawnChunks() {
+        return spawnChunks;
+    }
 
     public EarthInTimePlugin() {
         mainInstance = this;
@@ -75,12 +81,20 @@ public class EarthInTimePlugin extends JavaPlugin {
         Database.nations.put("orangef", nation3);
         WarUtils.declareWar(nation, nation2);
         //Development Only!!!
+        world = Bukkit.getWorld("world");
+        spawnLocation = new Location(world, 18877.5, 163.5, 6325.5, -180, 0);
+        spawnChunks = new HashSet<>();
+        for (int i = -10; i <= 10; i++) {
+            for (int j = -10; j <= 10; j ++) {
+                spawnChunks.add(new int[]{1179 + i, 395 + j});
+            }
+        }
 
         NationDynmap.setNationDynmapAPI();
         NationDynmap.drawNations();
+        NationDynmap.drawSpawn();
         BukkitTask task = new OneSecondScheduler(this).runTaskTimer(this, 0, 20);
-        world = Bukkit.getWorld("world");
-        spawnLocation = new Location(world, 18877.5, 163.5, 6325.5, -180, 0);
+
 
         getLogger().info("====EarthInTime is Enabled====");
     }
