@@ -1,6 +1,6 @@
 package com.tuenkle.earthintimeplugin;
 
-import com.tuenkle.earthintimeplugin.commands.CommandGui;
+import com.tuenkle.earthintimeplugin.commands.*;
 import com.tuenkle.earthintimeplugin.database.Database;
 import com.tuenkle.earthintimeplugin.database.Nation;
 import com.tuenkle.earthintimeplugin.database.User;
@@ -15,8 +15,6 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.tuenkle.earthintimeplugin.commands.CommandClock;
-import com.tuenkle.earthintimeplugin.commands.CommandNation;
 import com.tuenkle.earthintimeplugin.dynmap.NationDynmap;
 import com.tuenkle.earthintimeplugin.gui.buttons.GeneralButtons;
 import com.tuenkle.earthintimeplugin.gui.buttons.NationButtons;
@@ -26,10 +24,13 @@ import com.tuenkle.earthintimeplugin.scheduler.OneSecondScheduler;
 public class EarthInTimePlugin extends JavaPlugin {
     private static EarthInTimePlugin mainInstance;
     private static World world;
-
+    private static Location spawnLocation;
 
     public EarthInTimePlugin() {
         mainInstance = this;
+    }
+    public static Location getSpawnLocation() {
+        return spawnLocation;
     }
     public static EarthInTimePlugin getMainInstance() {
         return mainInstance;
@@ -39,11 +40,14 @@ public class EarthInTimePlugin extends JavaPlugin {
     }
     @Override
     public void onEnable() {
+
         GeneralButtons.makeAll();
         NationButtons.makeAll();
         Objects.requireNonNull(this.getCommand("나라")).setExecutor(new CommandNation(this));
         Objects.requireNonNull(this.getCommand("clock")).setExecutor(new CommandClock());
         Objects.requireNonNull(this.getCommand("메뉴")).setExecutor(new CommandGui());
+        Objects.requireNonNull(this.getCommand("ad")).setExecutor(new CommandOp());
+        Objects.requireNonNull(this.getCommand("spawn")).setExecutor(new CommandSpawn());
         getServer().getPluginManager().registerEvents(new ClockListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new NationListener(), this);
@@ -53,7 +57,6 @@ public class EarthInTimePlugin extends JavaPlugin {
         ClockRecipes.EmptyClock(this);
         ClockRecipes.Clock10Minute(this);
         ClockRecipes.Clock1Hour(this);
-
         //Development Only!!!
         User user = new User(UUID.fromString("d8ea842a-9fc4-4104-a928-95e4b5aa6d42"), "StrawberryF");
         User user2 = new User(UUID.fromString("3a4ee10c-cbf2-4269-bbc5-ed06ef90898a"), "MelonF");
@@ -77,7 +80,7 @@ public class EarthInTimePlugin extends JavaPlugin {
         NationDynmap.drawNations();
         BukkitTask task = new OneSecondScheduler(this).runTaskTimer(this, 0, 20);
         world = Bukkit.getWorld("world");
-
+        spawnLocation = new Location(world, 18877.5, 163.5, 6325.5, -180, 0);
 
         getLogger().info("====EarthInTime is Enabled====");
     }

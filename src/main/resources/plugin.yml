@@ -13,3 +13,7 @@ commands:
     usage: /nation set nationName
   메뉴:
     description: 메뉴
+  ad:
+    description: Admin Commands
+  spawn:
+    description: Spawn Command
