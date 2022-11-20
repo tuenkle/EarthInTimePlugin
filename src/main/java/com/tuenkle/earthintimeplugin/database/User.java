@@ -1,7 +1,5 @@
 package com.tuenkle.earthintimeplugin.database;
 
-import com.tuenkle.earthintimeplugin.gui.war.WarGui;
-import com.tuenkle.earthintimeplugin.gui.war.WarInfoGui;
 import org.bukkit.inventory.InventoryHolder;
 
 import java.util.ArrayList;
@@ -9,7 +7,7 @@ import java.util.HashSet;
 import java.util.UUID;
 
 public class User {
-    private long money = 600000000L;
+    private double money = 600000000L;
     private int language = 0;
     private String name;
     private UUID uuid;
@@ -40,11 +38,11 @@ public class User {
     public HashSet<int[]> getSafeChunk() {
         return nation.getChunks();
     }
-    public long getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(long money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 
@@ -77,10 +75,10 @@ public class User {
     public void setNation(Nation nation) {
         this.nation = nation;
     }
-    public void withdrawMoney(long amount) {
+    public void withdrawMoney(double amount) {
         money = money - amount;
     }
-    public void depositMoney(long amount) {
+    public void depositMoney(double amount) {
         money = money + amount;
     }
 

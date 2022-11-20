@@ -8,6 +8,7 @@ import com.tuenkle.earthintimeplugin.listeners.*;
 import com.tuenkle.earthintimeplugin.utils.WarUtils;
 import com.tuenkle.earthintimeplugin.vault.EconomyImplementer;
 import com.tuenkle.earthintimeplugin.vault.VaultHook;
+import com.tuenkle.earthintimeplugin.warps.WarpListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -31,6 +32,7 @@ public class EarthInTimePlugin extends JavaPlugin {
     private static Location spawnLocation;
     private static HashSet<int[]> spawnChunks;
     private VaultHook vaultHook;
+    public static HashSet<int[]> spawnNorthWestWarp = new HashSet<>();
     public static HashSet<int[]> getSpawnChunks() {
         return spawnChunks;
     }
@@ -52,6 +54,15 @@ public class EarthInTimePlugin extends JavaPlugin {
         economyImplementer = new EconomyImplementer();
         vaultHook = new VaultHook();
         vaultHook.hook();
+        spawnNorthWestWarp.add(new int[]{18854, 160, 6306});
+        spawnNorthWestWarp.add(new int[]{18854, 160, 6305});
+        spawnNorthWestWarp.add(new int[]{18855, 160, 6305});
+        spawnNorthWestWarp.add(new int[]{18855, 160, 6304});
+        spawnNorthWestWarp.add(new int[]{18856, 160, 6304});
+        spawnNorthWestWarp.add(new int[]{18856, 160, 6303});
+        spawnNorthWestWarp.add(new int[]{18857, 160, 6303});
+        spawnNorthWestWarp.add(new int[]{18857, 160, 6302});
+        spawnNorthWestWarp.add(new int[]{18858, 160, 6302});
         GeneralButtons.makeAll();
         NationButtons.makeAll();
         Objects.requireNonNull(this.getCommand("나라")).setExecutor(new CommandNation(this));
@@ -66,6 +77,7 @@ public class EarthInTimePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new NationListener(), this);
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
         getServer().getPluginManager().registerEvents(new GuiStartListener(), this);
+        getServer().getPluginManager().registerEvents(new WarpListener(), this);
 
         ClockRecipes.EmptyClock(this);
         ClockRecipes.Clock10Minute(this);

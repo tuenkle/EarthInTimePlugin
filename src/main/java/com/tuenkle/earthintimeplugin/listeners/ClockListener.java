@@ -1,7 +1,6 @@
 package com.tuenkle.earthintimeplugin.listeners;
 
 import com.tuenkle.earthintimeplugin.database.Database;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;

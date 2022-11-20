@@ -18,7 +18,7 @@ public class CommandEconomy implements CommandExecutor {
                 return true;
             }
             if (args[0].equals("balance")) {
-                player.sendMessage(String.valueOf(EarthInTimePlugin.economyImplementer.getBalance(args[1])));
+                player.sendMessage(String.format("%.0f",EarthInTimePlugin.economyImplementer.getBalance(args[1])));
                 return true;
             }
         }

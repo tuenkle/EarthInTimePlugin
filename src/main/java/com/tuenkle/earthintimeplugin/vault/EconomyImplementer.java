@@ -105,54 +105,64 @@ public class EconomyImplementer implements Economy {
 
     @Override
     public boolean has(OfflinePlayer offlinePlayer, String s, double v) {
+        User user = Database.users.get(offlinePlayer.getUniqueId());
+        user.withdrawMoney(v);
         return false;
     }
 
     @Override
     public EconomyResponse withdrawPlayer(String s, double v) {
+        User user = Database.getUserByUsername(s);
+        user.withdrawMoney(v);
         return null;
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
+        User user = Database.users.get(offlinePlayer.getUniqueId());
+        user.withdrawMoney(v);
         return null;
     }
 
     @Override
     public EconomyResponse withdrawPlayer(String s, String s1, double v) {
+        User user = Database.getUserByUsername(s);
+        user.withdrawMoney(v);
         return null;
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, String s, double v) {
+        User user = Database.users.get(offlinePlayer.getUniqueId());
+        user.withdrawMoney(v);
         return null;
     }
 
     @Override
     public EconomyResponse depositPlayer(String s, double v) {
         User user = Database.getUserByUsername(s);
-        user.depositMoney((long) v);
+        user.depositMoney(v);
         return null;
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
         User user = Database.users.get(offlinePlayer.getUniqueId());
-        user.depositMoney((long) v);
+        user.depositMoney(v);
         return null;
     }
 
     @Override
     public EconomyResponse depositPlayer(String s, String s1, double v) {
         User user = Database.getUserByUsername(s);
-        user.depositMoney((long) v);
+        user.depositMoney(v);
         return null;
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, String s, double v) {
         User user = Database.users.get(offlinePlayer.getUniqueId());
-        user.depositMoney((long) v);
+        user.depositMoney(v);
         return null;
     }
 

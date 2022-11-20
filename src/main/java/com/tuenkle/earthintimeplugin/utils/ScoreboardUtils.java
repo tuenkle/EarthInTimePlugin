@@ -16,7 +16,7 @@ public class ScoreboardUtils {
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         Score score = objective.getScore(ChatColor.AQUA + "=-=-=-=-=-=-=-=-=-=-=-=");
         score.setScore(2);
-        long userMoney = Database.users.get(player.getUniqueId()).getMoney();
+        double userMoney = Database.users.get(player.getUniqueId()).getMoney();
         Score score2 = objective.getScore("소지 시간: " + secondToUniversalTime(userMoney));
         score2.setScore(1);
         player.setDisplayName("[" + secondToUniversalTime(userMoney) + ChatColor.WHITE + "]" + player.getName());
