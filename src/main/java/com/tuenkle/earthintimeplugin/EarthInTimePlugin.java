@@ -12,6 +12,7 @@ import com.tuenkle.earthintimeplugin.warps.WarpListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -30,6 +31,7 @@ public class EarthInTimePlugin extends JavaPlugin {
     public static EconomyImplementer economyImplementer;
     private static World world;
     private static Location spawnLocation;
+    public static Block spawnBlock;
     private static HashSet<int[]> spawnChunks;
     private VaultHook vaultHook;
     public static HashSet<int[]> spawnNorthWestWarp = new HashSet<>();
@@ -54,15 +56,7 @@ public class EarthInTimePlugin extends JavaPlugin {
         economyImplementer = new EconomyImplementer();
         vaultHook = new VaultHook();
         vaultHook.hook();
-        spawnNorthWestWarp.add(new int[]{18854, 160, 6306});
-        spawnNorthWestWarp.add(new int[]{18854, 160, 6305});
-        spawnNorthWestWarp.add(new int[]{18855, 160, 6305});
-        spawnNorthWestWarp.add(new int[]{18855, 160, 6304});
-        spawnNorthWestWarp.add(new int[]{18856, 160, 6304});
-        spawnNorthWestWarp.add(new int[]{18856, 160, 6303});
-        spawnNorthWestWarp.add(new int[]{18857, 160, 6303});
-        spawnNorthWestWarp.add(new int[]{18857, 160, 6302});
-        spawnNorthWestWarp.add(new int[]{18858, 160, 6302});
+
         GeneralButtons.makeAll();
         NationButtons.makeAll();
         Objects.requireNonNull(this.getCommand("나라")).setExecutor(new CommandNation(this));
@@ -102,6 +96,7 @@ public class EarthInTimePlugin extends JavaPlugin {
         //Development Only!!!
         world = Bukkit.getWorld("world");
         spawnLocation = new Location(world, 18877.5, 163.5, 6325.5, -180, 0);
+        spawnBlock = spawnLocation.getBlock();
         spawnChunks = new HashSet<>();
         for (int i = -10; i <= 10; i++) {
             for (int j = -10; j <= 10; j ++) {
